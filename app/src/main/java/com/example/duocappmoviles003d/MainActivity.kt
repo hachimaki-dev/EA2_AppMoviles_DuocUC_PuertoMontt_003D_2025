@@ -50,7 +50,7 @@ fun renderView(){
             modifier = Modifier.padding(paddingValues)
         ){
             Image(
-                painter = painterResource(R.drawable.img),
+                painter = painterResource(R.drawable.dumbell),
                 contentDescription = "Barbell",
                 modifier = Modifier.padding(120.dp)
             )
