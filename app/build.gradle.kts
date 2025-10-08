@@ -40,7 +40,13 @@ android {
 }
 
 dependencies {
-
+    // Para hacer llamadas a la API (Retrofit y Gson)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Para mostrar imágenes desde una URL (Coil)
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    // ViewModel para gestionar la lógica y el estado
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
