@@ -4,15 +4,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,15 +35,13 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier.background(Color.Black)
+            modifier = Modifier.background(Color.White)
         ){
 
             Image(
                 alignment = Alignment.Center,
-                painter = painterResource(id = R.drawable.zoro),
-                contentDescription = "Imagen de fondo de mi app",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                painter = painterResource(id = R.drawable.game),
+                contentDescription = "Logo de mi app"
             )
 
 
@@ -50,10 +51,10 @@ fun LoginScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Welcome",
+                    text = "Iniciar Sesión",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Black,
                     fontSize = 30.sp
                 )
 
@@ -62,19 +63,40 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Nombre de usuario") },
+                    label = { Text("Email") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedLabelColor = Color.White,
-                        focusedBorderColor = Color.White,
-                        cursorColor = Color.White,
-                        disabledLabelColor = Color.White,
-                        disabledBorderColor = Color.White,
-                        unfocusedLabelColor = Color.White,
-                        unfocusedBorderColor = Color.White,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        focusedLabelColor = Color(2,178,191),
+                        focusedBorderColor = Color.Black,
+                        cursorColor = Color.Black,
+                        disabledLabelColor = Color.Black,
+                        disabledBorderColor = Color(2,178,191),
+                        unfocusedLabelColor = Color(2,178,191),
+                        unfocusedBorderColor = Color.Black,
+                        focusedTextColor = Color.Black
+
+                    ),
+                    shape = RoundedCornerShape(26.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text("Contraseña") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = Color(2,178,191),
+                        focusedBorderColor = Color.Black,
+                        cursorColor = Color.Black,
+                        disabledLabelColor = Color.Black,
+                        disabledBorderColor = Color(2,178,191),
+                        unfocusedLabelColor = Color(2,178,191),
+                        unfocusedBorderColor = Color.Black,
+                        focusedTextColor = Color.Black
 
                     ),
                     shape = RoundedCornerShape(26.dp)
@@ -90,12 +112,28 @@ fun LoginScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Green
+                        containerColor = Color(2,178,191)
                     )
                 ) {
-                    Text(text = "Ir a Home",
+                    Text(text = "Iniciar Sesión",
                         color = Color.Black)
                 }
+
+                Button(
+                    onClick = {
+                        if (username.text.isNotBlank()) {
+                            onNavigateToHome(username.text)
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(2,178,191)
+                    )
+                ) {
+                    Text(text = "Registrarse",
+                        color = Color.Black)
+                }
+
             }
         }
     }
