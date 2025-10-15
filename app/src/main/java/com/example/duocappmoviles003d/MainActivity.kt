@@ -39,58 +39,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            InvocarTextField()
+            ComposeLogin()
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun renderView() {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Hola") }
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.dumbell),
-                contentDescription = "Barbell",
-                modifier = Modifier.padding(120.dp)
-            )
-
-            Spacer(
-                modifier = Modifier.height(500.dp)
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) { }
-        }
-
-
-    }
-    Row {
-        Text("Hola mundo como estan")
-        Button({}) { "Soy un boton" }
-    }
-}
-@Composable
-fun InvocarTextField(){
-    var textoQueCambia by remember { mutableStateOf("") }
-    TextField(
-        value = textoQueCambia,
-        onValueChange = {
-                valor -> textoQueCambia = valor
-            println(valor)
-        },
-        placeholder = { Text("Escribe aqui")},
-        trailingIcon = {Icon(Icons.Default.AccountBox, contentDescription = "icono de usuario")}
-    )
-    j
+fun ComposeLogin(){
+    Box
 }
