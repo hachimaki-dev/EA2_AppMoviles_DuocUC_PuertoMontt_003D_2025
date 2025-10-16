@@ -28,6 +28,7 @@ fun LoginScreen(
     onNavigateToHome: (String) -> Unit
 ) {
     var username by remember { mutableStateOf(TextFieldValue("")) }
+    var password by remember { mutableStateOf(TextFieldValue("")) }
 
     Column(
         modifier = Modifier.fillMaxWidth().fillMaxSize(),
@@ -83,8 +84,8 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
+                    value = password,
+                    onValueChange = { password = it },
                     label = { Text("Contraseña") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
@@ -116,6 +117,7 @@ fun LoginScreen(
                     )
                 ) {
                     Text(text = "Iniciar Sesión",
+                        fontWeight = FontWeight.Black,
                         color = Color.Black)
                 }
 
@@ -131,8 +133,15 @@ fun LoginScreen(
                     )
                 ) {
                     Text(text = "Registrarse",
+                        fontWeight = FontWeight.Black,
                         color = Color.Black)
                 }
+                Text(text = "Olvidé mi contraseña",
+                    fontWeight = FontWeight.Black,
+                    color = Color(2,178,191)
+
+
+                )
 
             }
         }
