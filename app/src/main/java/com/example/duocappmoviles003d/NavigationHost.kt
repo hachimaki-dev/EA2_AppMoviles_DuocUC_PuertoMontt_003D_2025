@@ -13,55 +13,65 @@ fun NavigationHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationRoutes.LOGIN
     ) {
-        // Ruta: Login (sin parámetros)
+        // Login
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
                 onNavigateToHome = { username ->
-                    navController.navigate(
-                        NavigationRoutes.createHomeRoute(username)
-                    )
+                    navController.navigate(NavigationRoutes.createHomeRoute(username))
+                },
+                onNavigateToRegister = {
+                    navController.navigate(NavigationRoutes.REGISTER)
                 }
             )
         }
 
-        // Ruta: Home (con parámetro)
+        // Registro
+        composable(route = NavigationRoutes.REGISTER) {
+            RegistrarScreen(
+                onNavigateToLogin = {
+                    navController.navigate(NavigationRoutes.LOGIN) {
+                        popUpTo(NavigationRoutes.LOGIN) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // Catalogo / Home
         composable(
             route = NavigationRoutes.HOME,
-            arguments = listOf(
-                navArgument("username") {
-                    type = NavType.StringType
-                }
-            )
+            arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
-
-            HomeScreen(
+            CatalogoScreen(
                 username = username,
-                onNavigateToProfile = {
-                    navController.navigate(NavigationRoutes.PROFILE)
-                },
+                onNavigateToProfile = { navController.navigate(NavigationRoutes.PROFILE) },
                 onNavigateBack = {
-                    navController.popBackStack()
+                    navController.navigate(NavigationRoutes.LOGIN) {
+                        popUpTo(NavigationRoutes.LOGIN) { inclusive = true }
+                    }
                 },
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
-                }
+                navegarHaciaCarrito = { navController.navigate(NavigationRoutes.CART) }
             )
         }
 
-        // Ruta: Profile (sin parámetros)
+        // Perfil
         composable(route = NavigationRoutes.PROFILE) {
-            ProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
+            ProfileScreen(onNavigateBack = { navController.popBackStack() })
         }
 
-        composable(route = NavigationRoutes.CART){
+        // Carrito
+        composable(route = NavigationRoutes.CART) {
             VistaCarrito(
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
+                carrito = carritoGlobal,
+                navegarHaciaCatalogo = {
+                    navController.navigate(NavigationRoutes.HOME) {
+                        popUpTo(NavigationRoutes.HOME) { inclusive = true }
+                    }
+                },
+                cerrarSesion = {
+                    navController.navigate(NavigationRoutes.LOGIN) {
+                        popUpTo(NavigationRoutes.LOGIN) { inclusive = true }
+                    }
                 }
             )
         }

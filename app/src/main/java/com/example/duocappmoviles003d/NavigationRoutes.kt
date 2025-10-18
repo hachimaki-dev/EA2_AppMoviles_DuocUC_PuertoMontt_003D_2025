@@ -6,6 +6,9 @@ object NavigationRoutes {
     const val PROFILE = "profile"
     const val CART = "cart"
 
+    const val REGISTER = "register"
+
+
     // Función helper para crear la ruta con parámetro
     fun createHomeRoute(username: String) = "home/$username"
 }
