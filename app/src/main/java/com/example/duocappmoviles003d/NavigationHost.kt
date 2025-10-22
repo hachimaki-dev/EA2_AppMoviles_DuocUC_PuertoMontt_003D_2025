@@ -21,6 +21,9 @@ fun NavigationHost(navController: NavHostController) {
                 },
                 onNavigateToRegister = {
                     navController.navigate(NavigationRoutes.REGISTER)
+                },
+                onNavigateToForgot = {
+                    navController.navigate(NavigationRoutes.FORGOT)
                 }
             )
         }
@@ -38,7 +41,7 @@ fun NavigationHost(navController: NavHostController) {
 
         // Catalogo / Home
         composable(
-            route = NavigationRoutes.HOME,
+            route = NavigationRoutes.CATALOGO,
             arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
@@ -64,8 +67,8 @@ fun NavigationHost(navController: NavHostController) {
             VistaCarrito(
                 carrito = carritoGlobal,
                 navegarHaciaCatalogo = {
-                    navController.navigate(NavigationRoutes.HOME) {
-                        popUpTo(NavigationRoutes.HOME) { inclusive = true }
+                    navController.navigate(NavigationRoutes.CATALOGO) {
+                        popUpTo(NavigationRoutes.CATALOGO) { inclusive = true }
                     }
                 },
                 cerrarSesion = {
@@ -75,5 +78,14 @@ fun NavigationHost(navController: NavHostController) {
                 }
             )
         }
+        // Recuperar contraseña
+        composable(route = NavigationRoutes.FORGOT) {
+            Forgot(
+                onNavigateToHome = { username ->
+                    navController.navigate(NavigationRoutes.createHomeRoute(username))
+                }
+            )
+        }
+
     }
 }

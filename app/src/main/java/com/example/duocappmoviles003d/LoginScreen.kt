@@ -23,7 +23,7 @@ fun LoginScreen(
 ) {
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var errorMessage by remember { mutableStateOf("") } // <-- mensaje de error
+    var errorMessage by remember { mutableStateOf("") } //  mensaje de error
 
     Box(
         modifier = Modifier
@@ -147,12 +147,23 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = "Olvide mi contraseña",
-                fontWeight = FontWeight.Black,
-                color = Color(2, 178, 191),
-                fontSize = 12.sp
-            )
+
+            Button(
+                onClick = { onNavigateToForgot() },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(2, 178, 191)
+                ),
+                shape = RoundedCornerShape(26.dp)
+            ) {
+
+                Text(
+                    text = "Olvide mi contraseña",
+                    fontWeight = FontWeight.Black,
+                    color = Color(2, 178, 191),
+                    fontSize = 12.sp
+                )
+            }
         }
     }
 }
