@@ -50,7 +50,7 @@ fun PantallaEntrada(
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
             ) {
-                Text("Ingresar", color = buttonTextColor, fontWeight = FontWeight.Bold)
+                Text("Iniciar Sesión", color = buttonTextColor, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
