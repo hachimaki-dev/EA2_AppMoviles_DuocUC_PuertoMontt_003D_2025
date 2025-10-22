@@ -11,59 +11,64 @@ import androidx.navigation.navArgument
 fun NavigationHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = NavigationRoutes.LOGIN
+        startDestination = NavigationRoutes.ENTRY
     ) {
-        // Ruta: Login (sin parámetros)
-        composable(route = NavigationRoutes.LOGIN) {
-            LoginScreen(
-                onNavigateToHome = { username ->
-                    navController.navigate(
-                        NavigationRoutes.createHomeRoute(username)
-                    )
+        // Ruta de Entrada
+        composable(route = NavigationRoutes.ENTRY) {
+            PantallaEntrada(
+                onNavigateToLogin = {
+                    navController.navigate(NavigationRoutes.LOGIN)
+                },
+                onNavigateToRegister = {
+                    navController.navigate(NavigationRoutes.REGISTER)
                 }
             )
         }
 
-        // Ruta: Home (con parámetro)
-        composable(
-            route = NavigationRoutes.HOME,
-            arguments = listOf(
-                navArgument("username") {
-                    type = NavType.StringType
+        // Ruta: Login
+        composable(route = NavigationRoutes.LOGIN) {
+            LoginScreen(
+                onNavigateToHome = { username ->
+                    navController.navigate(NavigationRoutes.createHomeRoute(username)) {
+                        popUpTo(NavigationRoutes.ENTRY)
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate(NavigationRoutes.REGISTER)
                 }
             )
+        }
+
+        // Ruta: Register, ahora llama a Registro
+        composable(route = NavigationRoutes.REGISTER) {
+            Registro(
+                onNavigateToHome = { username ->
+                    navController.navigate(NavigationRoutes.createHomeRoute(username)) {
+                        popUpTo(NavigationRoutes.ENTRY)
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.navigate(NavigationRoutes.LOGIN) {
+                        popUpTo(navController.graph.startDestinationId)
+                    }
+                }
+            )
+        }
+
+        // Ruta: Home
+        composable(
+            route = NavigationRoutes.HOME,
+            arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
 
             HomeScreen(
                 username = username,
-                onNavigateToProfile = {
-                    navController.navigate(NavigationRoutes.PROFILE)
-                },
                 onNavigateBack = {
-                    navController.popBackStack()
-                },
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
+                    navController.popBackStack(NavigationRoutes.ENTRY, inclusive = false)
                 }
             )
         }
 
-        // Ruta: Profile (sin parámetros)
-        composable(route = NavigationRoutes.PROFILE) {
-            ProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable(route = NavigationRoutes.CART){
-            VistaCarrito(
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
-                }
-            )
-        }
     }
 }

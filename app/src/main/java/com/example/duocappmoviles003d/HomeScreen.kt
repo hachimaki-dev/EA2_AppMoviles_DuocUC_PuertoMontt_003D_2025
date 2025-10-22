@@ -9,10 +9,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
-    username: String, // Parámetro recibido
-    onNavigateToProfile: () -> Unit,
-    onNavigateBack: () -> Unit,
-    navegarHaciaCarrito: () -> Unit
+    username: String,
+    onNavigateBack: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -33,29 +31,12 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(
-            onClick = onNavigateToProfile,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Ir a Perfil")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedButton(
             onClick = onNavigateBack,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Volver a Login")
+            Text("Volver a la Entrada")
         }
-    }
-
-    Spacer(modifier = Modifier.height(32.dp))
-
-    Button(
-        onClick = navegarHaciaCarrito,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text("Ir a Carrito")
     }
 }
