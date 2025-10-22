@@ -19,11 +19,12 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LoginScreen(
     onNavigateToHome: (String) -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
+    onNavigateToForgot: () -> Unit
 ) {
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var errorMessage by remember { mutableStateOf("") } //  mensaje de error
+    var errorMessage by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -38,7 +39,6 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.game),
                 contentDescription = "Logo de mi app",
@@ -94,7 +94,6 @@ fun LoginScreen(
                 shape = RoundedCornerShape(26.dp)
             )
 
-            // Mensaje de error
             if (errorMessage.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -109,7 +108,7 @@ fun LoginScreen(
             Button(
                 onClick = {
                     if (username.text.isBlank() || password.text.isBlank()) {
-                        errorMessage = "Por favor, completa todos los campos"
+                        errorMessage = "Por favor completa todos los campos"
                     } else {
                         errorMessage = ""
                         onNavigateToHome(username.text)
@@ -147,21 +146,15 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-
-            Button(
+            TextButton(
                 onClick = { onNavigateToForgot() },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(2, 178, 191)
-                ),
-                shape = RoundedCornerShape(26.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-
                 Text(
-                    text = "Olvide mi contraseña",
+                    text = "Olvide mi contrasena",
                     fontWeight = FontWeight.Black,
                     color = Color(2, 178, 191),
-                    fontSize = 12.sp
+                    fontSize = 14.sp
                 )
             }
         }

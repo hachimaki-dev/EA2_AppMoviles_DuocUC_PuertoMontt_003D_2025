@@ -2,15 +2,11 @@ package com.example.duocappmoviles003d
 
 object NavigationRoutes {
     const val LOGIN = "login"
-    const val CATALOGO = "catalogo/{username}" // {username} es el parámetro
+    const val REGISTER = "register"
+    const val FORGOT = "forgotPassword"
+    const val CATALOGO = "catalogo/{username}"
     const val PROFILE = "profile"
     const val CART = "cart"
 
-    const val REGISTER = "register"
-
-    const val FORGOT = "forgotPassword"
-
-
-    // Función helper para crear la ruta con parámetro
-    fun createHomeRoute(username: String) = "home/$username"
+    fun createHomeRoute(username: String) = "catalogo/$username"
 }

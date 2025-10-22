@@ -13,7 +13,6 @@ fun NavigationHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationRoutes.LOGIN
     ) {
-        // Login
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
                 onNavigateToHome = { username ->
@@ -28,7 +27,6 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // Registro
         composable(route = NavigationRoutes.REGISTER) {
             RegistrarScreen(
                 onNavigateToLogin = {
@@ -39,7 +37,6 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // Catalogo / Home
         composable(
             route = NavigationRoutes.CATALOGO,
             arguments = listOf(navArgument("username") { type = NavType.StringType })
@@ -57,12 +54,10 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // Perfil
         composable(route = NavigationRoutes.PROFILE) {
             ProfileScreen(onNavigateBack = { navController.popBackStack() })
         }
 
-        // Carrito
         composable(route = NavigationRoutes.CART) {
             VistaCarrito(
                 carrito = carritoGlobal,
@@ -78,14 +73,13 @@ fun NavigationHost(navController: NavHostController) {
                 }
             )
         }
-        // Recuperar contraseña
+
         composable(route = NavigationRoutes.FORGOT) {
-            Forgot(
+            ForgotPassword(
                 onNavigateToHome = { username ->
                     navController.navigate(NavigationRoutes.createHomeRoute(username))
                 }
             )
         }
-
     }
 }
