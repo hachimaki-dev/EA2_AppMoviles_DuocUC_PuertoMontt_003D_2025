@@ -47,7 +47,7 @@
 
 1. **Clona el repositorio**
 ```bash
-git clone https://github.com/hachimaki-dev/EA2_AppMoviles_DuocUC_PuertoMontt_003D_2025/tree/ev2/citt_connect.git
+git clone https://github.com/hachimaki-dev/EA2_AppMoviles_DuocUC_PuertoMontt_003D_2025/tree/ev2/cittconnect.git
 cd EA2_AppMoviles_DuocUC_PuertoMontt_003D_2025
 ```
 
