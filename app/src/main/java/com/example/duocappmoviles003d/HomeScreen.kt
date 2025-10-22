@@ -12,7 +12,10 @@ fun HomeScreen(
     username: String, // Parámetro recibido
     onNavigateToProfile: () -> Unit,
     onNavigateBack: () -> Unit,
-    navegarHaciaCarrito: () -> Unit
+    naveg
+    .
+
+arHaciaCarrito: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
