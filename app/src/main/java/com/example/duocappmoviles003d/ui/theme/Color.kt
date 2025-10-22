@@ -14,3 +14,10 @@ val AzulOscuroCITT = Color(0xFF0151A1)
 val TurquesaCITT = Color(0xFF25EFD2)
 val FondoCITT = Color(0xFFF5F7FA)
 val TextoPistaCITT = Color(0xFFB4B4B4)
+
+val VerdeProgreso = Color(0xFF4CAF50)
+val AmarilloTarjeta = Color(0xFFFFF9C4)
+val GrisClaroTexto = Color(0xFF9E9E9E)
+val NegroClaroTexto = Color(0xFF424242)
+
+val RojoSalir = Color(0xFFD32F2F)
