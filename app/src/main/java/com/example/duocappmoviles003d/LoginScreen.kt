@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -44,7 +45,8 @@ fun LoginScreen(
                 contentDescription = "Logo de mi app",
                 modifier = Modifier
                     .height(120.dp)
-                    .padding(bottom = 24.dp)
+                    .padding(bottom = 24.dp),
+                contentScale = ContentScale.Fit
             )
 
             Text(
@@ -60,17 +62,9 @@ fun LoginScreen(
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                label = { Text("Email") },
+                label = { Text("Usuario") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = Color(2, 178, 191),
-                    focusedBorderColor = Color.Black,
-                    cursorColor = Color.Black,
-                    unfocusedLabelColor = Color(2, 178, 191),
-                    unfocusedBorderColor = Color.Black,
-                    focusedTextColor = Color.Black
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
@@ -83,14 +77,6 @@ fun LoginScreen(
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = Color(2, 178, 191),
-                    focusedBorderColor = Color.Black,
-                    cursorColor = Color.Black,
-                    unfocusedLabelColor = Color(2, 178, 191),
-                    unfocusedBorderColor = Color.Black,
-                    focusedTextColor = Color.Black
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
@@ -109,54 +95,33 @@ fun LoginScreen(
                 onClick = {
                     if (username.text.isBlank() || password.text.isBlank()) {
                         errorMessage = "Por favor completa todos los campos"
+                    } else if (!validarLogin(username.text, password.text)) {
+                        errorMessage = "Usuario o contraseña incorrectos"
                     } else {
                         errorMessage = ""
                         onNavigateToHome(username.text)
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(2, 178, 191)
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
                 shape = RoundedCornerShape(26.dp)
-            ) {
-                Text(
-                    text = "Iniciar Sesion",
-                    fontWeight = FontWeight.Black,
-                    color = Color.Black
-                )
-            }
+            ) { Text("Iniciar Sesion", color = Color.Black, fontWeight = FontWeight.Black) }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 onClick = { onNavigateToRegister() },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(2, 178, 191)
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
                 shape = RoundedCornerShape(26.dp)
-            ) {
-                Text(
-                    text = "Registrarse",
-                    fontWeight = FontWeight.Black,
-                    color = Color.Black
-                )
-            }
+            ) { Text("Registrarse", color = Color.Black, fontWeight = FontWeight.Black) }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             TextButton(
                 onClick = { onNavigateToForgot() },
                 modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Olvide mi contrasena",
-                    fontWeight = FontWeight.Black,
-                    color = Color(2, 178, 191),
-                    fontSize = 14.sp
-                )
-            }
+            ) { Text("Olvide mi contrasena", color = Color(2, 178, 191), fontWeight = FontWeight.Black) }
         }
     }
 }

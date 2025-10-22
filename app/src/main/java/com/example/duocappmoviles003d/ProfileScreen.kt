@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -16,109 +16,91 @@ import androidx.compose.ui.unit.sp
 fun ProfileScreen(
     onNavigateBack: () -> Unit
 ) {
-    var username by remember { mutableStateOf("Usuario") }
-    var email by remember { mutableStateOf("usuario@email.com") }
-    var password by remember { mutableStateOf("password") }
+    val usuario = UsuarioActivo
+    var username by remember { mutableStateOf(TextFieldValue(usuario?.username ?: "")) }
+    var email by remember { mutableStateOf(TextFieldValue(usuario?.email ?: "")) }
+    var mensaje by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
-                text = "Editar Perfil",
-                style = MaterialTheme.typography.headlineMedium,
+                text = "Perfil de Usuario",
+                fontSize = 24.sp,
                 color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Username
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                label = { Text("Usuario") },
+                label = { Text("Username") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Email
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Correo electronico") },
+                label = { Text("Email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Contrasena") },
-                visualTransformation = PasswordVisualTransformation(),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
-                shape = RoundedCornerShape(26.dp)
-            )
+            if (mensaje.isNotEmpty()) {
+                Text(text = mensaje, color = Color.Black, fontSize = 14.sp)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
+            // Botón Guardar cambios
             Button(
-                onClick = { /* Aqui podrias guardar los cambios */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(26.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(2,178,191)
-                )
+                onClick = {
+                    if (username.text.isBlank() || email.text.isBlank()) {
+                        mensaje = "Por favor completa todos los campos"
+                    } else {
+                        usuario?.username = username.text
+                        usuario?.email = email.text
+                        mensaje = "Datos actualizados correctamente"
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(2,178,191)),
+                shape = RoundedCornerShape(26.dp)
             ) {
-                Text("Guardar cambios", fontSize = 18.sp, color = Color.Black)
+                Text("Guardar cambios", color = Color.Black)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Botón volver
             Button(
-                onClick = onNavigateBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(26.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black
-                )
+                onClick = { onNavigateBack() },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                shape = RoundedCornerShape(26.dp)
             ) {
-                Text("Volver", fontSize = 18.sp, color = Color.White)
+                Text("Volver", color = Color.White)
             }
         }
     }

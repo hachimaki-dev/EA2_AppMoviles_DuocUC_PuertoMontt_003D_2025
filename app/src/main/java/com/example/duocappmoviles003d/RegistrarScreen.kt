@@ -9,8 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -18,10 +20,11 @@ import androidx.compose.ui.unit.sp
 fun RegistrarScreen(
     onNavigateToLogin: () -> Unit
 ) {
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf(TextFieldValue("")) }
+    var email by remember { mutableStateOf(TextFieldValue("")) }
+    var password by remember { mutableStateOf(TextFieldValue("")) }
+    var confirmPassword by remember { mutableStateOf(TextFieldValue("")) }
+    var errorMessage by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -32,24 +35,27 @@ fun RegistrarScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.game),
-                contentDescription = "Logo App",
-                modifier = Modifier.size(100.dp)
+                contentDescription = "Logo de mi app",
+                modifier = Modifier
+                    .height(120.dp)
+                    .padding(bottom = 24.dp),
+                contentScale = ContentScale.Fit
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Crear cuenta",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black
+                text = "Registro",
+                color = Color.Black,
+                fontWeight = FontWeight.Black,
+                fontSize = 30.sp
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             OutlinedTextField(
                 value = username,
@@ -57,91 +63,76 @@ fun RegistrarScreen(
                 label = { Text("Usuario") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
+            Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Correo electronico") },
+                label = { Text("Email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
+            Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contrasena") },
-                visualTransformation = PasswordVisualTransformation(),
+                label = { Text("Contraseña") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
+            Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text("Confirmar contrasena") },
-                visualTransformation = PasswordVisualTransformation(),
+                label = { Text("Confirmar Contraseña") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
-                ),
                 shape = RoundedCornerShape(26.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = { onNavigateToLogin() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(26.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(2,178,191)
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    fontSize = 14.sp
                 )
-            ) {
-                Text("Registrarse", fontSize = 18.sp, color = Color.Black)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextButton(onClick = { onNavigateToLogin() }) {
-                Text(
-                    "Si tienes cuenta? inicia sesion",
-                    color = Color(2,178,191)
-                )
-            }
+            Button(
+                onClick = {
+                    errorMessage = ""
+                    if (username.text.isBlank() || email.text.isBlank() || password.text.isBlank() || confirmPassword.text.isBlank()) {
+                        errorMessage = "Por favor completa todos los campos"
+                    } else if (password.text != confirmPassword.text) {
+                        errorMessage = "Las contraseñas no coinciden"
+                    } else {
+                        val nuevoUsuario = Usuario(username.text, email.text, password.text)
+                        if (registrarUsuario(nuevoUsuario)) onNavigateToLogin()
+                        else errorMessage = "El usuario ya existe"
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
+                shape = RoundedCornerShape(26.dp)
+            ) { Text("Registrar", color = Color.Black, fontWeight = FontWeight.Black) }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = { onNavigateToLogin() },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
+                shape = RoundedCornerShape(26.dp)
+            ) { Text("Volver al Login", color = Color.Black, fontWeight = FontWeight.Black) }
         }
     }
 }

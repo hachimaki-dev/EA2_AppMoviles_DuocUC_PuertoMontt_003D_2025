@@ -11,13 +11,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             MaterialTheme {
                 Surface {
-                    // Creamos el NavController
-                    val navController = rememberNavController()
-
-                    // Iniciamos el NavigationHost
-                    NavigationHost(navController = navController)
+                    NavigationHost(navController)
                 }
             }
         }
