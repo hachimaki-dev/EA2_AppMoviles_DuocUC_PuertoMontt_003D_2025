@@ -13,55 +13,19 @@ fun NavigationHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationRoutes.LOGIN
     ) {
-        // Ruta: Login (sin parámetros)
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
-                onNavigateToHome = { username ->
-                    navController.navigate(
-                        NavigationRoutes.createHomeRoute(username)
-                    )
+                navegarHaciaContacto = {
+                    navController.navigate(NavigationRoutes.CONTACT)
                 }
             )
         }
 
-        // Ruta: Home (con parámetro)
-        composable(
-            route = NavigationRoutes.HOME,
-            arguments = listOf(
-                navArgument("username") {
-                    type = NavType.StringType
-                }
-            )
-        ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
-
-            HomeScreen(
-                username = username,
-                onNavigateToProfile = {
-                    navController.navigate(NavigationRoutes.PROFILE)
-                },
-                onNavigateBack = {
-                    navController.popBackStack()
-                },
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
-                }
-            )
-        }
-
-        // Ruta: Profile (sin parámetros)
-        composable(route = NavigationRoutes.PROFILE) {
-            ProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable(route = NavigationRoutes.CART){
-            VistaCarrito(
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
+        composable(route = NavigationRoutes.CONTACT) {
+            ShowContactUi(
+                navegarHaciaContacto = {
+                    // Aquí podrías volver al login o navegar a otro lado
+                    navController.navigate(NavigationRoutes.LOGIN)
                 }
             )
         }
