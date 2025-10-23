@@ -29,7 +29,7 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text("Menú Principal") },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    titleContentColor = Color.White // <-- Esto estaba pegado antes
+                    titleContentColor = Color.White
                 ),
                 actions = {
                     IconButton(onClick = onNavigateToLogin) {
@@ -53,12 +53,12 @@ fun HomeScreen(
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
-            // Botón a la Pantalla Secundaria 1 (Formulario de Login ya está completo)
+
             Card( // Uso de Card (Componente MD3)
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                onClick = onNavigateToDetail, // Navega a la Vista de Confirmación/Detalle
+                onClick = onNavigateToDetail,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 Row(
@@ -71,7 +71,7 @@ fun HomeScreen(
                 }
             }
 
-            // Simulación de otro enlace o botón de menú
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()

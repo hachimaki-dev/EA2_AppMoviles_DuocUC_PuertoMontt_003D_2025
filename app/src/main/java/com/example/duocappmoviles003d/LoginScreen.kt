@@ -40,7 +40,7 @@ fun LoginScreen(
     val isPasswordInvalid = password.isBlank() || password.length < 6
 
     fun validateFormAndNavigate() {
-        formSubmitted = true // Intentamos enviar, activar visualización de errores
+        formSubmitted = true
 
         if (!isUsernameInvalid && !isEmailInvalid && !isPasswordInvalid) {
             onNavigateToHome(username)
