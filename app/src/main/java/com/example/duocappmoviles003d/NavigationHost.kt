@@ -41,7 +41,7 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // --- Pantalla Catálogo ---
+        // --- Pantalla Catalogo ---
         composable(NavigationRoutes.CATALOGO) {
             CatalogoScreen(
                 onNavigateToProfile = { navController.navigate(NavigationRoutes.PROFILE) },

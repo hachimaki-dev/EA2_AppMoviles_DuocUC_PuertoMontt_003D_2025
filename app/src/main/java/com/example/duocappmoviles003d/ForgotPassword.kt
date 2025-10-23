@@ -29,7 +29,7 @@ fun ForgotPassword(onNavigateBack: () -> Unit) {
                 modifier = Modifier.height(120.dp).padding(bottom = 24.dp)
             )
 
-            Text("Recuperar contrasena", color = Color.Black, fontSize = 30.sp)
+            Text("Recuperar contraseña", color = Color.Black, fontSize = 30.sp)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -40,10 +40,15 @@ fun ForgotPassword(onNavigateBack: () -> Unit) {
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color(2,178,191),
-                    focusedLabelColor = Color(2,178,191),
-                    unfocusedLabelColor = Color(2,178,191)
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
                 ),
                 shape = RoundedCornerShape(26.dp)
             )

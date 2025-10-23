@@ -29,7 +29,7 @@ fun CatalogoScreen(
     Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
 
-            // --- Header con logo y perfil ---
+            // --- logo y perfil ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,7 +125,7 @@ fun CatalogoScreen(
             ) {
                 Button(
                     onClick = onCerrarSesion,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                     modifier = Modifier.weight(1f)
                 ) { Text("Cerrar Sesión", color = Color.White) }
 

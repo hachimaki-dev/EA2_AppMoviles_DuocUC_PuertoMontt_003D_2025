@@ -51,7 +51,18 @@ fun ProfileScreen(
                 label = { Text("Username") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -63,7 +74,18 @@ fun ProfileScreen(
                 label = { Text("Email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -65,7 +65,19 @@ fun LoginScreen(
                 label = { Text("Usuario") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
+
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -77,7 +89,18 @@ fun LoginScreen(
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             if (errorMessage.isNotEmpty()) {
@@ -112,9 +135,9 @@ fun LoginScreen(
             Button(
                 onClick = { onNavigateToRegister() },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(26.dp)
-            ) { Text("Registrarse", color = Color.Black, fontWeight = FontWeight.Black) }
+            ) { Text("Registrarse", color = Color.White, fontWeight = FontWeight.Black) }
 
             Spacer(modifier = Modifier.height(12.dp))
 

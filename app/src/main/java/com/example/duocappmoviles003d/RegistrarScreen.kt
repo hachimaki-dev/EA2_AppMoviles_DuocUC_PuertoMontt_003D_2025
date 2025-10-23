@@ -63,7 +63,18 @@ fun RegistrarScreen(
                 label = { Text("Usuario") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -73,7 +84,18 @@ fun RegistrarScreen(
                 label = { Text("Email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -83,7 +105,18 @@ fun RegistrarScreen(
                 label = { Text("Contraseña") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -93,14 +126,25 @@ fun RegistrarScreen(
                 label = { Text("Confirmar Contraseña") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(2, 178, 191),
+                    unfocusedTextColor = Color.Black,
+                    unfocusedBorderColor = Color(2, 178, 191),
+                    unfocusedLabelColor = Color(2, 178, 191),
+                    disabledBorderColor = Color(2, 178, 191),
+                    focusedLabelColor = Color(2, 178, 191),
+                    focusedTextColor = Color.Black
+
+
+                )
             )
 
             if (errorMessage.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = errorMessage,
-                    color = Color.Red,
+                    color = Color.Black,
                     fontSize = 14.sp
                 )
             }
@@ -130,9 +174,9 @@ fun RegistrarScreen(
             Button(
                 onClick = { onNavigateToLogin() },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(26.dp)
-            ) { Text("Volver al Login", color = Color.Black, fontWeight = FontWeight.Black) }
+            ) { Text("Volver al Login", color = Color.White, fontWeight = FontWeight.Black) }
         }
     }
 }
