@@ -37,23 +37,16 @@ fun NavigationHost(navController: NavHostController) {
 
             HomeScreen(
                 username = username,
-                onNavigateToProfile = {
-                    navController.navigate(NavigationRoutes.PROFILE)
+                onNavigateToDetail = {
+                    navController.navigate(NavigationRoutes.PROFILE) // O DETAIL
                 },
-                onNavigateBack = {
-                    navController.popBackStack()
+                onNavigateToLogin = {
+                    navController.popBackStack(NavigationRoutes.LOGIN, inclusive = true)
+                    navController.navigate(NavigationRoutes.LOGIN)
                 },
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
-                }
-            )
-        }
 
-        // Ruta: Profile (sin parámetros)
-        composable(route = NavigationRoutes.PROFILE) {
-            ProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
+                onNavigateToCart = {
+                    navController.navigate(NavigationRoutes.CART)
                 }
             )
         }

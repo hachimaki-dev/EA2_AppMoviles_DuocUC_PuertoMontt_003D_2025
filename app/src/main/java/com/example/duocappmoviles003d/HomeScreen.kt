@@ -1,61 +1,93 @@
 package com.example.duocappmoviles003d
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 
+@OptIn(ExperimentalMaterial3Api::class)
+// Dentro de HomeScreen.kt
 @Composable
 fun HomeScreen(
-    username: String, // Parámetro recibido
-    onNavigateToProfile: () -> Unit,
-    onNavigateBack: () -> Unit,
-    navegarHaciaCarrito: () -> Unit
+    username: String,
+    onNavigateToDetail: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateToCart: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Pantalla Home",
-            style = MaterialTheme.typography.headlineMedium
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Bienvenido, $username!",
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = onNavigateToProfile,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Ir a Perfil")
+    Scaffold( // Uso de Scaffold y TopAppBar (Componentes MD3)
+        topBar = {
+            TopAppBar(
+                title = { Text("Menú Principal") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    titleContentColor = Color.White // <-- Esto estaba pegado antes
+                ),
+                actions = {
+                    IconButton(onClick = onNavigateToLogin) {
+                        Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar Sesión", tint = Color.White)
+                    }
+                }
+            )
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedButton(
-            onClick = onNavigateBack,
-            modifier = Modifier.fillMaxWidth()
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Volver a Login")
+            Text(
+                text = "Bienvenido, $username",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+
+            // Botón a la Pantalla Secundaria 1 (Formulario de Login ya está completo)
+            Card( // Uso de Card (Componente MD3)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                onClick = onNavigateToDetail, // Navega a la Vista de Confirmación/Detalle
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Row(
+                    modifier = Modifier.padding(20.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.Info, contentDescription = null, modifier = Modifier.size(32.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text("Ir a Detalle / Confirmación", style = MaterialTheme.typography.titleMedium)
+                }
+            }
+
+            // Simulación de otro enlace o botón de menú
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                onClick = onNavigateToDetail, // Podría ser otra pantalla, pero reutilizamos para cumplir la navegación
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Row(
+                    modifier = Modifier.padding(20.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.List, contentDescription = null, modifier = Modifier.size(32.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text("Ver Listado de Items", style = MaterialTheme.typography.titleMedium)
+                }
+            }
         }
-    }
-
-    Spacer(modifier = Modifier.height(32.dp))
-
-    Button(
-        onClick = navegarHaciaCarrito,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text("Ir a Carrito")
     }
 }
