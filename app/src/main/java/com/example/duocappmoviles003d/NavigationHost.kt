@@ -25,12 +25,13 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // Ruta: Login
+
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
                 onNavigateToHome = { username ->
                     navController.navigate(NavigationRoutes.createHomeRoute(username)) {
-                        popUpTo(NavigationRoutes.ENTRY)
+
+                        popUpTo(NavigationRoutes.ENTRY) { inclusive = true }
                     }
                 },
                 onNavigateToRegister = {
@@ -39,36 +40,43 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // Ruta: Register, ahora llama a Registro
+
         composable(route = NavigationRoutes.REGISTER) {
             Registro(
                 onNavigateToHome = { username ->
                     navController.navigate(NavigationRoutes.createHomeRoute(username)) {
-                        popUpTo(NavigationRoutes.ENTRY)
+
+                        popUpTo(NavigationRoutes.ENTRY) { inclusive = true }
                     }
                 },
                 onNavigateToLogin = {
-                    navController.navigate(NavigationRoutes.LOGIN) {
-                        popUpTo(navController.graph.startDestinationId)
-                    }
+                    navController.navigate(NavigationRoutes.LOGIN)
                 }
             )
         }
 
-        // Ruta: Home
+
         composable(
             route = NavigationRoutes.HOME,
             arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
 
+
             HomeScreen(
                 username = username,
-                onNavigateBack = {
-                    navController.popBackStack(NavigationRoutes.ENTRY, inclusive = false)
+                onNavigate = { ruta ->
+                    if (ruta == "login") {
+
+                        navController.navigate(NavigationRoutes.LOGIN) {
+                            popUpTo(0)
+                        }
+                    } else {
+
+                        navController.navigate(ruta)
+                    }
                 }
             )
         }
-
     }
 }

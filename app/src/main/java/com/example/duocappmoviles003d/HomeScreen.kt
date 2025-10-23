@@ -1,42 +1,265 @@
 package com.example.duocappmoviles003d
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+
+// --- Datos de ejemplo para los productos ---
+data class Producto(val nombre: String, val precio: String, val imagenResId: Int)
+
+val ofertaPrincipal = Producto("Perfume Cacharel", "$919", R.drawable.roro_perfumes)
+val productosDestacados = listOf(
+    Producto("Dior Sauvage", "$1.250", R.drawable.roro_perfumes),
+    Producto("Acqua Di Gio", "$1.100", R.drawable.roro_perfumes),
+    Producto("Invictus", "$980", R.drawable.roro_perfumes)
+)
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
+    val estadoMenuHamburguesa = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = estadoMenuHamburguesa,
+        drawerContent = {
+            ModalDrawerSheet(
+                drawerContainerColor = Color.Black
+            ) {
+                Text(
+                    text = "¡Hola, $username!",
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Divider(color = Color.Gray)
+                Spacer(modifier = Modifier.height(8.dp))
+                NavigationDrawerItem(
+                    label = { Text("Inicio") },
+                    selected = true,
+                    onClick = { scope.launch { estadoMenuHamburguesa.close() } },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = Color.White,
+                        unselectedTextColor = Color.White
+                    )
+                )
+                NavigationDrawerItem(
+                    label = { Text("Cerrar Sesión") },
+                    selected = false,
+                    onClick = { onNavigate("login"); scope.launch { estadoMenuHamburguesa.close() } },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+            }
+        }
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            ContenidoPrincipal()
+
+            HomeTopAppBar(
+                modifier = Modifier.align(Alignment.TopCenter),
+                onMenuClick = {
+                    scope.launch { estadoMenuHamburguesa.apply { if (isClosed) open() else close() } }
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeTopAppBar(modifier: Modifier = Modifier, onMenuClick: () -> Unit) {
+    TopAppBar(
+        modifier = modifier,
+        title = {
+            Image(
+                painter = painterResource(id = R.drawable.roro_perfumes),
+                contentDescription = "Logo",
+                modifier = Modifier.height(40.dp)
+
+            )
+        },
+        navigationIcon = {
+
+            Surface(
+                shape = CircleShape,
+                color = Color.Black.copy(alpha = 0.5f), // Fondo negro semitransparente
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+                IconButton(onClick = onMenuClick) {
+                    Icon(Icons.Default.Menu, contentDescription = "Menú")
+                }
+            }
+        },
+        actions = {
+
+            Surface(
+                shape = CircleShape,
+                color = Color.Black.copy(alpha = 0.5f), // Fondo negro semitransparente
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                IconButton(onClick = {  }) {
+                    Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
+                }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            titleContentColor = Color.White,
+            navigationIconContentColor = Color.White,
+            actionIconContentColor = Color.White
+        )
+    )
+}
 
 @Composable
-fun HomeScreen(
-    username: String,
-    onNavigateBack: () -> Unit
-) {
+fun ContenidoPrincipal(modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFFF0F0F0))
+    ) {
+        item {
+            Image(
+                painter = painterResource(id = R.drawable.pf),
+                contentDescription = "Banner principal",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item { SeccionOfertas() }
+        item { Spacer(modifier = Modifier.height(24.dp)) }
+        item { SeccionDestacados() }
+        item { Spacer(modifier = Modifier.height(24.dp)) }
+        item { SeccionProximamente() }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+    }
+}
+
+@Composable
+fun SeccionOfertas() {
+    Column {
+        Text(
+            text = "Ofertas del Mes",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = ofertaPrincipal.imagenResId),
+                    contentDescription = ofertaPrincipal.nombre,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp)
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(ofertaPrincipal.nombre, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text(ofertaPrincipal.precio, color = Color.Red, fontSize = 16.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun SeccionDestacados() {
+    Column {
+        Text(
+            text = "Destacados",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(productosDestacados) { producto ->
+                Card(
+                    modifier = Modifier.width(150.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = producto.imagenResId),
+                            contentDescription = producto.nombre,
+                            modifier = Modifier
+                                .height(120.dp)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            producto.nombre,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center,
+                            minLines = 2
+                        )
+                        Text(producto.precio, color = MaterialTheme.typography.bodyMedium.color)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SeccionProximamente() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Pantalla Home",
-            style = MaterialTheme.typography.headlineMedium
+            "¡Próximamente!",
+            style = MaterialTheme.typography.titleLarge
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Bienvenido, $username!",
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-
-        OutlinedButton(
-            onClick = onNavigateBack,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Volver a la Entrada")
-        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text("Nuevos productos llegarán pronto. ¡Mantente atento!")
     }
 }
