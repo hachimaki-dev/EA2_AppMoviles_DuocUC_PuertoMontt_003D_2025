@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.ferremas.model.Category
+import com.example.ferremas.model.Product
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -93,13 +95,24 @@ fun HomeScreen(){
 
             //features products
               Spacer(modifier = Modifier.height(16.dp))
-              SectionTitle(title = "Features", "Ver Todo") {
+              SectionTitle(title = "Promociones", "Ver Todo") {
                   /**todo add navigation**/
               }
 
+              val productList = listOf(
+                  Product("1","Taladro", 999.9, imageUrl = "https://unsplash.com/es/fotos/taladro-inalambrico-dewalt-negro-y-amarillo-MXeDE_yCdHQ"),
+                  Product("2","Taladro", 13123.9, imageUrl = "https://unsplash.com/es/fotos/taladro-inalambrico-dewalt-negro-y-amarillo-MXeDE_yCdHQ")
 
+              )
 
+              LazyRow(
+                  contentPadding = PaddingValues(horizontal = 16.dp),
+                  horizontalArrangement = Arrangement.spacedBy(16.dp)
+              ) {
+                  items(productList){
 
+                  }
+              }
 
 
           }
