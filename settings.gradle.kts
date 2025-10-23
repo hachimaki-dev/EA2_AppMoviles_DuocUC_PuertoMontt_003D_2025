@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DuocAppMoviles003D"
+rootProject.name = "Perfulandia"
 include(":app")
