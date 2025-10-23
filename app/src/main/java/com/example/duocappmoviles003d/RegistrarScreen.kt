@@ -43,13 +43,13 @@ fun RegistrarScreen(
                 painter = painterResource(id = R.drawable.game),
                 contentDescription = "Logo de mi app",
                 modifier = Modifier
-                    .height(120.dp)
+                    .height(250.dp)
                     .padding(bottom = 24.dp),
                 contentScale = ContentScale.Fit
             )
 
             Text(
-                text = "Registro",
+                text = "Registrarse",
                 color = Color.Black,
                 fontWeight = FontWeight.Black,
                 fontSize = 30.sp

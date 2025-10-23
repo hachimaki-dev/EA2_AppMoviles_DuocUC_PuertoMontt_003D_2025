@@ -65,7 +65,7 @@ fun NavigationHost(navController: NavHostController) {
             VistaCarrito(
                 carrito = carritoGlobal,
                 navegarHaciaCatalogo = { navController.navigate(NavigationRoutes.CATALOGO) },
-                onPagar = { /* Lógica de pago */ }
+                onPagar = { /* Logica de pago */ }
             )
         }
 

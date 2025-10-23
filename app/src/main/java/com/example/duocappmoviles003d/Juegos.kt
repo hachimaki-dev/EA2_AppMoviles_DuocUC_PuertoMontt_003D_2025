@@ -20,10 +20,12 @@ val carritoGlobal = mutableListOf<Juego>()
 
 // Catálogo de juegos
 val catalogoItems = listOf(
-    Juego("Battlefield", 15000, R.drawable.battlefield, "Descripcion Juego 1"),
+    Juego("Battlefield", 15000, R.drawable.battlefield, "JUegoshooter"),
     Juego("Fc 24", 20000, R.drawable.fifa, "Descripcion Juego 2"),
     Juego("Minecraft", 25000, R.drawable.minecraft, "Descripcion Juego 3"),
-    Juego("Call of duty", 18000, R.drawable.callofduty, "Descripcion Juego 4")
+    Juego("Call of duty", 18000, R.drawable.callofduty, "Descripcion Juego 4"),
+    Juego("Call of duty", 18000, R.drawable.callofduty, "Descripcion Juego 4"),
+
 )
 
 // Función para agregar al carrito sin duplicados
