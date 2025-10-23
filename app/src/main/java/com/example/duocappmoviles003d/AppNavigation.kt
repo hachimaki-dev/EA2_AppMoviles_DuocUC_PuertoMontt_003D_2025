@@ -15,7 +15,7 @@ object AppRoutes {
 
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController()
+    val navController = rememberNavController()//kristo
 
     NavHost(
         navController = navController,

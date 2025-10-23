@@ -72,8 +72,6 @@ import kotlinx.coroutines.launch
 import com.example.duocappmoviles003d.ui.theme.RojoSalir
 
 
-// Color para el botón Salir, puedes moverlo a Color.kt si quieres
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaMenuPrincipal(navController: NavController) {
@@ -248,18 +246,21 @@ fun PantallaMenuPrincipal(navController: NavController) {
 }
 
 
+// --- CÓDIGO MODIFICADO ---
+
 @Composable
 fun MenuDrawerContent(
     navController: NavController,
     onCloseDrawer: () -> Unit
 ) {
     ModalDrawerSheet(
-        modifier = Modifier.widthIn(max = 300.dp)
+        modifier = Modifier.widthIn(max = 300.dp),
+        drawerContainerColor = FondoCITT // <- CAMBIO: Fondo claro
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AzulOscuroCITT),
+                .background(FondoCITT), // <- CAMBIO: Fondo claro
         ) {
             // Encabezado del Menú
             Column(
@@ -272,12 +273,12 @@ fun MenuDrawerContent(
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Usuario",
-                    tint = Color.White,
+                    tint = AzulOscuroCITT, // <- CAMBIO: Icono azul marino
                     modifier = Modifier.size(100.dp)
                 )
                 Text(
                     text = "Hola! Usuario",
-                    color = Color.White,
+                    color = AzulOscuroCITT, // <- CAMBIO: Texto azul marino
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -333,7 +334,7 @@ fun MenuDrawerContent(
                     .fillMaxWidth()
                     .padding(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = RojoSalir,
+                    containerColor = RojoSalir, // <- CAMBIO: Nuevo rojo UI
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(12.dp)
@@ -358,8 +359,8 @@ fun BotonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
             .fillMaxWidth()
             .height(50.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = TurquesaCITT,
-            contentColor = AzulOscuroCITT
+            containerColor = TurquesaCITT,  // <- CAMBIO: Azul primario vibrante
+            contentColor = Color.White    // <- CAMBIO: Texto blanco (mejor contraste)
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -372,6 +373,8 @@ fun BotonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
         Spacer(modifier = Modifier.weight(1f)) // Empuja el texto a la izquierda
     }
 }
+
+// --- FIN CÓDIGO MODIFICADO ---
 
 
 // Componentes Reutilizables

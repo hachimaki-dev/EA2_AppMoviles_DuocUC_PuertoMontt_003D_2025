@@ -82,7 +82,7 @@ fun PantallaLogin(navController: NavController) {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Box(
+                Box( // kristo
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
@@ -164,7 +164,7 @@ fun PantallaLogin(navController: NavController) {
                     Spacer(modifier = Modifier.height(32.dp))
 
                     // Botón de Acceso
-                    Button(
+                    Button( // kristo
                         onClick = {
                             navController.navigate(AppRoutes.MAIN_SCREEN) {
                                 popUpTo(AppRoutes.LOGIN_SCREEN) { inclusive = true }
