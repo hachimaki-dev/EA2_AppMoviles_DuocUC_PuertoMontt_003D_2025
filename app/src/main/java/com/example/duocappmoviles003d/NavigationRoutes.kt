@@ -6,6 +6,6 @@ object NavigationRoutes {
     const val CART = "cart"
 
     const val CONTACT = "contact"
-
-
+    const val CATALOG = "catalog"
+    const val SETTINGS = "settings"
 }

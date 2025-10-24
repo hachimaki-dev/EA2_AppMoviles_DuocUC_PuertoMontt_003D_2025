@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    // Iconos Material (Filled.*)
+    implementation("androidx.compose.material:material-icons-extended")
+    
     //Comentarios
     //Agregamos la dependencia del Nav
     implementation("androidx.navigation:navigation-compose:2.7.7")
