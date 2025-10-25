@@ -25,12 +25,10 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
                 onNavigateToHome = { username ->
                     navController.navigate(NavigationRoutes.createHomeRoute(username)) {
-
                         popUpTo(NavigationRoutes.ENTRY) { inclusive = true }
                     }
                 },
@@ -40,12 +38,10 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-
         composable(route = NavigationRoutes.REGISTER) {
             Registro(
                 onNavigateToHome = { username ->
                     navController.navigate(NavigationRoutes.createHomeRoute(username)) {
-
                         popUpTo(NavigationRoutes.ENTRY) { inclusive = true }
                     }
                 },
@@ -55,24 +51,39 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-
         composable(
             route = NavigationRoutes.HOME,
             arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
 
-
             HomeScreen(
                 username = username,
                 onNavigate = { ruta ->
                     if (ruta == "login") {
-
-                        navController.navigate(NavigationRoutes.LOGIN) {
-                            popUpTo(0)
-                        }
+                        navController.navigate(NavigationRoutes.LOGIN) { popUpTo(0) }
                     } else {
+                        // Navega a la ruta que se le pase (ej: "productos/usuario")
+                        navController.navigate(ruta)
+                    }
+                }
+            )
+        }
 
+        // ***** CAMBIO: AÑADIDA LA NUEVA RUTA PARA LA PANTALLA DE PRODUCTOS *****
+        composable(
+            route = NavigationRoutes.PRODUCTS, // Asume que tienes "productos/{username}" en NavigationRoutes
+            arguments = listOf(navArgument("username") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
+
+            PantallaProductos(
+                username = username,
+                onNavigate = { ruta ->
+                    if (ruta == "login") {
+                        navController.navigate(NavigationRoutes.LOGIN) { popUpTo(0) }
+                    } else {
+                        // Navega a la ruta que se le pase (ej: "home")
                         navController.navigate(ruta)
                     }
                 }

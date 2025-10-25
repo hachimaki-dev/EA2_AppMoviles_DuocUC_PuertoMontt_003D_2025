@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -25,8 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
-// --- Datos de ejemplo para los productos ---
+// --- Datos de ejemplo y Colores ---
 data class Producto(val nombre: String, val precio: String, val imagenResId: Int)
+
+val AppPrimaryColor = Color(0xFFE0B0FF) // Color lila/lavanda
 
 val ofertaPrincipal = Producto("Perfume Cacharel", "$919", R.drawable.roro_perfumes)
 val productosDestacados = listOf(
@@ -55,7 +58,7 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                Divider(color = Color.Gray)
+                HorizontalDivider(color = Color.Gray)
                 Spacer(modifier = Modifier.height(8.dp))
                 NavigationDrawerItem(
                     label = { Text("Inicio") },
@@ -66,6 +69,20 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                         unselectedTextColor = Color.White
                     )
                 )
+
+                // ***** CAMBIO: SE AÑADE EL BOTÓN PARA NAVEGAR A PRODUCTOS *****
+                NavigationDrawerItem(
+                    label = { Text("Productos") },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createProductsRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesión") },
                     selected = false,
@@ -88,6 +105,15 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                     scope.launch { estadoMenuHamburguesa.apply { if (isClosed) open() else close() } }
                 }
             )
+
+            Image(
+                painter = painterResource(id = R.drawable.roro_perfumes),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 40.dp)
+                    .height(80.dp)
+            )
         }
     }
 }
@@ -97,19 +123,11 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
 fun HomeTopAppBar(modifier: Modifier = Modifier, onMenuClick: () -> Unit) {
     TopAppBar(
         modifier = modifier,
-        title = {
-            Image(
-                painter = painterResource(id = R.drawable.roro_perfumes),
-                contentDescription = "Logo",
-                modifier = Modifier.height(40.dp)
-
-            )
-        },
+        title = { /* El título está vacío, el logo se maneja por fuera */ },
         navigationIcon = {
-
             Surface(
                 shape = CircleShape,
-                color = Color.Black.copy(alpha = 0.5f), // Fondo negro semitransparente
+                color = Color.Black.copy(alpha = 0.5f),
                 modifier = Modifier.padding(start = 8.dp)
             ) {
                 IconButton(onClick = onMenuClick) {
@@ -118,20 +136,18 @@ fun HomeTopAppBar(modifier: Modifier = Modifier, onMenuClick: () -> Unit) {
             }
         },
         actions = {
-
             Surface(
                 shape = CircleShape,
-                color = Color.Black.copy(alpha = 0.5f), // Fondo negro semitransparente
+                color = Color.Black.copy(alpha = 0.5f),
                 modifier = Modifier.padding(end = 8.dp)
             ) {
-                IconButton(onClick = {  }) {
+                IconButton(onClick = { /* Acción para el carrito */ }) {
                     Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
                 }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            titleContentColor = Color.White,
+            containerColor = Color.Black.copy(alpha = 0.4f),
             navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White
         )
@@ -146,15 +162,41 @@ fun ContenidoPrincipal(modifier: Modifier = Modifier) {
             .background(Color(0xFFF0F0F0))
     ) {
         item {
-            Image(
-                painter = painterResource(id = R.drawable.pf),
-                contentDescription = "Banner principal",
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp),
-                contentScale = ContentScale.Crop
-            )
+                    .height(250.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.pf),
+                    contentDescription = "Banner principal",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)),
+                                startY = 250f
+                            )
+                        )
+                )
+
+                Text(
+                    text = "Inicio",
+                    color = AppPrimaryColor,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 16.dp)
+                )
+            }
         }
+
         item { Spacer(modifier = Modifier.height(16.dp)) }
         item { SeccionOfertas() }
         item { Spacer(modifier = Modifier.height(24.dp)) }
