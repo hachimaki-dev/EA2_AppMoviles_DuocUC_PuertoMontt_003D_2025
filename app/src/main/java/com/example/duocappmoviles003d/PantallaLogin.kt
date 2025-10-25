@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -59,11 +60,17 @@ import kotlinx.coroutines.launch
 @Composable
 fun PantallaLogin(navController: NavController) {
 
-    // Variables para guardar el texto del usuario
+    val usuariosRegistrados = mapOf(
+        "estudiante@duocuc.cl" to "duoc123",
+        "profesor@profesor.duocuc.cl" to "profe123"
+    )
+
     var rutOCorreo by remember { mutableStateOf("") }
     var clave by remember { mutableStateOf("") }
 
-    // Contenedor para centrar el formulario
+    var mostrarErrorDialog by remember { mutableStateOf(false) }
+    var mensajeError by remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +89,7 @@ fun PantallaLogin(navController: NavController) {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Box( // kristo
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
@@ -107,7 +114,6 @@ fun PantallaLogin(navController: NavController) {
                     }
                 }
 
-                // Cuerpo del Formulario
                 Column(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -121,14 +127,14 @@ fun PantallaLogin(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Campo de Texto: RUT o Email
                     OutlinedTextField(
                         value = rutOCorreo,
                         onValueChange = { rutOCorreo = it },
-                        label = { Text("RUT o Email") },
-                        placeholder = { Text("Ej: 19.123.456-7 o correo@duoc.cl") },
+                        label = { Text("Email") },
+                        placeholder = { Text("Ej: correo@duocuc.cl") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -141,7 +147,6 @@ fun PantallaLogin(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Campo de Texto: Contraseña
                     OutlinedTextField(
                         value = clave,
                         onValueChange = { clave = it },
@@ -149,7 +154,7 @@ fun PantallaLogin(navController: NavController) {
                         placeholder = { Text("Ingresa tu clave") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        visualTransformation = PasswordVisualTransformation(), // Oculta la clave
+                        visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
@@ -163,11 +168,27 @@ fun PantallaLogin(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    // Botón de Acceso
-                    Button( // kristo
+                    Button(
                         onClick = {
-                            navController.navigate(AppRoutes.MAIN_SCREEN) {
-                                popUpTo(AppRoutes.LOGIN_SCREEN) { inclusive = true }
+                            val email = rutOCorreo.trim()
+                            val pass = clave.trim()
+
+                            if (email.isBlank() || pass.isBlank()) {
+                                mensajeError = "Por favor, ingresa email y contraseña."
+                                mostrarErrorDialog = true
+                            }
+                            else if (!email.endsWith("@duocuc.cl") && !email.endsWith("@profesor.duocuc.cl")) {
+                                mensajeError = "El correo debe ser de dominio @duocuc.cl o @profesor.duocuc.cl"
+                                mostrarErrorDialog = true
+                            }
+                            else if (usuariosRegistrados.containsKey(email) && usuariosRegistrados[email] == pass) {
+                                navController.navigate(AppRoutes.createMainScreenRoute(email)) {
+                                    popUpTo(AppRoutes.LOGIN_SCREEN) { inclusive = true }
+                                }
+                            }
+                            else {
+                                mensajeError = "Email o contraseña incorrectos."
+                                mostrarErrorDialog = true
                             }
                         },
                         modifier = Modifier
@@ -188,8 +209,7 @@ fun PantallaLogin(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Botón: Olvidaste Contraseña
-                    TextButton(onClick = { /* Falta la lógica de olvidar clave -> TODO */ }) {
+                    TextButton(onClick = { }) {
                         Text(
                             text = "¿Olvidaste tu Contraseña?",
                             color = TurquesaCITT,
@@ -198,6 +218,21 @@ fun PantallaLogin(navController: NavController) {
                     }
                 }
             }
+        }
+
+        if (mostrarErrorDialog) {
+            AlertDialog(
+                onDismissRequest = { mostrarErrorDialog = false },
+                title = { Text("Error de Inicio de Sesión") },
+                text = { Text(mensajeError) },
+                confirmButton = {
+                    TextButton(
+                        onClick = { mostrarErrorDialog = false }
+                    ) {
+                        Text("Entendido")
+                    }
+                }
+            )
         }
     }
 }

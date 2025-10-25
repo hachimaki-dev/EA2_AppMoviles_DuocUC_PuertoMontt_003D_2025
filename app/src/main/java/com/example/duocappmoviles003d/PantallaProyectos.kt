@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaProyectos(navController: NavController) {
+fun PantallaProyectos(navController: NavController, userEmail: String) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -63,6 +63,7 @@ fun PantallaProyectos(navController: NavController) {
         drawerContent = {
             MenuDrawerContent(
                 navController = navController,
+                userEmail = userEmail,
                 onCloseDrawer = {
                     scope.launch {
                         drawerState.close()
@@ -96,7 +97,7 @@ fun PantallaProyectos(navController: NavController) {
                     },
                     actions = {
                         IconButton(onClick = {
-                            navController.navigate(AppRoutes.CREATE_PROJECT_SCREEN)
+                            navController.navigate(AppRoutes.createCreateProjectScreenRoute(userEmail))
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Add,
@@ -119,7 +120,6 @@ fun PantallaProyectos(navController: NavController) {
                     .padding(padding)
                     .padding(horizontal = 24.dp)
             ) {
-                // Barra de Búsqueda
                 OutlinedTextField(
                     value = busqueda,
                     onValueChange = { busqueda = it },
@@ -145,16 +145,13 @@ fun PantallaProyectos(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Lista de Proyectos
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // Item Fijo
                     item {
                         ProyectoItem(texto = "Sistema de deteccion de fraude en sistemas b...")
                     }
 
-                    // Subtítulo
                     item {
                         Text(
                             text = "Proyectos de tu track",
@@ -165,7 +162,6 @@ fun PantallaProyectos(navController: NavController) {
                         )
                     }
 
-                    // Lista de Proyectos Genéricos
                     items(proyectos.size) { index ->
                         ProyectoItem(texto = proyectos[index])
                     }
@@ -175,7 +171,6 @@ fun PantallaProyectos(navController: NavController) {
     }
 }
 
-// Componente para los items de la lista
 @Composable
 fun ProyectoItem(texto: String) {
     Column(modifier = Modifier.fillMaxWidth()) {

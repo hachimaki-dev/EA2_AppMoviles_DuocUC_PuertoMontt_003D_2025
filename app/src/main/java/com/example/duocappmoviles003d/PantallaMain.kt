@@ -49,6 +49,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,13 +69,16 @@ import com.example.duocappmoviles003d.ui.theme.GrisClaroTexto
 import com.example.duocappmoviles003d.ui.theme.NegroClaroTexto
 import com.example.duocappmoviles003d.ui.theme.TurquesaCITT
 import com.example.duocappmoviles003d.ui.theme.VerdeProgreso
-import kotlinx.coroutines.launch
 import com.example.duocappmoviles003d.ui.theme.RojoSalir
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaMenuPrincipal(navController: NavController) {
+fun PantallaMenuPrincipal(
+    navController: NavController,
+    userEmail: String
+) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -84,6 +88,7 @@ fun PantallaMenuPrincipal(navController: NavController) {
         drawerContent = {
             MenuDrawerContent(
                 navController = navController,
+                userEmail = userEmail,
                 onCloseDrawer = {
                     scope.launch {
                         drawerState.close()
@@ -92,7 +97,6 @@ fun PantallaMenuPrincipal(navController: NavController) {
             )
         }
     ) {
-        // Scaffold sirve para dar una "estructura" como la de una barra superior)
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -134,7 +138,6 @@ fun PantallaMenuPrincipal(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Sección Proyecto Asignado
                 SeccionTitulo(
                     icono = Icons.Default.Star,
                     titulo = "Proyecto Asignado"
@@ -149,7 +152,6 @@ fun PantallaMenuPrincipal(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Row con Track, Progreso y Profesor
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.Top
@@ -175,7 +177,6 @@ fun PantallaMenuPrincipal(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Sección Proximos Eventos
                 SeccionTitulo(
                     icono = Icons.Default.CalendarToday,
                     titulo = "Mis proximos eventos"
@@ -190,18 +191,15 @@ fun PantallaMenuPrincipal(navController: NavController) {
                         .padding(vertical = 24.dp)
                 )
 
-                // Seccion integrantes
                 SeccionTitulo(
                     icono = Icons.Default.List,
                     titulo = "Integrantes de tu proyecto"
                 )
 
-                // Row con estudiantes y lista
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Cantidad de estudiantes del track
                     Card(
                         modifier = Modifier.weight(0.4f),
                         shape = RoundedCornerShape(20.dp),
@@ -229,14 +227,13 @@ fun PantallaMenuPrincipal(navController: NavController) {
 
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    // Columna de Integrantes
                     Column(
-                        modifier = Modifier.weight(0.6f), // Ocupa el 60%
+                        modifier = Modifier.weight(0.6f),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         IntegranteItem(nombre = "Ada Lovelace")
                         IntegranteItem(nombre = "Mark Hopper")
-                        IntegranteItem(nombre = "Margaret Hamilto") // Acortado
+                        IntegranteItem(nombre = "Margaret Hamilto")
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
@@ -245,24 +242,28 @@ fun PantallaMenuPrincipal(navController: NavController) {
     }
 }
 
-
-// --- CÓDIGO MODIFICADO ---
-
 @Composable
 fun MenuDrawerContent(
     navController: NavController,
+    userEmail: String,
     onCloseDrawer: () -> Unit
 ) {
+
+    val userName = remember(userEmail) {
+        userEmail.split("@").firstOrNull()
+            ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            ?: "Usuario"
+    }
+
     ModalDrawerSheet(
         modifier = Modifier.widthIn(max = 300.dp),
-        drawerContainerColor = FondoCITT // <- CAMBIO: Fondo claro
+        drawerContainerColor = FondoCITT
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(FondoCITT), // <- CAMBIO: Fondo claro
+                .background(FondoCITT),
         ) {
-            // Encabezado del Menú
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -273,18 +274,17 @@ fun MenuDrawerContent(
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Usuario",
-                    tint = AzulOscuroCITT, // <- CAMBIO: Icono azul marino
+                    tint = AzulOscuroCITT,
                     modifier = Modifier.size(100.dp)
                 )
                 Text(
-                    text = "Hola! Usuario",
-                    color = AzulOscuroCITT, // <- CAMBIO: Texto azul marino
+                    text = "Hola! $userName",
+                    color = AzulOscuroCITT,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            // Botones del Menú
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -295,8 +295,8 @@ fun MenuDrawerContent(
                     text = "Menú Principal",
                     icon = Icons.Default.Home,
                     onClick = {
-                        navController.navigate(AppRoutes.MAIN_SCREEN) {
-                            popUpTo(AppRoutes.MAIN_SCREEN) { inclusive = true }
+                        navController.navigate(AppRoutes.createMainScreenRoute(userEmail)) {
+                            popUpTo(AppRoutes.LOGIN_SCREEN) { inclusive = true }
                         }
                         onCloseDrawer()
                     }
@@ -305,7 +305,7 @@ fun MenuDrawerContent(
                     text = "Proyectos y tracks",
                     icon = Icons.AutoMirrored.Filled.LibraryBooks,
                     onClick = {
-                        navController.navigate(AppRoutes.PROJECTS_SCREEN)
+                        navController.navigate(AppRoutes.createProjectsScreenRoute(userEmail))
                         onCloseDrawer()
                     }
                 )
@@ -321,9 +321,8 @@ fun MenuDrawerContent(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f)) // Empuja el botón Salir al fondo
+            Spacer(modifier = Modifier.weight(1f))
 
-            // Botón Salir
             Button(
                 onClick = {
                     navController.navigate(AppRoutes.LOGIN_SCREEN) {
@@ -334,7 +333,7 @@ fun MenuDrawerContent(
                     .fillMaxWidth()
                     .padding(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = RojoSalir, // <- CAMBIO: Nuevo rojo UI
+                    containerColor = RojoSalir,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(12.dp)
@@ -350,7 +349,6 @@ fun MenuDrawerContent(
     }
 }
 
-// Botón personalizado para el menú
 @Composable
 fun BotonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
     Button(
@@ -359,8 +357,8 @@ fun BotonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
             .fillMaxWidth()
             .height(50.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = TurquesaCITT,  // <- CAMBIO: Azul primario vibrante
-            contentColor = Color.White    // <- CAMBIO: Texto blanco (mejor contraste)
+            containerColor = TurquesaCITT,
+            contentColor = Color.White
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -370,16 +368,10 @@ fun BotonMenu(text: String, icon: ImageVector, onClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(text = text, fontWeight = FontWeight.Bold, textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(1f)) // Empuja el texto a la izquierda
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
-// --- FIN CÓDIGO MODIFICADO ---
-
-
-// Componentes Reutilizables
-
-// Título de sección
 @Composable
 fun SeccionTitulo(icono: ImageVector, titulo: String) {
     Column {
@@ -408,7 +400,6 @@ fun SeccionTitulo(icono: ImageVector, titulo: String) {
     }
 }
 
-// Item de info (Track y Profesor)
 @Composable
 fun InfoItem(
     titulo: String,
@@ -445,7 +436,6 @@ fun InfoItem(
     }
 }
 
-// Círculo de progreso
 @Composable
 fun InfoProgreso(
     titulo: String,
@@ -473,7 +463,6 @@ fun InfoProgreso(
                 strokeWidth = 8.dp,
                 strokeCap = StrokeCap.Round
             )
-            // Texto "64%"
             Text(
                 text = "${(progreso * 100).toInt()}%",
                 fontSize = 18.sp,
@@ -484,11 +473,9 @@ fun InfoProgreso(
     }
 }
 
-// Item de integrante
 @Composable
 fun IntegranteItem(nombre: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        // Imagen de perfil
         Image(
             imageVector = Icons.Default.Person,
             contentDescription = "Perfil",

@@ -52,15 +52,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaCrearProyecto(navController: NavController) {
+fun PantallaCrearProyecto(navController: NavController, userEmail: String) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    // lista de opciones para elegir los tracks
     val tracks = listOf("Ciberseguridad", "Desarrollo de videojuegos", "Inteligencia Artificial", "Robotica","Impresion 3D","Desarrollo de Software")
     var expanded by remember { mutableStateOf(false) }
-    var trackSeleccionado by remember { mutableStateOf(tracks[0]) } // muestra la primera opcion por defecto
+    var trackSeleccionado by remember { mutableStateOf(tracks[0]) }
     var nombreProyecto by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var integrantes by remember { mutableStateOf("") }
@@ -74,6 +73,7 @@ fun PantallaCrearProyecto(navController: NavController) {
         drawerContent = {
             MenuDrawerContent(
                 navController = navController,
+                userEmail = userEmail,
                 onCloseDrawer = {
                     scope.launch {
                         drawerState.close()
@@ -122,7 +122,6 @@ fun PantallaCrearProyecto(navController: NavController) {
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Selector de Track
                 Text(
                     text = "Selecciona un track para tu proyecto",
                     fontWeight = FontWeight.SemiBold,
@@ -172,7 +171,6 @@ fun PantallaCrearProyecto(navController: NavController) {
                     }
                 }
 
-                // Nombre del Proyecto
                 Text(
                     text = "Ingresa el nombre de tu proyecto",
                     fontWeight = FontWeight.SemiBold,
@@ -193,7 +191,6 @@ fun PantallaCrearProyecto(navController: NavController) {
                     )
                 )
 
-                // Descripción
                 Text(
                     text = "Describe tu proyecto (Objetivos/Propósito)",
                     fontWeight = FontWeight.SemiBold,
@@ -215,7 +212,6 @@ fun PantallaCrearProyecto(navController: NavController) {
                     )
                 )
 
-                // Integrantes
                 Text(
                     text = "Ingresa los nombres y apellidos de los integrantes",
                     fontWeight = FontWeight.SemiBold,
@@ -239,7 +235,6 @@ fun PantallaCrearProyecto(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botón Enviar
                 Button(
                     onClick = {
                         if (nombreProyecto.isBlank() || descripcion.isBlank() || integrantes.isBlank()) {
@@ -250,7 +245,6 @@ fun PantallaCrearProyecto(navController: NavController) {
                             mensajeDialogo = "Solicitud enviada"
                             dialogoEsError = false
                             mostrarDialogo = true
-                            // Aqui va a ir el codigo para enviar los datos
                         }
                     },
                     modifier = Modifier
@@ -271,7 +265,6 @@ fun PantallaCrearProyecto(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            // alerta solicitud enviada
             if (mostrarDialogo) {
                 AlertDialog(
                     onDismissRequest = { mostrarDialogo = false },
@@ -282,7 +275,7 @@ fun PantallaCrearProyecto(navController: NavController) {
                             onClick = {
                                 mostrarDialogo = false
                                 if (!dialogoEsError) {
-                                    navController.popBackStack() // Vuelve atras solo si fue exitoso
+                                    navController.popBackStack()
                                 }
                             }
                         ) {
