@@ -31,11 +31,11 @@ data class Producto(val nombre: String, val precio: String, val imagenResId: Int
 
 val AppPrimaryColor = Color(0xFFE0B0FF) // Color lila/lavanda
 
-val ofertaPrincipal = Producto("Perfume Cacharel", "$919", R.drawable.roro_perfumes)
+val ofertaPrincipal = Producto("Perfume Cacharel", "$60.000", R.drawable.cacharel)
 val productosDestacados = listOf(
-    Producto("Dior Sauvage", "$1.250", R.drawable.roro_perfumes),
-    Producto("Acqua Di Gio", "$1.100", R.drawable.roro_perfumes),
-    Producto("Invictus", "$980", R.drawable.roro_perfumes)
+    Producto("Dior Sauvage", "$140.000", R.drawable.diorsauvage),
+    Producto("Acqua Di Gio", "$79.990", R.drawable.acquadigio),
+    Producto("Paco Rabanne Invictus", "$85.000", R.drawable.invictus)
 )
 
 

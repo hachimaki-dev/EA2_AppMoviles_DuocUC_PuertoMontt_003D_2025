@@ -29,23 +29,25 @@ import kotlinx.coroutines.launch
 
 // ***** CAMBIO 1: DATOS DE PRODUCTOS ACTUALIZADOS CON LA IMAGEN DE EJEMPLO *****
 val productosHombre = listOf(
-    Producto("Dior Sauvage", "$140000", R.drawable.roro_perfumes),
-    Producto("Aqua di Gio", "$79990", R.drawable.roro_perfumes),
-    Producto("Versace Eros", "$69990", R.drawable.roro_perfumes),
-    Producto("Jean Paul Gaultier", "$69990", R.drawable.roro_perfumes),
-    Producto("212 NYC Men", "$55000", R.drawable.roro_perfumes),
-    Producto("Paco Rabanne Invictus", "$85000", R.drawable.roro_perfumes),
+    Producto("Dior Sauvage", "$140.000", R.drawable.diorsauvage),
+    Producto("Acqua di Gio", "$79.990", R.drawable.acquadigio),
+    Producto("Versace Eros Flame", "$69.990", R.drawable.versaceeros),
+    Producto("Jean Paul Gaultier", "$69.990", R.drawable.jeanpaul),
+    Producto("212 NYC Men", "$55.000", R.drawable.nyc),
+    Producto("Paco Rabanne Invictus", "$85.000", R.drawable.invictus),
 )
 
 val productosMujer = listOf(
-    Producto("Good Girl", "$120000", R.drawable.roro_perfumes),
-    Producto("La Vie Est Belle", "$110000", R.drawable.roro_perfumes),
-    Producto("Black Opium", "$95000", R.drawable.roro_perfumes),
+    Producto("Good Girl", "$120.000", R.drawable.goodgirl),
+    Producto("La Vie Est Belle", "$110.000", R.drawable.lavie),
+    Producto("Black Opium", "$95.000", R.drawable.blacko),
+    Producto("Perfume Cacharel", "$60.000", R.drawable.cacharel),
+    Producto("Giorgio Armani My Way", "$90.000", R.drawable.myway)
 )
 
 val productosUnisex = listOf(
-    Producto("Tom Ford Oud Wood", "$180000", R.drawable.roro_perfumes),
-    Producto("Jo Malone Lime Basil & Mandarin", "$130000", R.drawable.roro_perfumes),
+    Producto("Tom Ford Oud Wood", "$180.000", R.drawable.tomford),
+    Producto("Jo Malone Lime Basil & Mandarin", "$130.000", R.drawable.jomalone),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
