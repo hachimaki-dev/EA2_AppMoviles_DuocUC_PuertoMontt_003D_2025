@@ -53,6 +53,8 @@ dependencies {
     //Agregamos la dependencia del Nav
     implementation("androidx.navigation:navigation-compose:2.7.7")
     testImplementation(libs.junit)
+    //iconos(remove)
+    implementation("androidx.compose.material:material-icons-extended")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

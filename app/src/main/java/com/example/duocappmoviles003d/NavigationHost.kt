@@ -1,6 +1,7 @@
 package com.example.duocappmoviles003d
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel // ***** AÑADIDO: Import para el ViewModel *****
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,6 +10,9 @@ import androidx.navigation.navArgument
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
+    // ***** AÑADIDO: Se crea una única instancia del ViewModel para toda la app *****
+    val cartViewModel: CartViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = NavigationRoutes.ENTRY
@@ -63,16 +67,14 @@ fun NavigationHost(navController: NavHostController) {
                     if (ruta == "login") {
                         navController.navigate(NavigationRoutes.LOGIN) { popUpTo(0) }
                     } else {
-                        // Navega a la ruta que se le pase (ej: "productos/usuario")
                         navController.navigate(ruta)
                     }
                 }
             )
         }
 
-        // ***** CAMBIO: AÑADIDA LA NUEVA RUTA PARA LA PANTALLA DE PRODUCTOS *****
         composable(
-            route = NavigationRoutes.PRODUCTS, // Asume que tienes "productos/{username}" en NavigationRoutes
+            route = NavigationRoutes.PRODUCTS,
             arguments = listOf(navArgument("username") { type = NavType.StringType })
         ) { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
@@ -83,10 +85,31 @@ fun NavigationHost(navController: NavHostController) {
                     if (ruta == "login") {
                         navController.navigate(NavigationRoutes.LOGIN) { popUpTo(0) }
                     } else {
-                        // Navega a la ruta que se le pase (ej: "home")
                         navController.navigate(ruta)
                     }
-                }
+                },
+                // Se pasa el ViewModel a la pantalla de productos
+                cartViewModel = cartViewModel
+            )
+        }
+
+        composable(
+            route = NavigationRoutes.CART,
+            arguments = listOf(navArgument("username") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
+
+            PantallaCarrito(
+                username = username,
+                onNavigate = { ruta ->
+                    if (ruta == "login") {
+                        navController.navigate(NavigationRoutes.LOGIN) { popUpTo(0) }
+                    } else {
+                        navController.navigate(ruta)
+                    }
+                },
+                // Se pasa el ViewModel a la pantalla del carrito
+                cartViewModel = cartViewModel
             )
         }
     }

@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
-// ***** CAMBIO 1: DATOS DE PRODUCTOS ACTUALIZADOS CON LA IMAGEN DE EJEMPLO *****
 val productosHombre = listOf(
     Producto("Dior Sauvage", "$140.000", R.drawable.diorsauvage),
     Producto("Acqua di Gio", "$79.990", R.drawable.acquadigio),
@@ -52,7 +51,12 @@ val productosUnisex = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaProductos(username: String, onNavigate: (String) -> Unit) {
+// ***** CAMBIO 1: SE AÑADE el cartViewModel COMO PARÁMETRO *****
+fun PantallaProductos(
+    username: String,
+    onNavigate: (String) -> Unit,
+    cartViewModel: CartViewModel
+) {
     val estadoMenuHamburguesa = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -92,6 +96,19 @@ fun PantallaProductos(username: String, onNavigate: (String) -> Unit) {
                         unselectedTextColor = Color.White
                     )
                 )
+
+                NavigationDrawerItem(
+                    label = { Text("Carrito") },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createCartRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesión") },
                     selected = false,
@@ -106,12 +123,16 @@ fun PantallaProductos(username: String, onNavigate: (String) -> Unit) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            ContenidoProductos()
+            // ***** CAMBIO 2: SE PASA el ViewModel al contenido *****
+            ContenidoProductos(cartViewModel = cartViewModel)
 
             HomeTopAppBar(
                 modifier = Modifier.align(Alignment.TopCenter),
                 onMenuClick = {
                     scope.launch { estadoMenuHamburguesa.apply { if (isClosed) open() else close() } }
+                },
+                onCartClick = {
+                    onNavigate(NavigationRoutes.createCartRoute(username))
                 }
             )
 
@@ -128,11 +149,10 @@ fun PantallaProductos(username: String, onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ContenidoProductos(modifier: Modifier = Modifier) {
-    // ***** CAMBIO 2: SE USA UN ÚNICO LAZYVERTICALGRID PARA TODA LA PANTALLA *****
-    // Esto crea un scroll único y fluido, eliminando el problema de anidamiento.
+// ***** CAMBIO 3: SE AÑADE el cartViewModel COMO PARÁMETRO *****
+fun ContenidoProductos(modifier: Modifier = Modifier, cartViewModel: CartViewModel) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // La cuadrícula tendrá 2 columnas
+        columns = GridCells.Fixed(2),
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFFF0F0F0)),
@@ -140,9 +160,7 @@ fun ContenidoProductos(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // --- BANNER SUPERIOR ---
         item(
-            // Hacemos que este item ocupe las 2 columnas para que sea de ancho completo.
             span = { GridItemSpan(2) }
         ) {
             Box(
@@ -178,7 +196,6 @@ fun ContenidoProductos(modifier: Modifier = Modifier) {
             }
         }
 
-        // --- SECCIÓN HOMBRE ---
         item(span = { GridItemSpan(2) }) {
             Text(
                 text = "Perfumes de Hombre",
@@ -187,10 +204,14 @@ fun ContenidoProductos(modifier: Modifier = Modifier) {
             )
         }
         items(productosHombre) { producto ->
-            ProductoCard(producto = producto, modifier = Modifier.padding(horizontal = 16.dp))
+            // ***** CAMBIO 4: SE PASA el ViewModel a cada tarjeta de producto *****
+            ProductoCard(
+                producto = producto,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                cartViewModel = cartViewModel
+            )
         }
 
-        // --- SECCIÓN MUJER ---
         item(span = { GridItemSpan(2) }) {
             Text(
                 text = "Perfumes de Mujer",
@@ -199,10 +220,13 @@ fun ContenidoProductos(modifier: Modifier = Modifier) {
             )
         }
         items(productosMujer) { producto ->
-            ProductoCard(producto = producto, modifier = Modifier.padding(horizontal = 16.dp))
+            ProductoCard(
+                producto = producto,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                cartViewModel = cartViewModel
+            )
         }
 
-        // --- SECCIÓN UNISEX ---
         item(span = { GridItemSpan(2) }) {
             Text(
                 text = "Perfumes Unisex",
@@ -211,13 +235,22 @@ fun ContenidoProductos(modifier: Modifier = Modifier) {
             )
         }
         items(productosUnisex) { producto ->
-            ProductoCard(producto = producto, modifier = Modifier.padding(horizontal = 16.dp))
+            ProductoCard(
+                producto = producto,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                cartViewModel = cartViewModel
+            )
         }
     }
 }
 
 @Composable
-fun ProductoCard(producto: Producto, modifier: Modifier = Modifier) {
+// ***** CAMBIO 5: SE AÑADE el cartViewModel COMO PARÁMETRO *****
+fun ProductoCard(
+    producto: Producto,
+    modifier: Modifier = Modifier,
+    cartViewModel: CartViewModel
+) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -254,7 +287,8 @@ fun ProductoCard(producto: Producto, modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { /* Acción para agregar al carrito */ },
+                // boton agregar producto
+                onClick = { cartViewModel.addToCart(producto) },
                 colors = ButtonDefaults.buttonColors(containerColor = AppPrimaryColor),
                 modifier = Modifier.fillMaxWidth()
             ) {

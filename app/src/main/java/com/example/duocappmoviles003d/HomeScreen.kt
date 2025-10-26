@@ -70,12 +70,24 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                     )
                 )
 
-                // ***** CAMBIO: SE AÑADE EL BOTÓN PARA NAVEGAR A PRODUCTOS *****
                 NavigationDrawerItem(
                     label = { Text("Productos") },
                     selected = false,
                     onClick = {
                         onNavigate(NavigationRoutes.createProductsRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
+                // ***** AÑADIDO: ITEM PARA NAVEGAR AL CARRITO *****
+                NavigationDrawerItem(
+                    label = { Text("Carrito") },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createCartRoute(username))
                         scope.launch { estadoMenuHamburguesa.close() }
                     },
                     colors = NavigationDrawerItemDefaults.colors(
@@ -103,6 +115,9 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                 modifier = Modifier.align(Alignment.TopCenter),
                 onMenuClick = {
                     scope.launch { estadoMenuHamburguesa.apply { if (isClosed) open() else close() } }
+                },
+                onCartClick = {
+                    onNavigate(NavigationRoutes.createCartRoute(username))
                 }
             )
 
@@ -120,7 +135,11 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar(modifier: Modifier = Modifier, onMenuClick: () -> Unit) {
+fun HomeTopAppBar(
+    modifier: Modifier = Modifier,
+    onMenuClick: () -> Unit,
+    onCartClick: () -> Unit
+) {
     TopAppBar(
         modifier = modifier,
         title = { /* El título está vacío, el logo se maneja por fuera */ },
@@ -141,7 +160,7 @@ fun HomeTopAppBar(modifier: Modifier = Modifier, onMenuClick: () -> Unit) {
                 color = Color.Black.copy(alpha = 0.5f),
                 modifier = Modifier.padding(end = 8.dp)
             ) {
-                IconButton(onClick = { /* Acción para el carrito */ }) {
+                IconButton(onClick = onCartClick) {
                     Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
                 }
             }
