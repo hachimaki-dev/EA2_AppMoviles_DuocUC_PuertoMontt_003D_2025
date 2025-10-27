@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 data class Producto(val nombre: String, val precio: String, val imagenResId: Int)
 
-val AppPrimaryColor = Color(0xFFE0B0FF) // Color lila/lavanda
+val AppPrimaryColor = Color(0xFFE0B0FF)
 
 val ofertaPrincipal = Producto("Perfume Cacharel", "$60.000", R.drawable.cacharel)
 val productosDestacados = listOf(

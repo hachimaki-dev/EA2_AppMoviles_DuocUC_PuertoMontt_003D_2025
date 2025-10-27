@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
 private val buttonColor = Color(0xFFE0B0FF)
@@ -25,9 +24,13 @@ fun Registro(
     onNavigateToHome: (String) -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
-    var username by remember { mutableStateOf(TextFieldValue("")) }
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    var usernameError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -61,35 +64,79 @@ fun Registro(
 
                 OutlinedTextField(
                     value = username,
-                    onValueChange = { username = it },
+                    onValueChange = {
+                        username = it
+                        usernameError = null
+                    },
                     label = { Text("Nombre de Usuario") },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = usernameError != null,
+                    supportingText = {
+                        if (usernameError != null) {
+                            Text(text = usernameError!!, color = MaterialTheme.colorScheme.error)
+                        }
+                    }
                 )
 
                 OutlinedTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        email = it
+                        emailError = null
+                    },
                     label = { Text("E-mail") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    isError = emailError != null,
+                    supportingText = {
+                        if (emailError != null) {
+                            Text(text = emailError!!, color = MaterialTheme.colorScheme.error)
+                        }
+                    }
                 )
 
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Password") },
+                    onValueChange = {
+                        password = it
+                        passwordError = null
+                    },
+                    label = { Text("Contraseña") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    isError = passwordError != null,
+                    supportingText = {
+                        if (passwordError != null) {
+                            Text(text = passwordError!!, color = MaterialTheme.colorScheme.error)
+                        }
+                    }
                 )
 
                 Button(
                     onClick = {
-                        if (username.text.isNotBlank()) {
-                            onNavigateToHome(username.text)
+                        var esValido = true
+                        if (username.isBlank()) {
+                            usernameError = "El usuario no puede estar vacío"
+                            esValido = false
+                        }
+                        if (email.isBlank()) {
+                            emailError = "El correo no puede estar vacío"
+                            esValido = false
+                        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                            emailError = "El formato del correo no es válido"
+                            esValido = false
+                        }
+                        if (password.length < 6) {
+                            passwordError = "La contraseña debe tener al menos 6 caracteres"
+                            esValido = false
+                        }
+
+                        if (esValido) {
+                            onNavigateToHome(username)
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
