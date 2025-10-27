@@ -300,7 +300,7 @@ fun SeccionDestacados() {
                             textAlign = TextAlign.Center,
                             minLines = 2
                         )
-                        Text(producto.precio, color = MaterialTheme.typography.bodyMedium.color)
+                        Text(producto.precio, color = Color.Red)
                     }
                 }
             }
