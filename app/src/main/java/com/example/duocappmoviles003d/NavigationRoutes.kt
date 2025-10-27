@@ -6,12 +6,12 @@ object NavigationRoutes {
     const val REGISTER = "register"
     const val HOME = "home/{username}"
     const val PRODUCTS = "productos/{username}"
-
     const val CART = "carrito/{username}"
+    const val CONTACT = "contacto/{username}"
+
     fun createCartRoute(username: String) = "carrito/$username"
-
     fun createProductsRoute(username: String) = "productos/$username"
-
-    // Función helper para crear la ruta con parámetro
     fun createHomeRoute(username: String) = "home/$username"
+
+    fun createContactRoute(username: String) = "contacto/$username"
 }

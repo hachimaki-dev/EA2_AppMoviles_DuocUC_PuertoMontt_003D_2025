@@ -51,7 +51,6 @@ val productosUnisex = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-// ***** CAMBIO 1: SE AÑADE el cartViewModel COMO PARÁMETRO *****
 fun PantallaProductos(
     username: String,
     onNavigate: (String) -> Unit,
@@ -87,12 +86,15 @@ fun PantallaProductos(
                         unselectedTextColor = Color.White
                     )
                 )
+
                 NavigationDrawerItem(
                     label = { Text("Productos") },
                     selected = true,
-                    onClick = { scope.launch { estadoMenuHamburguesa.close() } },
+                    onClick = {
+                        onNavigate(NavigationRoutes.createProductsRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
                     colors = NavigationDrawerItemDefaults.colors(
-                        selectedTextColor = Color.White,
                         unselectedTextColor = Color.White
                     )
                 )
@@ -102,6 +104,18 @@ fun PantallaProductos(
                     selected = false,
                     onClick = {
                         onNavigate(NavigationRoutes.createCartRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Contacto") },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createContactRoute(username))
                         scope.launch { estadoMenuHamburguesa.close() }
                     },
                     colors = NavigationDrawerItemDefaults.colors(
@@ -123,7 +137,6 @@ fun PantallaProductos(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            // ***** CAMBIO 2: SE PASA el ViewModel al contenido *****
             ContenidoProductos(cartViewModel = cartViewModel)
 
             HomeTopAppBar(
@@ -149,7 +162,6 @@ fun PantallaProductos(
 }
 
 @Composable
-// ***** CAMBIO 3: SE AÑADE el cartViewModel COMO PARÁMETRO *****
 fun ContenidoProductos(modifier: Modifier = Modifier, cartViewModel: CartViewModel) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -204,7 +216,6 @@ fun ContenidoProductos(modifier: Modifier = Modifier, cartViewModel: CartViewMod
             )
         }
         items(productosHombre) { producto ->
-            // ***** CAMBIO 4: SE PASA el ViewModel a cada tarjeta de producto *****
             ProductoCard(
                 producto = producto,
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -245,7 +256,7 @@ fun ContenidoProductos(modifier: Modifier = Modifier, cartViewModel: CartViewMod
 }
 
 @Composable
-// ***** CAMBIO 5: SE AÑADE el cartViewModel COMO PARÁMETRO *****
+
 fun ProductoCard(
     producto: Producto,
     modifier: Modifier = Modifier,

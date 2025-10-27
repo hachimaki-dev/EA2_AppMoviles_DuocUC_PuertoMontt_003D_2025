@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
-// --- Datos de ejemplo y Colores ---
 data class Producto(val nombre: String, val precio: String, val imagenResId: Int)
 
 val AppPrimaryColor = Color(0xFFE0B0FF) // Color lila/lavanda
@@ -58,12 +57,13 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                HorizontalDivider(color = Color.Gray)
-                Spacer(modifier = Modifier.height(8.dp))
                 NavigationDrawerItem(
                     label = { Text("Inicio") },
-                    selected = true,
-                    onClick = { scope.launch { estadoMenuHamburguesa.close() } },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createHomeRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
                     colors = NavigationDrawerItemDefaults.colors(
                         selectedTextColor = Color.White,
                         unselectedTextColor = Color.White
@@ -82,12 +82,23 @@ fun HomeScreen(username: String, onNavigate: (String) -> Unit) {
                     )
                 )
 
-                // ***** AÑADIDO: ITEM PARA NAVEGAR AL CARRITO *****
                 NavigationDrawerItem(
                     label = { Text("Carrito") },
                     selected = false,
                     onClick = {
                         onNavigate(NavigationRoutes.createCartRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Contacto") },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createContactRoute(username))
                         scope.launch { estadoMenuHamburguesa.close() }
                     },
                     colors = NavigationDrawerItemDefaults.colors(

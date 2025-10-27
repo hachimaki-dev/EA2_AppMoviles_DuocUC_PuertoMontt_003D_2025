@@ -25,14 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
-// Define el modelo de datos para un item en el carrito.
 data class CartItem(val producto: Producto, var cantidad: Int)
 
-// Se elimina la lista de datos de ejemplo 'itemsEnCarrito'. El ViewModel ahora gestiona los datos.
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-// Se añade cartViewModel como parámetro para recibir el estado del carrito.
 fun PantallaCarrito(
     username: String,
     onNavigate: (String) -> Unit,
@@ -63,8 +60,12 @@ fun PantallaCarrito(
                         onNavigate(NavigationRoutes.createHomeRoute(username))
                         scope.launch { estadoMenuHamburguesa.close() }
                     },
-                    colors = NavigationDrawerItemDefaults.colors(unselectedTextColor = Color.White)
+                    colors = NavigationDrawerItemDefaults.colors(
+                        selectedTextColor = Color.White,
+                        unselectedTextColor = Color.White
+                    )
                 )
+
                 NavigationDrawerItem(
                     label = { Text("Productos") },
                     selected = false,
@@ -72,22 +73,42 @@ fun PantallaCarrito(
                         onNavigate(NavigationRoutes.createProductsRoute(username))
                         scope.launch { estadoMenuHamburguesa.close() }
                     },
-                    colors = NavigationDrawerItemDefaults.colors(unselectedTextColor = Color.White)
-                )
-                NavigationDrawerItem(
-                    label = { Text("Carrito") },
-                    selected = true,
-                    onClick = { scope.launch { estadoMenuHamburguesa.close() } },
                     colors = NavigationDrawerItemDefaults.colors(
-                        selectedTextColor = Color.White,
                         unselectedTextColor = Color.White
                     )
                 )
+
+                NavigationDrawerItem(
+                    label = { Text("Carrito") },
+                    selected = true,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createCartRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Contacto") },
+                    selected = false,
+                    onClick = {
+                        onNavigate(NavigationRoutes.createContactRoute(username))
+                        scope.launch { estadoMenuHamburguesa.close() }
+                    },
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
+                )
+
                 NavigationDrawerItem(
                     label = { Text("Cerrar Sesión") },
                     selected = false,
                     onClick = { onNavigate("login"); scope.launch { estadoMenuHamburguesa.close() } },
-                    colors = NavigationDrawerItemDefaults.colors(unselectedTextColor = Color.White)
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedTextColor = Color.White
+                    )
                 )
             }
         }
@@ -95,7 +116,6 @@ fun PantallaCarrito(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Se pasa el ViewModel al contenido principal del carrito.
             ContenidoCarrito(
                 onNavigateHome = {
                     onNavigate(NavigationRoutes.createHomeRoute(username))
@@ -124,13 +144,11 @@ fun PantallaCarrito(
 }
 
 @Composable
-// Se añade cartViewModel como parámetro para acceder a los datos y acciones del carrito.
 fun ContenidoCarrito(
     modifier: Modifier = Modifier,
     onNavigateHome: () -> Unit,
     cartViewModel: CartViewModel
 ) {
-    // Se observan los datos del ViewModel como estado para que la UI se actualice automáticamente.
     val cartItems by cartViewModel.cartItems.collectAsState()
     val total by cartViewModel.total.collectAsState()
 
@@ -186,7 +204,6 @@ fun ContenidoCarrito(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    // Se muestra un mensaje si el carrito está vacío, o la lista de productos si no lo está.
                     if (cartItems.isEmpty()) {
                         Text(
                             "Tu carrito está vacío",
@@ -212,7 +229,6 @@ fun ContenidoCarrito(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("Total:", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                        // Se muestra el total calculado por el ViewModel, con formato de miles.
                         Text(
                             "$${"%,d".format(total)}",
                             style = MaterialTheme.typography.titleLarge,
@@ -250,9 +266,9 @@ fun ContenidoCarrito(
 }
 
 @Composable
-// Se añade cartViewModel para que la tarjeta pueda comunicar acciones (actualizar cantidad, eliminar).
+
 fun CartItemCard(cartItem: CartItem, cartViewModel: CartViewModel) {
-    // Se elimina el estado local 'cantidad'. El ViewModel es la única fuente de verdad.
+
 
     Row(
         modifier = Modifier.fillMaxWidth(),
