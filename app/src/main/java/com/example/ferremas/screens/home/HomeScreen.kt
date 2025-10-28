@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import com.example.ferremas.R
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -100,8 +101,8 @@ fun HomeScreen(){
               }
 
               val productList = listOf(
-                  Product("1","Taladro", 999.9, imageUrl = "https://unsplash.com/es/fotos/taladro-inalambrico-dewalt-negro-y-amarillo-MXeDE_yCdHQ"),
-                  Product("2","Taladro", 13123.9, imageUrl = "https://unsplash.com/es/fotos/taladro-inalambrico-dewalt-negro-y-amarillo-MXeDE_yCdHQ")
+                  Product("1","Taladro", 999.9, imageUrl = R.drawable.traladro),
+                  Product("2","Martillo", 13123.9, imageUrl = R.drawable.martillo)
 
               )
 
@@ -109,8 +110,10 @@ fun HomeScreen(){
                   contentPadding = PaddingValues(horizontal = 16.dp),
                   horizontalArrangement = Arrangement.spacedBy(16.dp)
               ) {
-                  items(productList){
+                  items(productList){ product ->
 
+                      FeaturedProductCard(product) { }
+                        //** evento de click
                   }
               }
 
