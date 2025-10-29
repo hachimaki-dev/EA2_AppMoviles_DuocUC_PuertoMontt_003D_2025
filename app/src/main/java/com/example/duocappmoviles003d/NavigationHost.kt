@@ -2,10 +2,9 @@ package com.example.duocappmoviles003d
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
@@ -13,22 +12,30 @@ fun NavigationHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationRoutes.LOGIN
     ) {
-        // Ruta: Login
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
-                navegarHaciapokedexScreen = {
-                    navController.navigate(NavigationRoutes.PokedexHomeScreen)
+                onLoginSuccess = {
+                    navController.navigate(NavigationRoutes.POKEDEX_HOME) {
+                        popUpTo(NavigationRoutes.LOGIN) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate(NavigationRoutes.REGISTER)
                 }
             )
         }
 
-        // Ruta: Home Pokedex
-        composable(route = NavigationRoutes.PokedexHomeScreen) {
-            ShowHomePokedexScreen(
-                navegarHaciapokedexScreen = {
-                    navController.navigate(NavigationRoutes.PokedexHomeScreen)
+        composable(route = NavigationRoutes.REGISTER) {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    // vuelta al login para iniciar sesión
+                    navController.popBackStack()
                 }
             )
+        }
+
+        composable(route = NavigationRoutes.POKEDEX_HOME) {
+            PokedexHomeScreen()
         }
     }
 }
