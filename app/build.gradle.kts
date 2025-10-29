@@ -52,6 +52,9 @@ dependencies {
     //Comentarios
     //Agregamos la dependencia del Nav
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    //Agregamos la dependencia de Coil para renderizar imagenes de Internet
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
