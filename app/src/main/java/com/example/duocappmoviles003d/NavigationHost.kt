@@ -51,12 +51,12 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        composable(route = NavigationRoutes.CART){
+        composable(route = NavigationRoutes.CART) {
             VistaCarrito(
-                navegarHaciaCarrito = {
-                    navController.navigate(NavigationRoutes.CART)
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
+        }
     }
-}

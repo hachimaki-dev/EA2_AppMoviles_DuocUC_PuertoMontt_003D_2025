@@ -109,7 +109,8 @@ fun ProductCard(product: Product) {
 
             // Botón de Acción
             Button(
-                onClick = { /* Lógica para añadir al carrito */ },
+                onClick = {
+                    CartManager.addToCart(product) },
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryRed)
             ) {
                 Text("Comprar")

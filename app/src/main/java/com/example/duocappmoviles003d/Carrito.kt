@@ -1,21 +1,213 @@
 package com.example.duocappmoviles003d
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+data class CartItem(
+    val product: Product,
+    var quantity: Int = 1
+)
+object CartManager {
+    val cartItems = mutableStateListOf<CartItem>()
+
+    fun addToCart(product: Product) {
+        val existingItem = cartItems.find { it.product.id == product.id }
+        if (existingItem != null) {
+            existingItem.quantity++
+        } else {
+            cartItems.add(CartItem(product))
+        }
+    }
+
+    fun removeFromCart(productId: Int) {
+        cartItems.removeAll { it.product.id == productId }
+    }
+
+    fun updateQuantity(productId: Int, newQuantity: Int) {
+        val item = cartItems.find { it.product.id == productId }
+        item?.quantity = newQuantity
+        if (newQuantity <= 0) {
+            removeFromCart(productId)
+        }
+    }
+
+    fun getTotalPrice(): Double {
+        return cartItems.sumOf { it.product.price * it.quantity }
+    }
+
+    fun clearCart() {
+        cartItems.clear()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VistaCarrito (navegarHaciaCarrito : (String) -> Unit ){
-    Column (
-        modifier = Modifier.padding(20.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text("Soy el carrito de compras")
+fun VistaCarrito(
+    onNavigateBack: () -> Unit
+) {
+    val cartItems = remember { CartManager.cartItems }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Carrito de Compras") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = PrimaryRed,
+                    titleContentColor = Color.White
+                ),
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver",
+                            tint = Color.White
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            if (cartItems.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Tu carrito está vacío",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Agrega productos desde el catálogo",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            } else {
+                // Lista de productos en el carrito
+                LazyColumn(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    items(cartItems, key = { it.product.id }) { cartItem ->
+                        CartItemCard(cartItem = cartItem)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+
+                // Total y botón de comprar
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Total:",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                "$${String.format("%.2f", CartManager.getTotalPrice())}",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = PrimaryRed
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = { /* Lógica para finalizar compra */ },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = PrimaryRed)
+                        ) {
+                            Text("Finalizar Compra", style = MaterialTheme.typography.titleMedium)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CartItemCard(cartItem: CartItem) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    cartItem.product.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text("Precio: $${String.format("%.2f", cartItem.product.price)}")
+                Text("Subtotal: $${String.format("%.2f", cartItem.product.price * cartItem.quantity)}")
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = {
+                        CartManager.updateQuantity(cartItem.product.id, cartItem.quantity - 1)
+                    }
+                ) {
+                    Text("-", style = MaterialTheme.typography.titleLarge)
+                }
+
+                Text(
+                    cartItem.quantity.toString(),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
+                IconButton(
+                    onClick = {
+                        CartManager.updateQuantity(cartItem.product.id, cartItem.quantity + 1)
+                    }
+                ) {
+                    Text("+", style = MaterialTheme.typography.titleLarge)
+                }
+            }
+
+            IconButton(
+                onClick = { CartManager.removeFromCart(cartItem.product.id) }
+            ) {
+                Text("X", style = MaterialTheme.typography.bodyMedium, color = PrimaryRed)
+            }
+        }
     }
 }
