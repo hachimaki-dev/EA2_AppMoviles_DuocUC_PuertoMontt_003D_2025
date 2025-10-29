@@ -15,19 +15,20 @@ fun NavigationHost(navController: NavHostController) {
     ) {
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
-                navegarHaciaContacto = {
-                    navController.navigate(NavigationRoutes.CONTACT)
+                navegarHaciaMain = {
+                    navController.navigate(NavigationRoutes.MAIN)
                 }
             )
         }
 
-        composable(route = NavigationRoutes.CONTACT) {
-            ShowContactUi(
-                navegarHaciaContacto = {
+        composable(route = NavigationRoutes.MAIN) {
+            MainScreensita(
+                navegarHaciaMain = {
                     // Aquí podrías volver al login o navegar a otro lado
                     navController.navigate(NavigationRoutes.LOGIN)
                 }
             )
         }
+
     }
 }

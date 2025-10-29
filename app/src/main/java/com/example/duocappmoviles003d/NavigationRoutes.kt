@@ -5,7 +5,9 @@ object NavigationRoutes {
     const val PROFILE = "profile"
     const val CART = "cart"
 
-    const val CONTACT = "contact"
+    const val MAIN = "main"
+
+
 
 
 }
