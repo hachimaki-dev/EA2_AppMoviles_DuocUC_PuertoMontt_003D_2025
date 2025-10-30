@@ -1,19 +1,20 @@
 package com.example.duocappmoviles003d
 
-import android.R.attr.padding
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -41,20 +41,52 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MainScreensita(navegarHaciaMain : (String) -> Unit) {
     var Buscador by remember { mutableStateOf("") }
+    var menuExpanded by remember { mutableStateOf(false) }
+    //para el boton de configuracion hacemos e mismo prosedimiento
+    var configuracionExpanded by remember {mutableStateOf(false)}
     Scaffold(
 
 
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Acción para abrir el menú */ }) {
+
+                    Box{ //envolvemos en un box para que funcione como ancla para elmenu
+                    IconButton(onClick = { menuExpanded=true }) {
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menú",
                             tint = Color.White // Asegura que el icono sea blanco
                         )
                     }
-                },
+                        //escencial para darle al menusito su funcionsita
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = {menuExpanded=false}// esto es para cerrar cuando se toque afuera :v
+                        ) {
+                            DropdownMenuItem(
+                                text = {Text("Productos")},
+                                onClick = {
+                                    navegarHaciaMain("ruta pagina productos")
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {Text("Nuestras Tiendas")},
+                                onClick = {
+                                    navegarHaciaMain("Ir hacia Tiendas")
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Ir a Mi Perfil") },
+                                onClick = {
+                                    navegarHaciaMain("ruta_perfil")
+                                    menuExpanded = false
+                                }
+                            )
+                        }
+                }},
                 title = {
                     TextField(
                         value = Buscador,
@@ -81,6 +113,29 @@ fun MainScreensita(navegarHaciaMain : (String) -> Unit) {
                         //modifier = Modifier.fillMaxWidth()
                     )
                      },
+                actions = {
+                    IconButton(onClick = { configuracionExpanded=true }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Configuración",
+                            tint = Color.White // Asegura que sea blanco
+                        )
+                        DropdownMenu(
+                            expanded = configuracionExpanded,
+                            onDismissRequest = {configuracionExpanded=false}
+
+                        ) {
+                            DropdownMenuItem(
+                                text = {Text("cerrar sesion")},
+                                onClick = {
+                                    navegarHaciaMain("desconectarse")
+                                    configuracionExpanded = false
+                                }
+                            )
+                        }
+                    }
+
+                   },
 
                 // 2. Aquí le das los colores
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -95,38 +150,87 @@ fun MainScreensita(navegarHaciaMain : (String) -> Unit) {
     ) { padding ->
 
 
-        Column(
+        // 1. Cambiamos Column por LazyColumn para poder escrolear
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding) // <-- ¡Usa este padding!
-                .padding(16.dp),  // Un padding extra si quieres
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("HellFish una tienda lider en productos para la industria pesquera",
-                fontSize = (20.sp))
-            Spacer(modifier = Modifier.height(30.dp))
+                .padding(padding), // <-- Usa el padding del Scaffold
 
-            Image(
-                painter = painterResource(id = R.drawable.pesca_industriales),
-                contentDescription = "Logo de la tienda",
-                modifier = Modifier.fillMaxWidth()
-            )
+            // 2. Centramos todo el contenido
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-            Spacer(modifier = Modifier.height(20.dp))
+            // 3. Añadimos padding interno para que no se pegue a los bordes
+            contentPadding = PaddingValues(16.dp),
 
-            Text("Tanto la pesca industrial como artesanal" +
-                    "son nuestros principales clientes")
-            Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                painter = painterResource(id = R.drawable.salmonera_imagen),
-                contentDescription = "Logo de la tienda",
-                modifier = Modifier.fillMaxWidth()
-            )
+            // 4. (Opcional) Esto añade espacio automático entre cada "item"
+            verticalArrangement = Arrangement.spacedBy(30.dp)
+        ){
+           item {
+               Text(
+                   "HellFish una tienda lider en productos para la industria pesquera",
+                   fontSize = (20.sp)
+               )
+           }
 
-            Spacer(modifier = Modifier.height(20.dp))
 
-            Text("Ademas de presencia en la industria salmonera" +
-                    "da las mas grandes en chile")
+            item {
+                Image(
+                    painter = painterResource(id = R.drawable.pesca_industriales),
+                    contentDescription = "pesca industrial",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+
+                Text(
+                    "Tanto la pesca industrial como artesanal" +
+                            " son nuestros principales clientes"
+                )
+            }
+            item {
+
+                Image(
+                    painter = painterResource(id = R.drawable.salmonera_imagen),
+                    contentDescription = "jaulas salmoneras",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+
+                Text(
+                    "Ademas de presencia en la industria salmonera" +
+                            " de las mas grandes en chile"
+                )
+            }
+            item {
+
+                Image(
+                    painter = painterResource(id = R.drawable.cultivo_choro),
+                    contentDescription = "boyas del cultivo",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+
+                Text(
+                    "Somos la compañia lider y preferida por" +
+                            "todos los mitilicultores del sur de nuestro pais"
+                )
+            }
+            item {
+
+                Image(
+                    painter = painterResource(id = R.drawable.equipamiento_frio),
+                    contentDescription = "equipamiento frio",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+
+                Text(
+                    "Nuestros equipos son aptos para los climas mas hostiles"
+                )
+            }
 
 
 
