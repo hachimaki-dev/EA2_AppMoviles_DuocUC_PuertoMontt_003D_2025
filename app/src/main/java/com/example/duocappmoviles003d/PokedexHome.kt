@@ -1,5 +1,7 @@
 package com.example.duocappmoviles003d
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.duocappmoviles003d.viewmodel.PokedexViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,22 +16,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.duocappmoviles003d.model.Pokemon
 
-// Modelo de datos
-data class Pokemon(
-    val name: String,
-    val imageUrl: String
-)
-
-// Ejemplo temporal
-val listaPokemon = listOf(
-    Pokemon("Bulbasaur", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"),
-    Pokemon("Charmander", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"),
-    Pokemon("Squirtle", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png")
-)
 
 @Composable
-fun PokedexHomeScreen() {
+fun PokedexHomeScreen(viewModel: PokedexViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+    val state = viewModel.pokemonList
+
+    Surface() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +45,7 @@ fun PokedexHomeScreen() {
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.weight(1f)
         ) {
-            items(listaPokemon) { pokemon ->
+            items(state) { pokemon ->
                 PokemonCard(pokemon)
             }
         }
@@ -63,6 +57,7 @@ fun PokedexHomeScreen() {
             color = Color.Gray,
             modifier = Modifier.padding(8.dp)
         )
+    }
     }
 }
 
@@ -93,3 +88,4 @@ fun PokemonCard(pokemon: Pokemon) {
         }
     }
 }
+
