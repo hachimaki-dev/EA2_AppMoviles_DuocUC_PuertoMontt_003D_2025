@@ -1,7 +1,9 @@
 package com.example.duocappmoviles003d
 
+import com.example.duocappmoviles003d.viewmodel.PokedexViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,11 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.duocappmoviles003d.model.Pokemon
-import com.example.duocappmoviles003d.viewmodel.PokedexViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 
 @Composable
 fun PokedexHomeScreen(
+    navController: NavHostController,
     viewModel: PokedexViewModel = viewModel()
 ) {
     val state by viewModel.pokemonList.collectAsState()
@@ -39,7 +42,7 @@ fun PokedexHomeScreen(
             modifier = Modifier.fillMaxSize()
         )
 
-        // Overlay oscuro para contraste
+        // Overlay oscuro
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,7 +74,7 @@ fun PokedexHomeScreen(
                 modifier = Modifier.weight(1f)
             ) {
                 items(state) { pokemon ->
-                    PokemonCard(pokemon)
+                    PokemonCard(pokemon = pokemon, navController = navController)
                 }
             }
 
@@ -86,11 +89,17 @@ fun PokedexHomeScreen(
 }
 
 @Composable
-fun PokemonCard(pokemon: Pokemon) {
+fun PokemonCard(
+    navController: NavHostController,
+    pokemon: Pokemon
+) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                navController.navigate(NavigationRoutes.pokemonDetailRoute(pokemon.name))
+            },
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E2F)),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
