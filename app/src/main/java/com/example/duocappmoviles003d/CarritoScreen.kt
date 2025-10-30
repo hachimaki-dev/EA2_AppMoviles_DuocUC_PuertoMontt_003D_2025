@@ -184,7 +184,7 @@ fun CarritoScreen(navController: NavController){
             // 2. Centramos todo el contenido
             horizontalAlignment = Alignment.CenterHorizontally,
 
-            // 4. (Opcional) Esto añade espacio automático entre cada "item"
+            // este codigo es para darle un espacio entre cada elemento.
             verticalArrangement = Arrangement.spacedBy(30.dp)
         ){
             Text("carrito",

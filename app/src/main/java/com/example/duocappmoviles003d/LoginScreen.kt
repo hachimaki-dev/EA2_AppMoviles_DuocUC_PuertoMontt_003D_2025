@@ -29,6 +29,8 @@ fun LoginScreen(navegarHaciaMain: () -> Unit) {
     var username by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
+    var isUsernameError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
 
     Column(
 
@@ -68,8 +70,10 @@ fun LoginScreen(navegarHaciaMain: () -> Unit) {
 
         OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
+            onValueChange = { username = it
+                            isUsernameError=false},
             label = { Text("Usuario") },
+            isError= isUsernameError,
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -83,12 +87,21 @@ fun LoginScreen(navegarHaciaMain: () -> Unit) {
 
             )
         )
+        if (isUsernameError) {
+            Text(
+                text = "Ingrese usuario",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.align(Alignment.Start).padding(start = 16.dp)
+            )}
         Spacer(modifier =Modifier.height(16.dp))
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                            isPasswordError=false},
             label = { Text("Contraseña") },
             singleLine = true,
+            isError=isPasswordError,
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.colors(
@@ -102,13 +115,30 @@ fun LoginScreen(navegarHaciaMain: () -> Unit) {
 
             )
         )
+            if (isPasswordError) {
+                Text(
+                    text = "Debe ingresar una contraseña",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.align(Alignment.Start).padding(start = 16.dp)
+                )}
+
 
         Spacer(modifier=Modifier.height(30.dp))
         Button(
 
-            onClick = { navegarHaciaMain() },
+            onClick = {
+                isUsernameError = username.text.isBlank()
+                isPasswordError = password.text.isBlank()
+                if (!isUsernameError && !isPasswordError) {
+
+
+                        navegarHaciaMain()
+                    }
+
+            },
             colors=ButtonDefaults.buttonColors(
-                containerColor=Color(0xFFcc3300),
+                containerColor=Color.Blue,
                 contentColor=Color.White
             )
         ) {
