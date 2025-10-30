@@ -175,13 +175,13 @@ fun ProductScreen(navController: NavController){
                 .fillMaxSize()
                 .padding(padding), // <-- Usa el padding del Scaffold
 
-            // 2. Centramos todo el contenido
+            // pa centrarlo
             horizontalAlignment = Alignment.CenterHorizontally,
 
             // 3. Añadimos padding interno para que no se pegue a los bordes
             contentPadding = PaddingValues(16.dp),
 
-            // 4. (Opcional) Esto añade espacio automático entre cada "item"
+            // 4. (Opcional) Esto añade espacio automático entre cada "item", asi nos ahorramos spacer
             verticalArrangement = Arrangement.spacedBy(30.dp)
         ){
             item{Text("Pesca",
