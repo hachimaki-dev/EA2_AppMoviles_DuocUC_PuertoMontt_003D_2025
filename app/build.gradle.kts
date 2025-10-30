@@ -54,6 +54,11 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     //Agregamos la dependencia de Coil para renderizar imagenes de Internet
     implementation("io.coil-kt:coil-compose:2.4.0")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Coroutines (para llamadas asíncronas)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
