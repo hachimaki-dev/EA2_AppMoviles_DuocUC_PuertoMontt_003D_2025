@@ -29,31 +29,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun ProfileEdit(){
+fun ProfileScreen(navController: NavController){
     var username  by remember { mutableStateOf(TextFieldValue("")) }
     var password  by remember { mutableStateOf(TextFieldValue("")) }
     var correo  by remember { mutableStateOf(TextFieldValue("")) }
     var nombre  by remember { mutableStateOf(TextFieldValue("")) }
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // 2. Creamos un scope de corutina
+    // 2 :v usamos esto para que diga "cambios guardados"
     // (Lo necesitamos porque showSnackbar es una función 'suspend')
     val scope = rememberCoroutineScope()
     Scaffold(
-        // 3. El "parlante" (aquí se dibujará el Snackbar)
+        // 3 lol  :v
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
-    ) { padding -> // <-- El Scaffold te da un padding
+    ) { padding ->
 
-        // Aquí empieza tu código, PERO usa el padding
+
         Box(){
             Column(
                 modifier = Modifier
@@ -163,10 +163,6 @@ fun ProfileEdit(){
                         scope.launch {
                             snackbarHostState.showSnackbar("Cambios guardados")
                         }
-
-
-                        // navegarHaciaMain() // <-- Probablemente esto causa el crash
-                        // --------------------------------------------------
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFcc3300),
@@ -178,6 +174,18 @@ fun ProfileEdit(){
                         fontSize = 25.sp
                     )
                 }
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = {navController.navigate(NavigationRoutes.MAIN)},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFcc3300),
+                        contentColor = Color.White
+
+                    ) ){
+                        Text("Volver al Inicio",
+                            fontSize=25.sp)
+                    }
 
             }
 

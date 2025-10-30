@@ -67,21 +67,28 @@ fun MainScreensita(navegarHaciaMain : (String) -> Unit) {
                             DropdownMenuItem(
                                 text = {Text("Productos")},
                                 onClick = {
-                                    navegarHaciaMain("ruta pagina productos")
+                                    navegarHaciaMain(NavigationRoutes.PRODUCT)
                                     menuExpanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = {Text("Nuestras Tiendas")},
                                 onClick = {
-                                    navegarHaciaMain("Ir hacia Tiendas")
+                                    navegarHaciaMain(NavigationRoutes.LOCATION)
                                     menuExpanded = false
                                 }
                             )
                             DropdownMenuItem(
                                 text = { Text("Ir a Mi Perfil") },
                                 onClick = {
-                                    navegarHaciaMain("ruta_perfil")
+                                    navegarHaciaMain(NavigationRoutes.PROFILE)
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Ir al carrito") },
+                                onClick = {
+                                    navegarHaciaMain(NavigationRoutes.CARRITO)
                                     menuExpanded = false
                                 }
                             )
@@ -128,7 +135,7 @@ fun MainScreensita(navegarHaciaMain : (String) -> Unit) {
                             DropdownMenuItem(
                                 text = {Text("cerrar sesion")},
                                 onClick = {
-                                    navegarHaciaMain("desconectarse")
+                                    navegarHaciaMain(NavigationRoutes.LOGIN)
                                     configuracionExpanded = false
                                 }
                             )
