@@ -1,6 +1,5 @@
 package com.example.perfulandia.ui.auth
 
-// Asegúrate de tener esta importación para la validación de email
 import android.util.Patterns
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button

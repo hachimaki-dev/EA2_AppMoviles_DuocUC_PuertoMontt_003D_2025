@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.perfulandia.ui.MainScaffold
+import com.example.perfulandia.ui.auth.LoginScreen
 import com.example.perfulandia.ui.auth.RegistrationScreen
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PerfulandiaTheme {
                 // Aquí llamamos a nuestro nuevo contenedor principal
-                RegistrationScreen()
+                LoginScreen()
             }
         }
     }
