@@ -10,20 +10,19 @@ data class PokemonDto(
     val url: String
 )
 
-// Modelo que usara la UI
+// DTO de detalle para obtener sprites
+data class PokemonDetailDto(
+    val name: String,
+    val sprites: SpritesDto
+)
+
+data class SpritesDto(
+    val front_default: String?
+)
+
+// Modelo que usará la UI
 data class Pokemon(
     val name: String,
     val imageUrl: String
 )
 
-// Función de extensión para mapear explícitamente DTO -> Modelo
-fun List<PokemonDto>.toPokemonList(): List<Pokemon> {
-    return this.map { dto: PokemonDto ->
-        // extraer el id desde la URL de detalle del pokemon :)
-        val id = dto.url.trimEnd('/').substringAfterLast('/')
-        Pokemon(
-            name = dto.name.replaceFirstChar { it.uppercase() },
-            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
-        )
-    }
-}

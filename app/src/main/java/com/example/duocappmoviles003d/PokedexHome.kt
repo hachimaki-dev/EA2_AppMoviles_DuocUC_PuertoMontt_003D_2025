@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +24,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun PokedexHomeScreen(
     viewModel: PokedexViewModel = viewModel()
 ) {
-    val state = viewModel.pokemonList
+    // Recolecta el flujo como estado observable por Compose
+    val state by viewModel.pokemonList.collectAsState()
 
     Surface {
         Column(
@@ -64,6 +65,7 @@ fun PokedexHomeScreen(
     }
 }
 
+
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
     Card(
@@ -95,5 +97,3 @@ fun PokemonCard(pokemon: Pokemon) {
         }
     }
 }
-
-
