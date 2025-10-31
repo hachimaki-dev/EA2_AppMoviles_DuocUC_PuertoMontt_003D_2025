@@ -10,6 +10,10 @@ object NavigationRoutes {
     const val PROFILE = "profile"
     const val CART = "cart"
 
+    // ¡AÑADIDO! Nuevas rutas de pago
+    const val CHECKOUT = "checkout"
+    const val ORDER_CONFIRMED = "order_confirmed"
+
     // Función helper para crear la ruta con parámetro
     fun createHomeRoute(username: String) = "home/$username"
 }

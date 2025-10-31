@@ -13,18 +13,42 @@ fun NavigationHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationRoutes.LOGIN
     ) {
-        // Ruta: Login (sin parámetros)
+        // 1. Ruta: Login -> Navega a CATALOGUE
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
-                onNavigateToHome = { username ->
-                    navController.navigate(
-                        NavigationRoutes.createHomeRoute(username)
-                    )
+                onNavigateToCatalogue = {
+                    navController.navigate(NavigationRoutes.CATALOGUE)
                 }
             )
         }
 
-        // Ruta: Home (con parámetro)
+        // 2. Ruta: Catálogo de Productos -> Navega a CART
+        composable(route = NavigationRoutes.CATALOGUE) {
+            ProductCatalogueScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToCart = { navController.navigate(NavigationRoutes.CART) }
+            )
+        }
+// NavigationHost.kt
+
+// ... (rutas 1, 2, 3) ...
+
+// 4. Ruta: Carrito (¡CORREGIDA! Ahora navega a CHECKOUT)
+        composable(route = NavigationRoutes.CART) {
+            VistaCarrito(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                // <--- ¡ESTE PARÁMETRO FALTABA!
+                onNavigateToCheckout = {
+                    navController.navigate(NavigationRoutes.CHECKOUT)
+                }
+            )
+        }
+
+// ... (rutas 5, 6, 7) ...
+
+        // 4. Ruta: Home (Mantenida, aunque no se use desde Login)
         composable(
             route = NavigationRoutes.HOME,
             arguments = listOf(
@@ -38,25 +62,25 @@ fun NavigationHost(navController: NavHostController) {
             HomeScreen(
                 username = username,
                 onNavigateToDetail = {
-                    navController.navigate(NavigationRoutes.PROFILE) // O DETAIL
+                    navController.navigate(NavigationRoutes.PROFILE)
                 },
                 onNavigateToLogin = {
                     navController.popBackStack(NavigationRoutes.LOGIN, inclusive = true)
                     navController.navigate(NavigationRoutes.LOGIN)
                 },
-
                 onNavigateToCart = {
                     navController.navigate(NavigationRoutes.CART)
                 }
             )
         }
 
-        composable(route = NavigationRoutes.CART) {
-            VistaCarrito(
+        // 5. Ruta: Profile (Mantenida)
+        composable(route = NavigationRoutes.PROFILE) {
+            ProfileScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 }
             )
         }
-        }
     }
+}

@@ -15,25 +15,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+// Paleta de Colores
+val PrimaryRed = Color(0xFFB71C1C) // Rojo de acento
+val DarkBackground = Color(0xFF1E1E1E) // Fondo oscuro para contraste
+val CardBackground = DarkBackground.copy(alpha = 0.8f) // Tarjeta semi-transparente
 
-
-val PrimaryRed = Color(0xFFB71C1C)
 @Composable
 fun LoginScreen(
-    onNavigateToHome: (String) -> Unit
+    onNavigateToCatalogue: () -> Unit
 ) {
-
     var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") } // Nuevo campo
-    var password by remember { mutableStateOf("") } // Nuevo campo
-
-
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var formSubmitted by remember { mutableStateOf(false) }
-
 
     val isUsernameInvalid = username.isBlank()
     val isEmailInvalid = email.isBlank() || !email.contains("@")
@@ -41,105 +37,97 @@ fun LoginScreen(
 
     fun validateFormAndNavigate() {
         formSubmitted = true
-
         if (!isUsernameInvalid && !isEmailInvalid && !isPasswordInvalid) {
-            onNavigateToHome(username)
+            onNavigateToCatalogue()
         }
     }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-
+        // Asumiendo que R.drawable.cd31minutos existe
         Image(
             painter = painterResource(id = R.drawable.cd31minutos),
-            contentDescription = "Imagen de fondo de mi app",
+            contentDescription = "Fondo",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
 
-
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(32.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .align(Alignment.Center)
+                .fillMaxWidth(0.9f),
+            colors = CardDefaults.cardColors(containerColor = CardBackground),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            Text(
-                text = "Gamezone",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White, // Cambiamos a blanco para que se vea sobre el fondo oscuro
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Nombre de usuario") },
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = Color.White) },
-                isError = formSubmitted && isUsernameInvalid,
-                supportingText = { if (formSubmitted && isUsernameInvalid) Text("El usuario es requerido") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White, unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White, unfocusedLabelColor = Color.Gray,
-                    focusedBorderColor = PrimaryRed, unfocusedBorderColor = PrimaryRed
-                )
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // -- CAMPO 2: EMAIL (Nuevo) --
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Correo Electrónico") },
-                leadingIcon = { Icon(Icons.Default.MailOutline, contentDescription = null, tint = Color.White) },
-                isError = formSubmitted && isEmailInvalid,
-                supportingText = { if (formSubmitted && isEmailInvalid) Text("Formato de correo inválido (ej: a@b.cl)") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White, unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White, unfocusedLabelColor = Color.Gray,
-                    focusedBorderColor = PrimaryRed, unfocusedBorderColor = PrimaryRed
-                )
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Contraseña") },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = Color.White) },
-                isError = formSubmitted && isPasswordInvalid,
-                supportingText = { if (formSubmitted && isPasswordInvalid) Text("Mínimo 6 caracteres") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White, unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White, unfocusedLabelColor = Color.Gray,
-                    focusedBorderColor = PrimaryRed, unfocusedBorderColor = PrimaryRed
-                )
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-
-            Button(
-                onClick = { validateFormAndNavigate() },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = PrimaryRed, contentColor = Color.White)
+            Column(
+                modifier = Modifier.padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Ingresar al Home")
+                Text(
+                    text = "DISCO ZONE",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = Color.White,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Campos de texto con estilo
+                OutlinedTextField(
+                    value = username, onValueChange = { username = it }, label = { Text("Usuario") },
+                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                    isError = formSubmitted && isUsernameInvalid,
+                    singleLine = true, modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White, unfocusedTextColor = Color.White,
+                        focusedLabelColor = Color.White, unfocusedLabelColor = Color.Gray,
+                        focusedBorderColor = PrimaryRed, unfocusedBorderColor = Color.Gray,
+                        errorBorderColor = PrimaryRed
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = email, onValueChange = { email = it }, label = { Text("Email") },
+                    leadingIcon = { Icon(Icons.Default.MailOutline, contentDescription = null) },
+                    isError = formSubmitted && isEmailInvalid,
+                    singleLine = true, modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        // ... (Colores similares a arriba)
+                        focusedTextColor = Color.White, unfocusedTextColor = Color.White,
+                        focusedLabelColor = Color.White, unfocusedLabelColor = Color.Gray,
+                        focusedBorderColor = PrimaryRed, unfocusedBorderColor = Color.Gray,
+                        errorBorderColor = PrimaryRed
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = password, onValueChange = { password = it }, label = { Text("Contraseña") },
+                    leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+                    isError = formSubmitted && isPasswordInvalid,
+                    singleLine = true, visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        // ... (Colores similares a arriba)
+                        focusedTextColor = Color.White, unfocusedTextColor = Color.White,
+                        focusedLabelColor = Color.White, unfocusedLabelColor = Color.Gray,
+                        focusedBorderColor = PrimaryRed, unfocusedBorderColor = Color.Gray,
+                        errorBorderColor = PrimaryRed
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Button(
+                    onClick = { validateFormAndNavigate() },
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryRed)
+                ) {
+                    Text("INGRESAR AL CATÁLOGO", fontWeight = FontWeight.SemiBold)
+                }
             }
         }
     }

@@ -1,10 +1,8 @@
 package com.example.duocappmoviles003d
 
-class product (
-    val id_producto:Int,
-    val nombre:String,
-    var precio:Int,
-    var stock:Int
-) {
-
-}
+data class Product(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val stock: Int,
+)

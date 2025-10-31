@@ -52,32 +52,26 @@ object CartManager {
     }
 }
 
+// Carrito.kt
+
+// ... (imports y otras clases) ...
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VistaCarrito(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    // <--- ¡ESTE PARÁMETRO DEBE ESTAR AQUÍ!
+    onNavigateToCheckout: () -> Unit
 ) {
+    {
+    // ...
+    // Dentro del botón "Finalizar Compra" debe llamarse a onNavigateToCheckout()
+    // ...
+}
     val cartItems = remember { CartManager.cartItems }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Carrito de Compras") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryRed,
-                    titleContentColor = Color.White
-                ),
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        }
+        // ... (TopAppBar se mantiene igual)
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -86,27 +80,12 @@ fun VistaCarrito(
                 .padding(16.dp)
         ) {
             if (cartItems.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Tu carrito está vacío",
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Agrega productos desde el catálogo",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                // ... (Mensaje de carrito vacío)
             } else {
                 // Lista de productos en el carrito
                 LazyColumn(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(bottom = 8.dp)
                 ) {
                     items(cartItems, key = { it.product.id }) { cartItem ->
                         CartItemCard(cartItem = cartItem)
@@ -116,36 +95,26 @@ fun VistaCarrito(
 
                 // Total y botón de comprar
                 Card(
-                    modifier = Modifier.fillMaxWidth()
+                    // ... (Configuración de Card)
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Total:",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                "$${String.format("%.2f", CartManager.getTotalPrice())}",
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = PrimaryRed
-                            )
-                        }
+                        // ... (Fila de Total)
 
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Button(
-                            onClick = { /* Lógica para finalizar compra */ },
-                            modifier = Modifier.fillMaxWidth(),
+                            // ¡ACCIÓN MODIFICADA!
+                            onClick = onNavigateToCheckout,
+                            modifier = Modifier.fillMaxWidth().height(50.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = PrimaryRed)
                         ) {
-                            Text("Finalizar Compra", style = MaterialTheme.typography.titleMedium)
+                            Text(
+                                "Finalizar Compra",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
                         }
                     }
                 }
@@ -153,7 +122,6 @@ fun VistaCarrito(
         }
     }
 }
-
 @Composable
 fun CartItemCard(cartItem: CartItem) {
     Card(
