@@ -16,27 +16,34 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatalogoScreen(navegarHaciaContacto: () -> Unit, navegarHaciaConfiguracion: () -> Unit) {
+fun CatalogoScreen(
+    cartViewModel: CartViewModel,
+    navegarHaciaContacto: () -> Unit,
+    navegarHaciaConfiguracion: () -> Unit,
+    navegarHaciaCarrito: () -> Unit
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     var searchText by remember { mutableStateOf("") }
     var filterText by remember { mutableStateOf("") }
-    var cartCount by remember { mutableStateOf(0) }
     val snackbarHostState = remember { SnackbarHostState() }
+    val itemsMap by cartViewModel.items.collectAsState()
+    val cartCount = itemsMap.values.sumOf { it.quantity }
 
     val productosBase = remember {
         listOf(
-            Producto("Tomaco", "Edición especial de la granja", R.drawable.tomaco),
-            Producto("Tomate Cherry", "Pequeños y dulces", R.drawable.ic_launcher_foreground),
-            Producto("Tomate de Oro", "Color dorado y sabor intenso", R.drawable.tomate_de_oro),
-            Producto("Tomate Aji", "Picante y sabroso", R.drawable.tomate_aji)
+            Producto("tomaco", "Tomaco", "Edición especial de la granja", R.drawable.tomaco, 4990.0),
+            Producto("cherry", "Tomate Cherry", "Pequeños y dulces", R.drawable.ic_launcher_foreground, 2990.0),
+            Producto("oro", "Tomate de Oro", "Color dorado y sabor intenso", R.drawable.tomate_de_oro, 7990.0),
+            Producto("aji", "Tomate Aji", "Picante y sabroso", R.drawable.tomate_aji, 5990.0)
         )
     }
     val productosFiltrados = remember(filterText) {
@@ -96,7 +103,13 @@ fun CatalogoScreen(navegarHaciaContacto: () -> Unit, navegarHaciaConfiguracion: 
                         )
                     },
                     actions = {
-                        Text(text = "Carrito: $cartCount", modifier = Modifier.padding(end = 8.dp))
+                        BadgedBox(badge = {
+                            if (cartCount > 0) Badge { Text("$cartCount") }
+                        }) {
+                            IconButton(onClick = { navegarHaciaCarrito() }) {
+                                Icon(Icons.Filled.ShoppingCart, contentDescription = "Carrito")
+                            }
+                        }
                         IconButton(onClick = { filterText = searchText }) {
                             Icon(Icons.Filled.Search, contentDescription = "Buscar")
                         }
@@ -130,7 +143,13 @@ fun CatalogoScreen(navegarHaciaContacto: () -> Unit, navegarHaciaConfiguracion: 
                         ProductoItem(
                             producto = producto,
                             onAgregarCarrito = {
-                                cartCount++
+                                cartViewModel.addItem(
+                                    productId = producto.id,
+                                    title = producto.titulo,
+                                    price = producto.precio,
+                                    imageRes = producto.drawableRes,
+                                    qty = 1
+                                )
                                 scope.launch {
                                     snackbarHostState.showSnackbar("Agregado: ${producto.titulo}")
                                 }
@@ -179,7 +198,9 @@ private fun ProductoItem(
 }
 
 private data class Producto(
+    val id: String,
     val titulo: String,
     val detalle: String,
-    val drawableRes: Int
+    val drawableRes: Int,
+    val precio: Double
 )
