@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,11 +15,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.ferremas.R
 import com.example.ferremas.model.Product
+import androidx.compose.foundation.layout.Row
+import androidx.navigation.NavController
+
+
 @Composable
-fun CartScreen(){
+fun CartScreen(navController: NavController){
     var cartItems = listOf(
         Product("3", "Sierra", 999.9, imageUrl = R.drawable.traladro),
     )
@@ -49,7 +55,7 @@ fun CartScreen(){
             LazyColumn (modifier = Modifier.weight(14f)){
 
                 items( cartItems){item ->
-                    CardItemCard(
+                    CartItemCard (
                         item = item,
                         onRemoveItem = {/**aqui se controla el remover item**/}
                     )
@@ -58,6 +64,32 @@ fun CartScreen(){
             }
 
             // total y checkout
+            Column(modifier = Modifier.fillMaxWidth()
+                .padding(top=16.dp)) {
+
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+
+                    Text(text = "Total: ",
+                        style = MaterialTheme.typography.titleMedium)
+
+                    // llama a la vistamodelo para obtener el precio total
+                    Text(
+                        text = "...$",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {/** aqui se controla el checkout**/},
+                    modifier = Modifier.fillMaxWidth().height(50.dp)) {
+                    Text(text = "Checkout")
+                }
+
+            }
 
         }
     }
@@ -66,5 +98,10 @@ fun CartScreen(){
 
 @Composable
 fun CardItemCard(onRemoveItem: () -> Unit, item: Product) {
+    TODO("Not yet implemented")
+}
+
+@Composable
+fun CardItemCard(item: Product, onRemoveItem: () -> Unit) {
     TODO("Not yet implemented")
 }

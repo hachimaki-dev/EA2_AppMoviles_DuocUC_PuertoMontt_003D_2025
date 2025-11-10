@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import com.example.ferremas.R
 
 import androidx.compose.runtime.Composable
@@ -21,16 +20,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.ferremas.model.Category
 import com.example.ferremas.model.Product
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController: NavHostController,
+               onProfileClick: () -> Unit,
+               onCartClick: () -> Unit
+){
 
     Scaffold (
-        topBar = {MyTopAppBar()},
+        topBar = {MyTopAppBar(onProfileClick, onCartClick)},
         bottomBar = {BottomNavigationBar()}
 
     ){
@@ -60,7 +63,7 @@ fun HomeScreen(){
 
             //categories
             SectionTitle(title = "Categorias", "Ver Todo") {
-                /**todo add navigation**/
+                navController.navigate("Categories")
             }
 
             // CATEGORIAs
