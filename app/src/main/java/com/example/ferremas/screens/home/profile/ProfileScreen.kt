@@ -25,15 +25,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.ferremas.model.UserProfile
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.ferremas.viewmodels.UserViewModel
 
 @Composable
 fun ProfileScreen(
+    userViewModel: UserViewModel,
     navController: NavController,
     onSingOut: () -> Unit // fucnion poara sign out
 ){
     // get usuario actual
-    val currentUser = UserProfile("23","Tomas",
-        "to.garciab@duocuc.cl")
+    val currentUser by userViewModel.currentUser.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -57,7 +61,7 @@ fun ProfileScreen(
 
     // informacion del usuario
     Text(
-        text = currentUser.name,
+        text = currentUser!!.name,
         style = MaterialTheme.typography.headlineMedium,
         fontWeight = FontWeight.Bold
     )
@@ -65,7 +69,7 @@ fun ProfileScreen(
     Spacer(modifier = Modifier.height(8.dp))
 
     Text(
-        text = currentUser.email,
+        text = currentUser!!.email,
         style = MaterialTheme.typography.bodyMedium
     )
 

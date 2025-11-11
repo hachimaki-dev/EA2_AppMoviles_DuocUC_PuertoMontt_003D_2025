@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 @Composable
 fun SignUpScreen(
     onNavigateToLogin: () -> Unit,
-    onSignUpSucess: () -> Unit
+    onSignUpSuccess: () -> Unit
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -41,7 +41,7 @@ fun SignUpScreen(
 
 
     if (authState){
-        onSignUpSucess()
+        onSignUpSuccess()
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp),

@@ -23,21 +23,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.ferremas.viewmodels.UserViewModel
 
 @Composable
 fun LoginScreen(
     onNavigateToSignUp: () -> Unit,
     onLoginSuccess: () -> Unit,
+    userViewModel: UserViewModel,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-    // auth state
-    val authState = false
-
-    if (authState) {
-        onLoginSuccess()
-    }
+    var loginError by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -83,7 +79,17 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { /* TODO: manejar el login */ },
+            onClick = {
+                if (email.isEmpty() || password.isEmpty()) {
+                    loginError = "Por favor completa todos los campos"
+                } else if (!email.contains("@")) {
+                    loginError = "Ingresa un email válido"
+                } else {
+                    loginError = null
+                    userViewModel.loginUser(email, password)
+                    onLoginSuccess()
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -91,19 +97,14 @@ fun LoginScreen(
             Text("Iniciar Sesión")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = onNavigateToSignUp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.primary
+        // Mostrar error si existe
+        if (loginError != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = loginError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
             )
-        ) {
-            Text("Crear cuenta")
         }
 
         Spacer(modifier = Modifier.height(16.dp))

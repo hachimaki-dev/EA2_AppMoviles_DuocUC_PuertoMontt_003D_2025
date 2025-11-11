@@ -11,8 +11,11 @@ import com.example.ferremas.screens.home.HomeScreen
 import com.example.ferremas.screens.home.cart.CartScreen
 import com.example.ferremas.screens.home.categories.CategoryScreen
 import com.example.ferremas.screens.home.navigation.Screens
+import com.example.ferremas.screens.home.profile.LoginScreen
 import com.example.ferremas.screens.home.profile.ProfileScreen
 import com.example.ferremas.screens.home.profile.SignUpScreen
+import androidx.activity.viewModels
+import com.example.ferremas.viewmodels.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,50 +23,71 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            // sistema de navegacion
             val navController = rememberNavController()
+            val userViewModel: UserViewModel by viewModels()
 
-            // Nav host
             NavHost(
                 navController = navController,
-                startDestination = "home"
-            ){
-                // definir rutas usando composables
-                // para cada vista que se necesite
-                composable(Screens.Home.route){
-                    HomeScreen(
-                        navController= navController,
-                        onProfileClick = { navController.navigate(route = "Profile") },
-                        onCartClick = { navController.navigate(route = "Cart") }
-                    )
-                }
-                composable("Cart"){
-                    CartScreen(navController= navController)
-                }
-
-                composable("Profile"){
-                    ProfileScreen(navController = navController,
-                        onSingOut = {/** logica de sign out**/})
-                }
-
-                composable("Categories"){
-                    CategoryScreen(navController)
-                }
-
-                composable(Screens.SignUp.route){
-                    SignUpScreen(
-                        onNavigateToLogin = {
-                            navController.navigate(Screens.Login.route)
+                startDestination = Screens.Login.route  // ← Empieza en login
+            ) {
+                // PANTALLAS DE AUTENTICACIÓN
+                composable(Screens.Login.route) {
+                    LoginScreen(
+                        userViewModel = userViewModel,
+                        onNavigateToSignUp = {
+                            navController.navigate(Screens.SignUp.route)
                         },
-                        onSignUpSucess = {
-                            navController.navigate(Screens.Home.route)
+                        onLoginSuccess = {
+                            navController.navigate(Screens.Home.route) {
+                                popUpTo(Screens.Login.route) { inclusive = true }
+                            }
                         }
                     )
                 }
 
+                composable(Screens.SignUp.route) {
+                    SignUpScreen(
+                        onNavigateToLogin = {
+                            navController.navigate(Screens.Login.route)
+                        },
+                        onSignUpSuccess = {
+                            navController.navigate(Screens.Home.route) {
+                                popUpTo(Screens.Login.route) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+
+                // PANTALLAS PRINCIPALES
+                composable(Screens.Home.route) {
+                    HomeScreen(
+                        navController = navController,
+                        onProfileClick = { navController.navigate(Screens.Profile.route) },
+                        onCartClick = { navController.navigate(Screens.Cart.route) }
+                    )
+                }
+
+                composable(Screens.Cart.route) {
+                    CartScreen(navController = navController)
+                }
+
+                composable(Screens.Profile.route) {
+                    ProfileScreen(
+                        userViewModel = userViewModel,  // ← ✅ AGREGAR ESTE PARÁMETRO
+                        navController = navController,
+                        onSingOut = {
+                            userViewModel.logout()  // ← ✅ LLAMAR AL LOGOUT DEL VIEWMODEL
+                            navController.navigate(Screens.Login.route) {
+                                popUpTo(Screens.Home.route) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+
+                composable(Screens.Categories.route) {
+                    CategoryScreen(navController)
+                }
             }
         }
     }
 }
-
-
