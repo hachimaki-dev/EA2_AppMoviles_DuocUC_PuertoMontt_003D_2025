@@ -85,7 +85,8 @@ fun CategoryItem(category: Category, onClick: ()-> Unit) {
                 Text(
                     text = category.name,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0x0F080808)
+                    color = Color(0x0F080808),
+                    maxLines = 1
                 )
 
             }
