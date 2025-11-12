@@ -20,11 +20,10 @@ import androidx.compose.ui.unit.sp
 import com.example.duocappmoviles003d.R
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(viewModel: SignUpViewModel) {
     // Estados locales
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+
+    val state = viewModel.uiState.value
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -89,8 +88,8 @@ fun RegisterScreen() {
                     Spacer(Modifier.height(28.dp))
 
                     OutlinedTextField(
-                        value = name,
-                        onValueChange = { name = it },
+                        value =  state.name ,
+                        onValueChange = { viewModel.onNameChange(it)},
                         label = { Text("Nombre", color = Color(0xFFE1B3FF)) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
@@ -108,8 +107,8 @@ fun RegisterScreen() {
                     Spacer(Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
+                        value =  state.email ,
+                        onValueChange = {  viewModel.onEmailChange(it) },
                         label = { Text("Email", color = Color(0xFFE1B3FF)) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
@@ -127,8 +126,8 @@ fun RegisterScreen() {
                     Spacer(Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
+                        value =  state.password ,
+                        onValueChange = { viewModel.onPasswordChange(it) },
                         label = { Text("Contraseña", color = Color(0xFFE1B3FF)) },
                         modifier = Modifier.fillMaxWidth(),
                         visualTransformation = PasswordVisualTransformation(),
