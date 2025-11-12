@@ -67,7 +67,7 @@ fun PokedexHomeScreen(
                 color = Color.White,
                 modifier = Modifier.padding(16.dp)
             )
-
+                        //Disposición de Tarjetas
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(8.dp),
@@ -77,7 +77,7 @@ fun PokedexHomeScreen(
                     PokemonCard(pokemon = pokemon, navController = navController)
                 }
             }
-
+                        //Footer
             Text(
                 text = "© 2025 UltiDex",
                 fontSize = 14.sp,

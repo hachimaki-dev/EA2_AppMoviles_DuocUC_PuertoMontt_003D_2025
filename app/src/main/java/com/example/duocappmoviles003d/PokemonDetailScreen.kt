@@ -1,5 +1,6 @@
 package com.example.duocappmoviles003d
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +26,8 @@ fun PokemonDetailScreen(pokemon: PokemonDetail) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF0A0A0A))
+
+
     ) {
         Column(
             modifier = Modifier
