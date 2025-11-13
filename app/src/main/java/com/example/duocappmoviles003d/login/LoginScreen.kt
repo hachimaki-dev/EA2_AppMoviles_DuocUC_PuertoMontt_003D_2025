@@ -21,13 +21,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.duocappmoviles003d.R
+import com.example.duocappmoviles003d.login.LoginUIState
+import com.example.duocappmoviles003d.login.LoginViewModel
 
 @Composable
 fun LoginScreen(
     onLoginClick: (String, String) -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    viewModel: LoginViewModel
 ) {
-    var email by remember { mutableStateOf("") }
+
+    val stateDeLaVistaLogin = viewModel.estoRepresentaAlModeloDeDatos.value
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
@@ -87,8 +91,8 @@ fun LoginScreen(
                     )
                     Spacer(Modifier.height(8.dp))
                     OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
+                        value =  stateDeLaVistaLogin.email,
+                        onValueChange = { it -> viewModel.cuandoElEmailCambia(it) },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = {
                             Text(
@@ -223,9 +227,7 @@ fun LoginScreen(
                         .height(56.dp)
                         .background(Color(0xFFFF1EFF), RoundedCornerShape(4.dp))
                         .clickable {
-                            if (email.isNotBlank() && password.isNotBlank()) {
-                                onLoginClick(email, password)
-                            }
+                            viewModel.saludar("Pepito")
                         },
                     contentAlignment = Alignment.Center
                 ) {

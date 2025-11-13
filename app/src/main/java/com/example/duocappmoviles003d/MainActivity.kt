@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.duocappmoviles003d.auth.LoginScreen
 import com.example.duocappmoviles003d.catalog.CatalogScreen
 import com.example.duocappmoviles003d.catalog.Product
+import com.example.duocappmoviles003d.login.LoginViewModel
 import com.example.duocappmoviles003d.signup.RegisterScreen
 import com.example.duocappmoviles003d.signup.SignUpUiState
 import com.example.duocappmoviles003d.signup.SignUpViewModel
@@ -53,6 +54,7 @@ fun CatalogPreview() {
 fun LoginScreenPreview() {
     LoginScreen(
         onLoginClick = { email, password -> },
-        onSignUpClick = { }
+        onSignUpClick = { },
+        viewModel = LoginViewModel()
     )
 }
