@@ -1,27 +1,24 @@
-package com.example.duocappmoviles003d.viewModel
+package com.example.duocappmoviles003d.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.duocappmoviles003d.data.repository.UsuarioRepository
+import com.example.duocappmoviles003d.model.Producto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-data class Producto(val id: Int, val nombre: String)
+class CatalogoViewModel(
+    private val repo: UsuarioRepository = UsuarioRepository()
+) : ViewModel() {
 
-class CatalogoViewModel : ViewModel() {
-
-    private val _productos = MutableStateFlow(
-        listOf(
-            Producto(1, "Coca-Cola 1L"),
-            Producto(2, "Sprite 1.5L"),
-            Producto(3, "Fanta 1.5L"),
-            Producto(4, "Agua Dasani 600ml")
-        )
-    )
+    private val _productos = MutableStateFlow<List<Producto>>(emptyList())
     val productos: StateFlow<List<Producto>> = _productos
 
-    private val _carrito = MutableStateFlow<List<Producto>>(emptyList())
-    val carrito: StateFlow<List<Producto>> = _carrito
-
-    fun agregarAlCarrito(producto: Producto) {
-        _carrito.value = _carrito.value + producto
+    fun cargarProductos() {
+        viewModelScope.launch {
+            val lista = repo.obtenerProductos()
+            _productos.value = lista
+        }
     }
 }
