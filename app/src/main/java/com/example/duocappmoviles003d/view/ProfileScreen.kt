@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+package com.example.duocappmoviles003d.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,15 +11,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.duocappmoviles003d.viewModel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    viewModel: ProfileViewModel = viewModel()
 ) {
-    val usuario = UsuarioActivo
-    var username by remember { mutableStateOf(TextFieldValue(usuario?.username ?: "")) }
-    var email by remember { mutableStateOf(TextFieldValue(usuario?.email ?: "")) }
-    var mensaje by remember { mutableStateOf("") }
+    val uiState = viewModel.uiState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -44,10 +44,9 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Username
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = uiState.value.username,
+                onValueChange = { viewModel.onUsernameChanged(it) },
                 label = { Text("Username") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -60,17 +59,14 @@ fun ProfileScreen(
                     disabledBorderColor = Color(2, 178, 191),
                     focusedLabelColor = Color(2, 178, 191),
                     focusedTextColor = Color.Black
-
-
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Email
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = uiState.value.email,
+                onValueChange = { viewModel.onEmailChanged(it) },
                 label = { Text("Email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -83,29 +79,18 @@ fun ProfileScreen(
                     disabledBorderColor = Color(2, 178, 191),
                     focusedLabelColor = Color(2, 178, 191),
                     focusedTextColor = Color.Black
-
-
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (mensaje.isNotEmpty()) {
-                Text(text = mensaje, color = Color.Black, fontSize = 14.sp)
+            if (uiState.value.mensaje.isNotEmpty()) {
+                Text(text = uiState.value.mensaje, color = Color.Black, fontSize = 14.sp)
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // Botón Guardar cambios
             Button(
-                onClick = {
-                    if (username.text.isBlank() || email.text.isBlank()) {
-                        mensaje = "Por favor completa todos los campos"
-                    } else {
-                        usuario?.username = username.text
-                        usuario?.email = email.text
-                        mensaje = "Datos actualizados correctamente"
-                    }
-                },
+                onClick = { viewModel.guardarCambios() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(2,178,191)),
                 shape = RoundedCornerShape(26.dp)
@@ -115,9 +100,8 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón volver
             Button(
-                onClick = { onNavigateBack() },
+                onClick = onNavigateBack,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(26.dp)

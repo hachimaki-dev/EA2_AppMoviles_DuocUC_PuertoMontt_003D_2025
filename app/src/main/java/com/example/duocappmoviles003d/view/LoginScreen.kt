@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,20 +14,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.duocappmoviles003d.viewModel.LoginViewModel
 
 @Composable
 fun LoginScreen(
     onNavigateToHome: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
-    onNavigateToForgot: () -> Unit
+    onNavigateToForgot: () -> Unit,
+    viewModel: LoginViewModel = viewModel()
 ) {
-    var username by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
-    var errorMessage by remember { mutableStateOf("") }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +48,7 @@ fun LoginScreen(
             )
 
             Text(
-                text = "Iniciar Sesion",
+                text = "Iniciar Sesión",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.Black,
                 fontWeight = FontWeight.Black,
@@ -60,53 +58,38 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = viewModel.username,
+                onValueChange = { viewModel.username = it },
                 label = { Text("Usuario") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(26.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(2, 178, 191),
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color(2, 178, 191),
-                    unfocusedLabelColor = Color(2, 178, 191),
-                    disabledBorderColor = Color(2, 178, 191),
-                    focusedLabelColor = Color(2, 178, 191),
-                    focusedTextColor = Color.Black
-
-
+                    unfocusedBorderColor = Color(2, 178, 191)
                 )
-
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Contrasena") },
+                value = viewModel.password,
+                onValueChange = { viewModel.password = it },
+                label = { Text("Contraseña") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(26.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color(2, 178, 191),
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color(2, 178, 191),
-                    unfocusedLabelColor = Color(2, 178, 191),
-                    disabledBorderColor = Color(2, 178, 191),
-                    focusedLabelColor = Color(2, 178, 191),
-                    focusedTextColor = Color.Black
-
-
+                    unfocusedBorderColor = Color(2, 178, 191)
                 )
             )
 
-            if (errorMessage.isNotEmpty()) {
+            if (viewModel.errorMessage.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = errorMessage,
+                    text = viewModel.errorMessage,
                     color = Color.Red,
                     fontSize = 14.sp
                 )
@@ -115,20 +98,13 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = {
-                    if (username.text.isBlank() || password.text.isBlank()) {
-                        errorMessage = "Por favor completa todos los campos"
-                    } else if (!validarLogin(username.text, password.text)) {
-                        errorMessage = "Usuario o contraseña incorrectos"
-                    } else {
-                        errorMessage = ""
-                        onNavigateToHome(username.text)
-                    }
-                },
+                onClick = { viewModel.onLogin(onNavigateToHome) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
                 shape = RoundedCornerShape(26.dp)
-            ) { Text("Iniciar Sesion", color = Color.Black, fontWeight = FontWeight.Black) }
+            ) {
+                Text("Iniciar Sesión", color = Color.Black, fontWeight = FontWeight.Black)
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -137,14 +113,18 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 shape = RoundedCornerShape(26.dp)
-            ) { Text("Registrarse", color = Color.White, fontWeight = FontWeight.Black) }
+            ) {
+                Text("Registrarse", color = Color.White, fontWeight = FontWeight.Black)
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             TextButton(
                 onClick = { onNavigateToForgot() },
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("Olvide mi contrasena", color = Color(2, 178, 191), fontWeight = FontWeight.Black) }
+            ) {
+                Text("Olvidé mi contraseña", color = Color(2, 178, 191), fontWeight = FontWeight.Black)
+            }
         }
     }
 }
