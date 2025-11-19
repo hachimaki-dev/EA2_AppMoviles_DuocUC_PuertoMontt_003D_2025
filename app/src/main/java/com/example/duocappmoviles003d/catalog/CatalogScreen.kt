@@ -20,23 +20,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.duocappmoviles003d.R
-import kotlin.random.Random
-
-data class Product(
-    val id: Int,
-    val name: String,
-    val price: Double,
-    val imageRes: Int,
-    val stock: Int = Random.nextInt(3, 25)
-)
 
 @Composable
-fun CatalogScreen(products: List<Product>) {
+fun CatalogScreen(viewModel: CatalogViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Box(modifier = Modifier.fillMaxSize()) {
+        // Fondo
         Image(
             painter = painterResource(id = R.drawable.fondo_signup),
             contentDescription = null,
@@ -50,43 +45,116 @@ fun CatalogScreen(products: List<Product>) {
                 .background(Color(0xFF0A0118).copy(alpha = 0.75f))
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
-            //Header
-            Column(modifier = Modifier.padding(bottom = 20.dp)) {
-                Text(
-                    text = "CATÁLOGO",
-                    fontSize = 14.sp,
-                    color = Color(0xFFFF1EFF),
-                    letterSpacing = 3.sp,
-                    fontWeight = FontWeight.Black
-                )
-                Text(
-                    text = "otakuwear",
-                    fontSize = 42.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White,
-                    lineHeight = 38.sp
-                )
-                Text(
-                    text = "${products.size} productos disponibles",
-                    fontSize = 13.sp,
-                    color = Color.White.copy(alpha = 0.5f)
-                )
-            }
+        // Contenido según el estado
+        when (uiState) {
+            is UiState.Loading -> LoadingContent()
+            is UiState.Success -> SuccessContent((uiState as UiState.Success).products)
+            is UiState.Error -> ErrorContent(
+                message = (uiState as UiState.Error).message,
+                onRetry = { viewModel.retry() }
+            )
+        }
+    }
+}
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                modifier = Modifier.fillMaxSize()
+@Composable
+fun LoadingContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator(
+                color = Color(0xFFFF1EFF),
+                strokeWidth = 3.dp
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = "Cargando productos...",
+                color = Color.White,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorContent(message: String, onRetry: () -> Unit) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(32.dp)
+        ) {
+            Text(
+                text = "❌",
+                fontSize = 48.sp
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = "Error al cargar productos",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = message,
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = 14.sp
+            )
+            Spacer(Modifier.height(24.dp))
+            Button(
+                onClick = onRetry,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF1EFF)
+                )
             ) {
-                items(products) { product ->
-                    ProductCard(product)
-                }
+                Text("Reintentar", color = Color.Black, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+fun SuccessContent(products: List<Product>) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+    ) {
+        Column(modifier = Modifier.padding(bottom = 20.dp)) {
+            Text(
+                text = "CATÁLOGO",
+                fontSize = 14.sp,
+                color = Color(0xFFFF1EFF),
+                letterSpacing = 3.sp,
+                fontWeight = FontWeight.Black
+            )
+            Text(
+                text = "otakuwear",
+                fontSize = 42.sp,
+                fontWeight = FontWeight.Black,
+                color = Color.White,
+                lineHeight = 38.sp
+            )
+            Text(
+                text = "${products.size} productos disponibles",
+                fontSize = 13.sp,
+                color = Color.White.copy(alpha = 0.5f)
+            )
+        }
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(products) { product ->
+                ProductCard(product)
             }
         }
     }
@@ -107,17 +175,16 @@ fun ProductCard(product: Product) {
             .rotate(rotation)
             .clickable { clicked = !clicked }
     ) {
-        // Imagen de fondo
-        Image(
-            painter = painterResource(id = product.imageRes),
-            contentDescription = null,
+        // Imagen desde URL
+        AsyncImage(
+            model = product.imageUrl,
+            contentDescription = product.name,
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(4.dp)),
             contentScale = ContentScale.Crop
         )
 
-        // Overlay oscuro
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -132,13 +199,11 @@ fun ProductCard(product: Product) {
                 )
         )
 
-        // Info del producto
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(12.dp)
         ) {
-            // Stock badge
             if (product.stock < 5) {
                 Text(
                     text = "¡ÚLTIMAS ${product.stock}!",
@@ -168,7 +233,7 @@ fun ProductCard(product: Product) {
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "$${product.price}",
+                        text = "$${product.price.toInt()}",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Black,
                         color = Color.White
@@ -184,7 +249,7 @@ fun ProductCard(product: Product) {
                     modifier = Modifier
                         .size(44.dp)
                         .background(Color(0xFFFF1EFF), RoundedCornerShape(4.dp))
-                        .clickable { /* comprar */ },
+                        .clickable { /* TODO: comprar */ },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -197,7 +262,6 @@ fun ProductCard(product: Product) {
             }
         }
 
-        // Número de producto esquina superior
         Text(
             text = "#${product.id.toString().padStart(3, '0')}",
             fontSize = 11.sp,
