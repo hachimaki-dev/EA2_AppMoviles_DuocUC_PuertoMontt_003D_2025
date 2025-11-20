@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+package com.example.duocappmoviles003d.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,6 +62,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.duocappmoviles003d.ui.navigation.AppRoutes
 import com.example.duocappmoviles003d.ui.theme.AmarilloTarjeta
 import com.example.duocappmoviles003d.ui.theme.AzulOscuroCITT
 import com.example.duocappmoviles003d.ui.theme.FondoCITT

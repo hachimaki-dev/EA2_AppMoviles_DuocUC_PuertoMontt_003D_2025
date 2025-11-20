@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+package com.example.duocappmoviles003d.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,6 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.duocappmoviles003d.ui.screens.PantallaCrearProyecto
+import com.example.duocappmoviles003d.ui.screens.PantallaLogin
+import com.example.duocappmoviles003d.ui.screens.PantallaMenuPrincipal
+import com.example.duocappmoviles003d.ui.screens.PantallaProyectos
 
 object AppRoutes {
     const val LOGIN_SCREEN = "login"
