@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía MVVM en Android - OtakuWear App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <style>
+        .tooltip-term { cursor: help; border-bottom: 2px dotted #42b883; color: #42b883; font-weight: 600; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-btn { transition: all 0.3s; }
+        .nav-btn.active { background: #42b883; color: white; transform: scale(1.05); }
+        pre[class*="language-"] { border-radius: 12px; font-size: 14px; }
+        .card-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen">
+
+<!-- Header -->
+<header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">📱 Guía MVVM en Android</h1>
+                <p class="text-sm text-gray-600 mt-1">Aprende el patrón MVVM con Jetpack Compose - Ejemplo: OtakuWear App</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Navegación horizontal -->
+<nav class="bg-white shadow-sm mt-4 mx-6 rounded-xl p-2">
+    <div class="flex gap-2 overflow-x-auto">
+        <button onclick="showSection(1)" class="nav-btn active flex-1 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap">
+            🎯 ¿Qué es MVVM?
+        </button>
+        <button onclick="showSection(2)" class="nav-btn flex-1 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap bg-gray-100 hover:bg-gray-200">
+            🧩 ViewModel Android
+        </button>
+        <button onclick="showSection(3)" class="nav-btn flex-1 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap bg-gray-100 hover:bg-gray-200">
+            🔗 Vista + ViewModel
+        </button>
+        <button onclick="showSection(4)" class="nav-btn flex-1 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap bg-gray-100 hover:bg-gray-200">
+            💾 Estados
+        </button>
+        <button onclick="showSection(5)" class="nav-btn flex-1 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap bg-gray-100 hover:bg-gray-200">
+            ⚙️ Código Detallado
+        </button>
+        <button onclick="showSection(6)" class="nav-btn flex-1 px-4 py-3 rounded-lg font-medium text-sm whitespace-nowrap bg-gray-100 hover:bg-gray-200">
+            🚀 Ejercicios
+        </button>
+    </div>
+</nav>
+
+<!-- Container principal -->
+<main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- SECCIÓN 1: ¿Qué es MVVM? -->
+    <section id="section-1" class="section active">
+        <div class="card-glass rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">🎯 ¿Qué es MVVM?</h2>
+
+            <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg mb-6">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    <span class="tooltip-term" data-tippy-content="Model-View-ViewModel: patrón de arquitectura que separa la lógica de negocio de la interfaz">MVVM</span>
+                    es un patrón de arquitectura que nos ayuda a organizar mejor nuestro código en aplicaciones Android.
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🍕 Analogía: El Restaurante</h3>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-md border-2 border-blue-200">
+                    <div class="text-4xl mb-3">👨‍🍳</div>
+                    <h4 class="font-bold text-lg mb-2 text-blue-600">Model (Modelo)</h4>
+                    <p class="text-gray-600 text-sm">La cocina y los ingredientes. Los datos puros de tu app.</p>
+                    <div class="mt-3 text-xs bg-blue-50 p-2 rounded">
+                        <code>SignUpUiState</code> - Los datos del formulario
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border-2 border-green-200">
+                    <div class="text-4xl mb-3">🧑‍💼</div>
+                    <h4 class="font-bold text-lg mb-2 text-green-600">ViewModel</h4>
+                    <p class="text-gray-600 text-sm">El mesero. Conecta la cocina con el cliente y maneja los pedidos.</p>
+                    <div class="mt-3 text-xs bg-green-50 p-2 rounded">
+                        <code>SignUpViewModel</code> - La lógica del registro
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border-2 border-purple-200">
+                    <div class="text-4xl mb-3">👤</div>
+                    <h4 class="font-bold text-lg mb-2 text-purple-600">View (Vista)</h4>
+                    <p class="text-gray-600 text-sm">El cliente. Solo ve el menú y hace su pedido.</p>
+                    <div class="mt-3 text-xs bg-purple-50 p-2 rounded">
+                        <code>RegisterScreen</code> - La interfaz visual
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">✨ ¿Por qué usar MVVM?</h3>
+
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-3 text-xl">✓</span>
+                    <span><strong>Separación clara:</strong> La vista no sabe cómo funcionan los datos, solo los muestra.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-3 text-xl">✓</span>
+                    <span><strong>Fácil de testear:</strong> Puedes probar la lógica sin necesidad de la interfaz.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-3 text-xl">✓</span>
+                    <span><strong>Reusable:</strong> Puedes cambiar la vista sin tocar la lógica.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-3 text-xl">✓</span>
+                    <span><strong>Mantenible:</strong> Cada parte tiene su responsabilidad específica.</span>
+                </li>
+            </ul>
+
+            <div class="mt-8 flex justify-end">
+                <button onclick="showSection(2)" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition">
+                    Siguiente: ViewModel en Android →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: ViewModel en Android -->
+    <section id="section-2" class="section">
+        <div class="card-glass rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">🧩 ViewModel en Android</h2>
+
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg mb-6">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    En Android, un <span class="tooltip-term" data-tippy-content="Clase especial de Android que sobrevive a cambios de configuración como rotación de pantalla">ViewModel</span>
+                    es una clase especial que <strong>guarda y maneja los datos</strong> de tu interfaz de usuario.
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎒 ¿Qué hace un ViewModel?</h3>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h4 class="font-bold text-lg mb-3 text-green-600">✅ Responsabilidades</h4>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li>• Almacena el <strong>estado</strong> de la pantalla</li>
+                        <li>• Procesa la <strong>lógica de negocio</strong></li>
+                        <li>• Valida los datos del usuario</li>
+                        <li>• Se comunica con repositorios/APIs</li>
+                        <li>• Expone datos a la vista de forma <strong>observable</strong></li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h4 class="font-bold text-lg mb-3 text-red-600">❌ NO hace</h4>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li>• NO contiene referencias a vistas (UI)</li>
+                        <li>• NO maneja colores, tamaños o estilos</li>
+                        <li>• NO muestra Toast o Snackbars directamente</li>
+                        <li>• NO depende del Context de Android</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🔄 Ciclo de vida simplificado</h3>
+
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl mb-6">
+                <div class="flex items-center justify-between text-center">
+                    <div class="flex-1">
+                        <div class="text-3xl mb-2">📱</div>
+                        <p class="text-sm font-semibold">Activity/Screen creado</p>
+                    </div>
+                    <div class="text-2xl text-gray-400">→</div>
+                    <div class="flex-1">
+                        <div class="text-3xl mb-2">🎒</div>
+                        <p class="text-sm font-semibold">ViewModel se crea</p>
+                    </div>
+                    <div class="text-2xl text-gray-400">→</div>
+                    <div class="flex-1">
+                        <div class="text-3xl mb-2">🔄</div>
+                        <p class="text-sm font-semibold">Rotación/Cambios</p>
+                        <p class="text-xs text-gray-600">(ViewModel sobrevive)</p>
+                    </div>
+                    <div class="text-2xl text-gray-400">→</div>
+                    <div class="flex-1">
+                        <div class="text-3xl mb-2">💀</div>
+                        <p class="text-sm font-semibold">Activity destruido</p>
+                        <p class="text-xs text-gray-600">(ViewModel se limpia)</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">📦 Estructura básica</h3>
+
+            <pre><code class="language-kotlin">// Heredamos de ViewModel de Android
+class SignUpViewModel : ViewModel() {
+
+    // Estado privado (solo el ViewModel lo modifica)
+    private val _uiState = mutableStateOf(SignUpUiState())
+
+    // Estado público (solo lectura para la vista)
+    val uiState: State<SignUpUiState> = _uiState
+
+    // Funciones para modificar el estado
+    fun onNameChange(value: String) {
+        _uiState.value = _uiState.value.copy(name = value)
+    }
+}</code></pre>
+
+            <div class="mt-6 bg-blue-50 p-5 rounded-lg">
+                <p class="text-sm text-gray-700">
+                    <strong>💡 Punto clave:</strong> El ViewModel es como un "asistente inteligente" que mantiene los datos
+                    organizados y actualizados, incluso si giras el teléfono.
+                </p>
+            </div>
+
+            <div class="mt-8 flex justify-between">
+                <button onclick="showSection(1)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold transition">
+                    ← Anterior
+                </button>
+                <button onclick="showSection(3)" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition">
+                    Siguiente: Conectar Vista y ViewModel →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: Conectando Vista y ViewModel -->
+    <section id="section-3" class="section">
+        <div class="card-glass rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">🔗 Conectando Vista y ViewModel</h2>
+
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-lg mb-6">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Ahora veremos cómo <code class="bg-white px-2 py-1 rounded">RegisterScreen</code>
+                    (la vista) se comunica con <code class="bg-white px-2 py-1 rounded">SignUpViewModel</code>.
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎬 Paso 1: Crear el ViewModel en MainActivity</h3>
+
+            <pre><code class="language-kotlin">class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            // Creamos una instancia del ViewModel
+            RegisterScreen(viewModel = SignUpViewModel())
+        }
+    }
+}</code></pre>
+
+            <div class="my-6 bg-yellow-50 p-5 rounded-lg">
+                <p class="text-sm text-gray-700">
+                    <strong>⚠️ Nota:</strong> En apps más avanzadas, usarías
+                    <code class="bg-white px-2 py-1 rounded">viewModel()</code> de Compose para que Android gestione
+                    automáticamente el ciclo de vida. Por ahora, crearlo manualmente está bien.
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎨 Paso 2: Recibir el ViewModel en el Composable</h3>
+
+            <pre><code class="language-kotlin">@Composable
+fun RegisterScreen(viewModel: SignUpViewModel) {
+    // Obtenemos el estado actual del ViewModel
+    val state = viewModel.uiState.value
+
+    // Ahora podemos usar 'state.name', 'state.email', etc.
+}</code></pre>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">📝 Paso 3: Mostrar y modificar el estado</h3>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h4 class="font-semibold mb-3 text-gray-700">👁️ Leer el estado (Vista → ViewModel)</h4>
+                    <pre><code class="language-kotlin">OutlinedTextField(
+    value = state.name, // Leemos del estado
+    onValueChange = { /* ... */ },
+    label = { Text("Nombre") }
+)</code></pre>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-3 text-gray-700">✏️ Modificar el estado (Vista → ViewModel)</h4>
+                    <pre><code class="language-kotlin">OutlinedTextField(
+    value = state.name,
+    onValueChange = { nuevoNombre ->
+        viewModel.onNameChange(nuevoNombre)
+    },
+    label = { Text("Nombre") }
+)</code></pre>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🔄 Flujo completo de datos</h3>
+
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-xl">
+                <ol class="space-y-4 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4 flex-shrink-0">1</span>
+                        <div>
+                            <strong>Usuario escribe en el campo:</strong> Ej: "Carlos"
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4 flex-shrink-0">2</span>
+                        <div>
+                            <strong>Se ejecuta onValueChange:</strong> <code class="bg-white px-2 py-1 rounded">viewModel.onNameChange("Carlos")</code>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4 flex-shrink-0">3</span>
+                        <div>
+                            <strong>ViewModel actualiza el estado:</strong> <code class="bg-white px-2 py-1 rounded">_uiState.value = _uiState.value.copy(name = "Carlos")</code>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4 flex-shrink-0">4</span>
+                        <div>
+                            <strong>Compose detecta el cambio:</strong> La vista se redibuja automáticamente mostrando "Carlos"
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="mt-6 bg-green-50 p-5 rounded-lg">
+                <p class="text-sm text-gray-700">
+                    <strong>💚 Ventaja:</strong> La vista <strong>nunca</strong> modifica directamente el estado.
+                    Siempre pasa por el ViewModel, quien decide qué hacer con los datos (validar, transformar, etc.).
+                </p>
+            </div>
+
+            <div class="mt-8 flex justify-between">
+                <button onclick="showSection(2)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold transition">
+                    ← Anterior
+                </button>
+                <button onclick="showSection(4)" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition">
+                    Siguiente: Estados →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 4: Estados -->
+    <section id="section-4" class="section">
+        <div class="card-glass rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">💾 Estados: mutableStateOf vs State</h2>
+
+            <div class="bg-rose-50 border-l-4 border-rose-500 p-6 rounded-r-lg mb-6">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    En Compose, los <span class="tooltip-term" data-tippy-content="Variables que cuando cambian, automáticamente redibujan la UI">estados</span>
+                    son variables especiales que <strong>actualizan la interfaz automáticamente</strong> cuando cambian.
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🔍 Diferencia clave</h3>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-orange-50 p-6 rounded-xl border-2 border-orange-300">
+                    <h4 class="font-bold text-xl mb-3 text-orange-600 flex items-center">
+                        <span class="mr-2">📝</span> mutableStateOf
+                    </h4>
+                    <p class="text-gray-700 mb-4 text-sm">Variable que <strong>puede cambiar</strong> (lectura y escritura)</p>
+                    <pre><code class="language-kotlin">// Privado: solo el ViewModel lo modifica
+private val _uiState =
+    mutableStateOf(SignUpUiState())
+
+// Podemos hacer:
+_uiState.value = nuevoEstado ✅</code></pre>
+                    <div class="mt-4 bg-white p-3 rounded text-xs">
+                        <strong>Analogía:</strong> Un cuaderno donde TÚ escribes
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-xl border-2 border-blue-300">
+                    <h4 class="font-bold text-xl mb-3 text-blue-600 flex items-center">
+                        <span class="mr-2">👁️</span> State
+                    </h4>
+                    <p class="text-gray-700 mb-4 text-sm">Variable de <strong>solo lectura</strong> (solo ver, no modificar)</p>
+                    <pre><code class="language-kotlin">// Público: la vista solo lee
+val uiState: State<SignUpUiState> =
+    _uiState
+
+// Solo podemos hacer:
+val nombre = uiState.value.name ✅
+uiState.value = nuevoEstado ❌</code></pre>
+                    <div class="mt-4 bg-white p-3 rounded text-xs">
+                        <strong>Analogía:</strong> Un libro que solo puedes LEER
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎭 ¿Por qué dos variables?</h3>
+
+            <div class="bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-xl mb-6">
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-4">🔒</span>
+                        <div>
+                            <strong class="text-gray-800">Encapsulamiento:</strong>
+                            <p class="text-gray-700 text-sm mt-1">
+                                La vista NO puede modificar directamente <code class="bg-white px-2 py-1 rounded">_uiState</code>.
+                                Solo puede leer <code class="bg-white px-2 py-1 rounded">uiState</code> y llamar funciones del ViewModel.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-4">🛡️</span>
+                        <div>
+                            <strong class="text-gray-800">Control total:</strong>
+                            <p class="text-gray-700 text-sm mt-1">
+                                El ViewModel controla CUÁNDO y CÓMO se actualiza el estado. Puede validar, formatear, etc.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-4">🐛</span>
+                        <div>
+                            <strong class="text-gray-800">Menos bugs:</strong>
+                            <p class="text-gray-700 text-sm mt-1">
+                                Si algo sale mal con los datos, sabes que el problema está en el ViewModel, no en la vista.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">📚 data class y copy()</h3>
+
+            <pre><code class="language-kotlin">// SignUpUiState es un "data class"
+data class SignUpUiState(
+    val name: String = "",
+    val email: String = "",
+    val password: String = ""
+)
+
+// Para modificar UN campo sin tocar los demás, usamos copy()
+fun onNameChange(value: String) {
+    _uiState.value = _uiState.value.copy(name = value)
+    // Crea una COPIA con 'name' nuevo, pero email y password iguales
+}</code></pre>
+
+            <div class="mt-6 bg-purple-50 p-5 rounded-lg">
+                <p class="text-sm text-gray-700">
+                    <strong>🔑 Concepto importante:</strong>
+                    <span class="tooltip-term" data-tippy-content="Clase especial de Kotlin que genera automáticamente copy(), equals(), toString()">data class</span>
+                    nos da automáticamente la función <code class="bg-white px-2 py-1 rounded">copy()</code>, que crea una nueva instancia
+                    cambiando solo lo que especifiquemos.
+                </p>
+            </div>
+
+            <div class="mt-8 flex justify-between">
+                <button onclick="showSection(3)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold transition">
+                    ← Anterior
+                </button>
+                <button onclick="showSection(5)" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition">
+                    Siguiente: Código Detallado →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 5: Código Detallado -->
+    <section id="section-5" class="section">
+        <div class="card-glass rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">⚙️ Código Línea por Línea</h2>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">📄 SignUpUiState (El Modelo)</h3>
+
+            <pre><code class="language-kotlin">// data class: genera automáticamente copy(), equals(), toString()
+data class SignUpUiState(
+    val name: String = "",      // Valor por defecto: texto vacío
+    val email: String = "",     // Si no se pasa nada, será ""
+    val password: String = "",  // Los valores por defecto evitan errores
+    val errorMessage: String? = "" // String? significa que puede ser null
+)</code></pre>
+
+            <div class="bg-blue-50 p-5 rounded-lg mb-8 mt-4">
+                <h4 class="font-semibold mb-2">💡 ¿Qué es esto?</h4>
+                <p class="text-sm text-gray-700">
+                    Es una clase que representa <strong>todos los datos</strong> que necesita la pantalla de registro.
+                    Es como un "contenedor" con cajitas para cada dato. La palabra
+                    <span class="tooltip-term" data-tippy-content="Clase de datos que genera automáticamente métodos útiles">data</span>
+                    le dice a Kotlin que genere funciones útiles automáticamente.
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🧩 SignUpViewModel (La Lógica)</h3>
+
+            <pre><code class="language-kotlin">// Heredamos de ViewModel (clase de Android)
+class SignUpViewModel : ViewModel() {
+
+    // 1️⃣ Estado PRIVADO (solo este ViewModel puede modificarlo)
+    private val _uiState = mutableStateOf(SignUpUiState())
+    // mutableStateOf() crea un estado observable
+    // Inicialmente está vacío: name="", email="", password=""
+
+    // 2️⃣ Estado PÚBLICO (la vista solo puede leerlo)
+    val uiState: State<SignUpUiState> = _uiState
+    // Exponemos el estado pero como "solo lectura"
+
+    // 3️⃣ Función para actualizar el nombre
+    fun onNameChange(value: String) {
+        // copy() crea una COPIA del estado actual
+        // cambiando SOLO el campo 'name'
+        _uiState.value = _uiState.value.copy(name = value)
+    }
+
+    // 4️⃣ Función para actualizar el email
+    fun onEmailChange(value: String){
+        _uiState.value = _uiState.value.copy(email = value)
+    }
+
+    // 5️⃣ Función para actualizar la contraseña
+    fun onPasswordChange(value: String){
+        _uiState.value = _uiState.value.copy(password = value)
+    }
+}</code></pre>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-6 mb-8">
+                <div class="bg-green-50 p-5 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-green-700">✅ Patrón correcto</h4>
+                    <pre class="text-xs"><code class="language-kotlin">// La vista llama a la función
+viewModel.onNameChange("Carlos")
+
+// El ViewModel actualiza el estado
+_uiState.value =
+  _uiState.value.copy(name = "Carlos")</code></pre>
+                </div>
+
+                <div class="bg-red-50 p-5 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-red-700">❌ Incorrecto</h4>
+                    <pre class="text-xs"><code class="language-kotlin">// ¡La vista NO debe hacer esto!
+viewModel.uiState.value.name = "Carlos"
+// ❌ No compila: uiState es solo lectura
+
+viewModel._uiState.value = ...
+// ❌ No compila: _uiState es privado</code></pre>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">📱 RegisterScreen (La Vista)</h3>
+
+            <pre><code class="language-kotlin">@Composable
+fun RegisterScreen(viewModel: SignUpViewModel) {
+    // Obtenemos el estado actual
+    val state = viewModel.uiState.value
+
+    // ... código de UI ...
+
+    OutlinedTextField(
+        value = state.name, // 👁️ LEEMOS del estado
+        onValueChange = { nuevoTexto ->
+            viewModel.onNameChange(nuevoTexto) // ✏️ ACTUALIZAMOS vía ViewModel
+        },
+        label = { Text("Nombre") }
+    )
+
+    OutlinedTextField(
+        value = state.email, // 👁️ LEEMOS
+        onValueChange = { viewModel.onEmailChange(it) }, // ✏️ ACTUALIZAMOS
+        label = { Text("Email") }
+    )
+
+    OutlinedTextField(
+        value = state.password, // 👁️ LEEMOS
+        onValueChange = { viewModel.onPasswordChange(it) }, // ✏️ ACTUALIZAMOS
+        label = { Text("Contraseña") },
+        visualTransformation = PasswordVisualTransformation()
+    )
+}</code></pre>
+
+            <div class="bg-indigo-50 p-6 rounded-lg mt-6">
+                <h4 class="font-semibold mb-3 text-indigo-700">🎯 Resumen del flujo</h4>
+                <ol class="space-y-2 text-sm text-gray-700">
+                    <li><strong>1.</strong> Usuario escribe → <code class="bg-white px-2 py-1 rounded">onValueChange</code> se ejecuta</li>
+                    <li><strong>2.</strong> Vista llama → <code class="bg-white px-2 py-1 rounded">viewModel.onNameChange("texto")</code></li>
+                    <li><strong>3.</strong> ViewModel actualiza → <code class="bg-white px-2 py-1 rounded">_uiState.value = _uiState.value.copy(name = "texto")</code></li>
+                    <li><strong>4.</strong> Compose detecta cambio → La UI se redibuja automáticamente con el nuevo valor</li>
+                </ol>
+            </div>
+
+            <div class="mt-8 flex justify-between">
+                <button onclick="showSection(4)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold transition">
+                    ← Anterior
+                </button>
+                <button onclick="showSection(6)" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition">
+                    Siguiente: Ejercicios →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 6: Ejercicios -->
+    <section id="section-6" class="section">
+        <div class="card-glass rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">🚀 Ejercicios Prácticos</h2>
+
+            <div class="bg-gradient-to-r from-green-100 to-emerald-100 border-l-4 border-green-500 p-6 rounded-r-lg mb-8">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Ahora es tu turno de <strong>expandir el ViewModel</strong> con validaciones y nueva funcionalidad.
+                    ¡Estos ejercicios te preparan para crear apps reales!
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">✏️ Ejercicio 1: Validación de Email</h3>
+
+            <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                <h4 class="font-bold text-lg mb-3 text-green-600">🎯 Objetivo</h4>
+                <p class="text-gray-700 mb-4">Agregar validación para verificar que el email tenga formato correcto (contenga "@").</p>
+
+                <h4 class="font-bold mb-2">📝 Pasos sugeridos:</h4>
+                <ol class="space-y-2 text-sm text-gray-700 ml-5 list-decimal mb-4">
+                    <li>Agregar un campo <code class="bg-gray-100 px-2 py-1 rounded">isEmailValid: Boolean</code> en <code>SignUpUiState</code></li>
+                    <li>Modificar <code>onEmailChange()</code> para validar si el email contiene "@"</li>
+                    <li>Actualizar el estado con <code>copy(email = value, isEmailValid = ...)</code></li>
+                    <li>En la vista, mostrar un error si <code>state.isEmailValid == false</code></li>
+                </ol>
+
+                <details class="bg-gray-50 p-4 rounded-lg">
+                    <summary class="cursor-pointer font-semibold text-green-600 hover:text-green-700">💡 Ver pista</summary>
+                    <pre class="mt-3 text-xs"><code class="language-kotlin">// En SignUpUiState
+data class SignUpUiState(
+    val name: String = "",
+    val email: String = "",
+    val password: String = "",
+    val isEmailValid: Boolean = true, // Agregar esto
+    val errorMessage: String? = ""
+)
+
+// En SignUpViewModel
+fun onEmailChange(value: String) {
+    val esValido = value.contains("@") && value.length > 3
+    _uiState.value = _uiState.value.copy(
+        email = value,
+        isEmailValid = esValido
+    )
+}</code></pre>
+                </details>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">✏️ Ejercicio 2: Validación de Contraseña</h3>
+
+            <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                <h4 class="font-bold text-lg mb-3 text-blue-600">🎯 Objetivo</h4>
+                <p class="text-gray-700 mb-4">Validar que la contraseña tenga al menos 6 caracteres.</p>
+
+                <h4 class="font-bold mb-2">📝 Pasos sugeridos:</h4>
+                <ol class="space-y-2 text-sm text-gray-700 ml-5 list-decimal mb-4">
+                    <li>Agregar <code class="bg-gray-100 px-2 py-1 rounded">isPasswordValid: Boolean</code> en <code>SignUpUiState</code></li>
+                    <li>En <code>onPasswordChange()</code>, validar <code>value.length >= 6</code></li>
+                    <li>Mostrar mensaje de error en la vista si no es válida</li>
+                </ol>
+
+                <details class="bg-gray-50 p-4 rounded-lg">
+                    <summary class="cursor-pointer font-semibold text-blue-600 hover:text-blue-700">💡 Ver solución completa</summary>
+                    <pre class="mt-3 text-xs"><code class="language-kotlin">// SignUpUiState actualizado
+data class SignUpUiState(
+    val name: String = "",
+    val email: String = "",
+    val password: String = "",
+    val isEmailValid: Boolean = true,
+    val isPasswordValid: Boolean = true, // Nuevo campo
+    val errorMessage: String? = ""
+)
+
+// En el ViewModel
+fun onPasswordChange(value: String) {
+    val esValida = value.length >= 6
+    _uiState.value = _uiState.value.copy(
+        password = value,
+        isPasswordValid = esValida
+    )
+}
+
+// En la vista
+OutlinedTextField(
+    value = state.password,
+    onValueChange = { viewModel.onPasswordChange(it) },
+    label = { Text("Contraseña") },
+    isError = !state.isPasswordValid,
+    supportingText = {
+        if (!state.isPasswordValid) {
+            Text("Mínimo 6 caracteres", color = Color.Red)
+        }
+    }
+)</code></pre>
+                </details>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">✏️ Ejercicio 3: Función para Registrar</h3>
+
+            <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                <h4 class="font-bold text-lg mb-3 text-purple-600">🎯 Objetivo</h4>
+                <p class="text-gray-700 mb-4">Crear una función <code>onRegisterClick()</code> que valide todos los campos antes de "registrar".</p>
+
+                <h4 class="font-bold mb-2">📝 Pasos sugeridos:</h4>
+                <ol class="space-y-2 text-sm text-gray-700 ml-5 list-decimal mb-4">
+                    <li>Crear función <code>fun onRegisterClick()</code> en el ViewModel</li>
+                    <li>Verificar que ningún campo esté vacío</li>
+                    <li>Verificar que email y password sean válidos</li>
+                    <li>Si todo está bien, actualizar <code>errorMessage</code> a "¡Registro exitoso!"</li>
+                    <li>Si algo está mal, mostrar mensaje de error específico</li>
+                </ol>
+
+                <details class="bg-gray-50 p-4 rounded-lg">
+                    <summary class="cursor-pointer font-semibold text-purple-600 hover:text-purple-700">💡 Ver ejemplo de implementación</summary>
+                    <pre class="mt-3 text-xs"><code class="language-kotlin">fun onRegisterClick() {
+    val currentState = _uiState.value
+
+    when {
+        currentState.name.isBlank() -> {
+            _uiState.value = currentState.copy(
+                errorMessage = "El nombre no puede estar vacío"
+            )
+        }
+        !currentState.isEmailValid || currentState.email.isBlank() -> {
+            _uiState.value = currentState.copy(
+                errorMessage = "Email inválido"
+            )
+        }
+        !currentState.isPasswordValid -> {
+            _uiState.value = currentState.copy(
+                errorMessage = "Contraseña muy corta"
+            )
+        }
+        else -> {
+            // ¡Todo válido! Aquí llamarías a tu API
+            _uiState.value = currentState.copy(
+                errorMessage = "✅ ¡Registro exitoso!"
+            )
+        }
+    }
+}</code></pre>
+                </details>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">🌟 Ejercicio Bonus: Loading State</h3>
+
+            <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                <h4 class="font-bold text-lg mb-3 text-orange-600">🎯 Objetivo Avanzado</h4>
+                <p class="text-gray-700 mb-4">Agregar un estado de "cargando" mientras se procesa el registro (simulado).</p>
+
+                <h4 class="font-bold mb-2">📝 Ideas:</h4>
+                <ul class="space-y-2 text-sm text-gray-700 ml-5 list-disc mb-4">
+                    <li>Agregar <code class="bg-gray-100 px-2 py-1 rounded">isLoading: Boolean = false</code> en <code>SignUpUiState</code></li>
+                    <li>Al hacer clic en "Registrarse", cambiar <code>isLoading = true</code></li>
+                    <li>Simular un delay con <code>delay(2000)</code> (necesitas hacer la función <code>suspend</code>)</li>
+                    <li>Después del delay, cambiar <code>isLoading = false</code> y mostrar resultado</li>
+                    <li>Deshabilitar el botón mientras <code>isLoading == true</code></li>
+                </ul>
+
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-700">
+                        <strong>💡 Concepto nuevo:</strong> Esto requiere usar
+                        <span class="tooltip-term" data-tippy-content="Funciones que pueden pausarse y reanudarse, ideales para operaciones asíncronas">coroutines</span>.
+                        Es un tema avanzado, pero una gran oportunidad para investigar!
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">💭 Reflexión Final</h3>
+
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
+                <h4 class="font-bold mb-3">🧠 ¿Qué más puedes hacer en un ViewModel?</h4>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+                    <ul class="space-y-2">
+                        <li>✓ Formatear datos (ej: capitalizar nombres)</li>
+                        <li>✓ Hacer peticiones a APIs</li>
+                        <li>✓ Guardar en base de datos local</li>
+                        <li>✓ Manejar estados de error</li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li>✓ Implementar lógica de negocio compleja</li>
+                        <li>✓ Cachear datos</li>
+                        <li>✓ Gestionar permisos</li>
+                        <li>✓ Coordinar múltiples fuentes de datos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-green-600 text-white p-6 rounded-xl text-center">
+                <h3 class="text-2xl font-bold mb-2">🎉 ¡Felicidades!</h3>
+                <p class="text-lg">Ahora entiendes los fundamentos de MVVM en Android</p>
+                <p class="text-sm mt-2 opacity-90">Practica estos ejercicios y experimenta con tus propias ideas</p>
+            </div>
+
+            <div class="mt-8 flex justify-start">
+                <button onclick="showSection(5)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-semibold transition">
+                    ← Anterior
+                </button>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-white shadow-md mt-12 py-6">
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-600 text-sm">
+        <p>📚 Guía creada para estudiantes de desarrollo Android</p>
+        <p class="mt-2">💚 Aprende MVVM paso a paso con Jetpack Compose</p>
+    </div>
+</footer>
+
+<script>
+    // Navegación entre secciones
+    function showSection(num) {
+        // Ocultar todas las secciones
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Mostrar la sección seleccionada
+        document.getElementById('section-' + num).classList.add('active');
+
+        // Actualizar botones de navegación
+        document.querySelectorAll('.nav-btn').forEach((btn, index) => {
+            if (index + 1 === num) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Scroll al topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Inicializar tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        tippy('.tooltip-term', {
+            theme: 'light-border',
+            placement: 'top',
+            animation: 'scale',
+            arrow: true,
+            interactive: true,
+            maxWidth: 300
+        });
+    });
+</script>
+</body>
+</html>
