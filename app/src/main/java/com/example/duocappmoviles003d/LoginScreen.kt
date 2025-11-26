@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 // Paleta de Colores
-val PrimaryRed = Color(0xFFB71C1C) // Rojo de acento
+val PrimaryRed = Color(0xFF222222) // Rojo de acento
 val DarkBackground = Color(0xFF1E1E1E) // Fondo oscuro para contraste
 val CardBackground = DarkBackground.copy(alpha = 0.8f) // Tarjeta semi-transparente
 
@@ -33,7 +33,7 @@ fun LoginScreen(
 
     val isUsernameInvalid = username.isBlank()
     val isEmailInvalid = email.isBlank() || !email.contains("@")
-    val isPasswordInvalid = password.isBlank() || password.length < 6
+    val isPasswordInvalid = password.isBlank() || password.length > 4
 
     fun validateFormAndNavigate() {
         formSubmitted = true
@@ -45,7 +45,7 @@ fun LoginScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Asumiendo que R.drawable.cd31minutos existe
+
         Image(
             painter = painterResource(id = R.drawable.cd31minutos),
             contentDescription = "Fondo",

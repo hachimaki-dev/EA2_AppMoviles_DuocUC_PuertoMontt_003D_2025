@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+  package com.example.duocappmoviles003d
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.foundation.layout.*
@@ -52,9 +52,7 @@ object CartManager {
     }
 }
 
-// Carrito.kt
 
-// ... (imports y otras clases) ...
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,9 +62,7 @@ fun VistaCarrito(
     onNavigateToCheckout: () -> Unit
 ) {
     {
-    // ...
-    // Dentro del botón "Finalizar Compra" debe llamarse a onNavigateToCheckout()
-    // ...
+
 }
     val cartItems = remember { CartManager.cartItems }
 
