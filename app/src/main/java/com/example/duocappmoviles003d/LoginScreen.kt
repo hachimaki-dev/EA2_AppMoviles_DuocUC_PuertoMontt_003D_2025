@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-
+import io.github.jan.supabase.postgrest.from
 // Paleta de Colores
 val PrimaryRed = Color(0xFF222222) // Rojo de acento
 val DarkBackground = Color(0xFF1E1E1E) // Fondo oscuro para contraste
