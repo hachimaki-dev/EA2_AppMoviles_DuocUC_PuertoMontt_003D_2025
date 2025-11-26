@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.duocappmoviles003d.ui.components.MenuDrawerContent
 import com.example.duocappmoviles003d.ui.navigation.AppRoutes
 import com.example.duocappmoviles003d.ui.theme.FondoCITT
 import com.example.duocappmoviles003d.ui.theme.GrisClaroTexto

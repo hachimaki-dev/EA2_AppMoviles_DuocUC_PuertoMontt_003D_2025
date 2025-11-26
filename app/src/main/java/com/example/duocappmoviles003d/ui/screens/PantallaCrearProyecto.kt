@@ -48,6 +48,7 @@ import com.example.duocappmoviles003d.ui.theme.GrisClaroTexto
 import com.example.duocappmoviles003d.ui.theme.NegroClaroTexto
 import com.example.duocappmoviles003d.ui.theme.TextoPistaCITT
 import com.example.duocappmoviles003d.ui.theme.TurquesaCITT
+import com.example.duocappmoviles003d.ui.components.MenuDrawerContent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

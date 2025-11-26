@@ -2,22 +2,32 @@ package com.example.duocappmoviles003d.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Project(
+data class TrackObj(
+    @SerializedName("nombre")
+    val nombre: String
+)
+
+data class Proyecto(
     @SerializedName("id")
     val id: Long = 0,
 
-    @SerializedName("name")
-    val name: String,
+    @SerializedName("nombre")
+    val nombre: String,
 
-    @SerializedName("description")
-    val description: String,
+    @SerializedName("descripcion")
+    val descripcion: String,
 
-    @SerializedName("track")
-    val track: String,
-
-    @SerializedName("members")
-    val members: String,
+    @SerializedName("profesor")
+    val profesor: String,
 
     @SerializedName("progress")
-    val progress: Int
+    val progress: Int,
+
+    @SerializedName("tracks")
+    val trackDetails: TrackObj?
+)
+
+data class UserProjectResponse(
+    @SerializedName("proyectos")
+    val proyecto: Proyecto
 )

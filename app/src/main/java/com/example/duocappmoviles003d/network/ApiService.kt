@@ -1,10 +1,12 @@
 package com.example.duocappmoviles003d.network
-import com.example.duocappmoviles003d.model.Project
+import com.example.duocappmoviles003d.model.Proyecto
+import com.example.duocappmoviles003d.model.UserProjectResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @Headers(
@@ -14,7 +16,7 @@ interface ApiService {
         "Prefer: return=representation"
     )
     @GET("projects?select=*")
-    suspend fun getProjects(): Response<List<Project>>
+    suspend fun getProjects(): Response<List<Proyecto>>
 
     @Headers(
         "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnenBua3l0YWhseG9ra3NhbHhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NjczMjgsImV4cCI6MjA3OTE0MzMyOH0.V-S3fdFHVANEq9kBugc4CXATsp7vSs6Bh4ockhFI6J0",
@@ -23,5 +25,10 @@ interface ApiService {
         "Prefer: return=representation"
     )
     @POST("projects")
-    suspend fun createProject(@Body project: Project): Response<List<Project>>
+    suspend fun createProject(@Body project: Proyecto): Response<List<Proyecto>>
+
+    @GET("miembros_proyecto?select=proyectos(*,tracks(nombre))")
+    suspend fun getMyProjects(
+        @Query("user_email") email: String = "eq.estudiante@duocuc.cl"
+    ): Response<List<UserProjectResponse>>
 }

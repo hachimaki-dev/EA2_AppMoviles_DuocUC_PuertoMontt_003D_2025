@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.duocappmoviles003d.ui.screens.PantallaCrearProyecto
 import com.example.duocappmoviles003d.ui.screens.PantallaLogin
-import com.example.duocappmoviles003d.ui.screens.PantallaMenuPrincipal
+import com.example.duocappmoviles003d.ui.screens.PantallaMain
 import com.example.duocappmoviles003d.ui.screens.PantallaProyectos
 
 object AppRoutes {
@@ -39,7 +39,7 @@ fun AppNavigation() {
             arguments = listOf(navArgument("email") { type = NavType.StringType })
         ) { backStackEntry ->
             val email = backStackEntry.arguments?.getString("email") ?: "Usuario"
-            PantallaMenuPrincipal(navController = navController, userEmail = email)
+            PantallaMain(navController = navController, userEmail = email)
         }
 
         composable(
