@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import com.example.perfulandia.model.Product
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 // 1. Añadimos NavController como parámetro
