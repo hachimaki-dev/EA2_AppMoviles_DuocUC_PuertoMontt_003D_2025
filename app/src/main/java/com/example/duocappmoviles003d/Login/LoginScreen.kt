@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+package com.example.duocappmoviles003d.Login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,7 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import io.github.jan.supabase.postgrest.from
+import com.example.duocappmoviles003d.R
+
 // Paleta de Colores
 val PrimaryRed = Color(0xFF222222) // Rojo de acento
 val DarkBackground = Color(0xFF1E1E1E) // Fondo oscuro para contraste

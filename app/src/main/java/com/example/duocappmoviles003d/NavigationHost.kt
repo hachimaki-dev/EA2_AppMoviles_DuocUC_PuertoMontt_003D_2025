@@ -6,6 +6,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.duocappmoviles003d.Cart.VistaCarrito
+import com.example.duocappmoviles003d.Login.LoginScreen
+import com.example.duocappmoviles003d.ProductCatalogue.ProductCatalogueScreen
 
 @Composable
 fun NavigationHost(navController: NavHostController) {

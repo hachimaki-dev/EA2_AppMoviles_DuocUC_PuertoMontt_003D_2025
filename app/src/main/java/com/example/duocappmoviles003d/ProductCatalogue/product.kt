@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+package com.example.duocappmoviles003d.ProductCatalogue
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
