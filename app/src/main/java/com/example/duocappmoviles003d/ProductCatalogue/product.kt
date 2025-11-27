@@ -8,7 +8,7 @@ data class Product(
     @SerialName("id_product") val id: Long,
     val name: String,
     val price: Double,
-    @SerialName("image_url") val imageUrl: String, // Coil usará esto
+    @SerialName("image_url") val imageUrl: String,
     val stock: Int,
-    val description: String
+    val description: String? = ""
 )

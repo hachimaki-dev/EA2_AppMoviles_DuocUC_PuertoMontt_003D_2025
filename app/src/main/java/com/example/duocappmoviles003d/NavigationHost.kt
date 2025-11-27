@@ -2,13 +2,11 @@ package com.example.duocappmoviles003d
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.duocappmoviles003d.Cart.VistaCarrito
-import com.example.duocappmoviles003d.Login.LoginScreen
-import com.example.duocappmoviles003d.ProductCatalogue.ProductCatalogueScreen
+import com.example.duocappmoviles003d.Cart.CartScreen // Importación NUEVA
+import com.example.duocappmoviles003d.Login.LoginScreen // Importación NUEVA
+import com.example.duocappmoviles003d.ProductCatalogue.ProductCatalogueScreen // Importación NUEVA
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
@@ -16,7 +14,7 @@ fun NavigationHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationRoutes.LOGIN
     ) {
-        // 1. Ruta: Login -> Navega a CATALOGUE
+        // 1. Ruta: Login
         composable(route = NavigationRoutes.LOGIN) {
             LoginScreen(
                 onNavigateToCatalogue = {
@@ -25,63 +23,43 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
 
-        // 2. Ruta: Catálogo de Productos -> Navega a CART
+        // 2. Ruta: Catálogo
         composable(route = NavigationRoutes.CATALOGUE) {
             ProductCatalogueScreen(
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToCart = { navController.navigate(NavigationRoutes.CART) }
             )
         }
-// NavigationHost.kt
 
-// ... (rutas 1, 2, 3) ...
-
-// 4. Ruta: Carrito (¡CORREGIDA! Ahora navega a CHECKOUT)
+        // 3. Ruta: Carrito (CORREGIDO)
         composable(route = NavigationRoutes.CART) {
-            VistaCarrito(
+            CartScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
-                // <--- ¡ESTE PARÁMETRO FALTABA!
                 onNavigateToCheckout = {
+                    // Navega a la pantalla de pago (asegúrate de tener esta ruta definida o creada)
                     navController.navigate(NavigationRoutes.CHECKOUT)
                 }
             )
         }
 
-// ... (rutas 5, 6, 7) ...
-
-        // 4. Ruta: Home (Mantenida, aunque no se use desde Login)
-        composable(
-            route = NavigationRoutes.HOME,
-            arguments = listOf(
-                navArgument("username") {
-                    type = NavType.StringType
-                }
-            )
-        ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: "Usuario"
-
-            HomeScreen(
-                username = username,
-                onNavigateToDetail = {
-                    navController.navigate(NavigationRoutes.PROFILE)
-                },
-                onNavigateToLogin = {
-                    navController.popBackStack(NavigationRoutes.LOGIN, inclusive = true)
-                    navController.navigate(NavigationRoutes.LOGIN)
-                },
-                onNavigateToCart = {
-                    navController.navigate(NavigationRoutes.CART)
-                }
-            )
+        // 4. Ruta: Checkout (Pago) - Opcional si ya la tienes implementada
+        composable(route = NavigationRoutes.CHECKOUT) {
+            // Aquí iría tu CheckoutScreen si la tienes creada
+            // CheckoutScreen(onPaymentSuccess = { navController.navigate(NavigationRoutes.ORDER_CONFIRMED) })
+            // Por ahora dejamos un placeholder si no existe la pantalla aún:
+            androidx.compose.material3.Text("Pantalla de Pago en construcción")
         }
 
-        // 5. Ruta: Profile (Mantenida)
-        composable(route = NavigationRoutes.PROFILE) {
-            ProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
+        // 5. Ruta: Confirmación
+        composable(route = NavigationRoutes.ORDER_CONFIRMED) {
+            OrderConfirmedScreen(
+                onNavigateToCatalogue = {
+                    // Volver al inicio y limpiar el historial de navegación para no volver al "éxito" con el botón atrás
+                    navController.navigate(NavigationRoutes.CATALOGUE) {
+                        popUpTo(NavigationRoutes.CATALOGUE) { inclusive = true }
+                    }
                 }
             )
         }
