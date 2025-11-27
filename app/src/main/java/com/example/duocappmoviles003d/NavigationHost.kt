@@ -51,17 +51,5 @@ fun NavigationHost(navController: NavHostController) {
             // Por ahora dejamos un placeholder si no existe la pantalla aún:
             androidx.compose.material3.Text("Pantalla de Pago en construcción")
         }
-
-        // 5. Ruta: Confirmación
-        composable(route = NavigationRoutes.ORDER_CONFIRMED) {
-            OrderConfirmedScreen(
-                onNavigateToCatalogue = {
-                    // Volver al inicio y limpiar el historial de navegación para no volver al "éxito" con el botón atrás
-                    navController.navigate(NavigationRoutes.CATALOGUE) {
-                        popUpTo(NavigationRoutes.CATALOGUE) { inclusive = true }
-                    }
-                }
-            )
-        }
     }
 }

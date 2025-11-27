@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack // Importante para la flecha
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,6 +17,7 @@ import com.example.duocappmoviles003d.Cart.CartViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductCatalogueScreen(
+    onNavigateBack: () -> Unit, // 1. ¡Agregamos este parámetro que faltaba!
     onNavigateToCart: () -> Unit,
     catViewModel: CatalogueViewModel = viewModel(),
     cartViewModel: CartViewModel = viewModel()
@@ -27,6 +29,15 @@ fun ProductCatalogueScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Catálogo") },
+                // 2. Agregamos el ícono de navegación para volver
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver"
+                        )
+                    }
+                },
                 actions = {
                     IconButton(onClick = onNavigateToCart) {
                         Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
