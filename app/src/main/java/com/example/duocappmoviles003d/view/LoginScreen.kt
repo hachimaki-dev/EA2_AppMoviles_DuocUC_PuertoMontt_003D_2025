@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+package com.example.duocappmoviles003d.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,15 +16,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.duocappmoviles003d.viewModel.LoginViewModel
+import com.example.duocappmoviles003d.R
+import com.example.duocappmoviles003d.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
     onNavigateToHome: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
     onNavigateToForgot: () -> Unit,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel()
 ) {
+    val username by viewModel.username.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val loginState by viewModel.loginState.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    // Si login es exitoso, navegar automáticamente
+    LaunchedEffect(loginState) {
+        loginState?.let {
+            onNavigateToHome(it.username)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -38,9 +51,10 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
             Image(
                 painter = painterResource(id = R.drawable.game),
-                contentDescription = "Logo de mi app",
+                contentDescription = "Logo app",
                 modifier = Modifier
                     .height(250.dp)
                     .padding(bottom = 24.dp),
@@ -57,9 +71,10 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
+            // USERNAME
             OutlinedTextField(
-                value = viewModel.username,
-                onValueChange = { viewModel.username = it },
+                value = username,
+                onValueChange = { viewModel.username.value = it },
                 label = { Text("Usuario") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -72,9 +87,10 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // PASSWORD
             OutlinedTextField(
-                value = viewModel.password,
-                onValueChange = { viewModel.password = it },
+                value = password,
+                onValueChange = { viewModel.password.value = it },
                 label = { Text("Contraseña") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -86,19 +102,22 @@ fun LoginScreen(
                 )
             )
 
-            if (viewModel.errorMessage.isNotEmpty()) {
+            // ERROR MESSAGE
+            if (!error.isNullOrEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = viewModel.errorMessage,
+                    text = error ?: "",
                     color = Color.Red,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // LOGIN BUTTON
             Button(
-                onClick = { viewModel.onLogin(onNavigateToHome) },
+                onClick = { viewModel.login() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
                 shape = RoundedCornerShape(26.dp)
@@ -108,6 +127,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // REGISTER BUTTON
             Button(
                 onClick = { onNavigateToRegister() },
                 modifier = Modifier.fillMaxWidth(),
@@ -123,7 +143,11 @@ fun LoginScreen(
                 onClick = { onNavigateToForgot() },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Olvidé mi contraseña", color = Color(2, 178, 191), fontWeight = FontWeight.Black)
+                Text(
+                    "Olvidé mi contraseña",
+                    color = Color(2, 178, 191),
+                    fontWeight = FontWeight.Black
+                )
             }
         }
     }
