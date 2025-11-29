@@ -44,16 +44,6 @@ android {
 
 dependencies {
 
-    // ---------- SUPABASE (versión correcta 2.5.1) ----------
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.5.1")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.1")
-
-
-
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-
-    // ------------------------------------------------------
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,11 +52,27 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-
-    // Navegación
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-
     testImplementation(libs.junit)
+    // Retrofit - Cliente HTTP type-safe
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Gson - Convierte JSON a objetos Kotlin
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Logging - Ver peticiones en Logcat (útil para debugging)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Coil - Cargar imágenes desde URL
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Coroutines - Ya deberías tenerlas, pero por si acaso
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // ViewModel Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
+    //Navegacion
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

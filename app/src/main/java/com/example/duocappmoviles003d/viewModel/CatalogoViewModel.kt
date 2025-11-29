@@ -2,6 +2,7 @@ package com.example.duocappmoviles003d.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.duocappmoviles003d.Repository.UsuarioRepository
 import com.example.duocappmoviles003d.data.repository.UsuarioRepository
 import com.example.duocappmoviles003d.model.Producto
 import kotlinx.coroutines.flow.MutableStateFlow
