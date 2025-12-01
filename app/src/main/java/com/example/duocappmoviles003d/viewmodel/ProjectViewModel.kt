@@ -4,17 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.duocappmoviles003d.model.Proyecto
 import com.example.duocappmoviles003d.model.Usuario
-import com.example.duocappmoviles003d.network.RetrofitClient
 import com.example.duocappmoviles003d.model.EmailRequest
-import com.example.duocappmoviles003d.network.FuncionesRetrofitClient
-import kotlinx.coroutines.Dispatchers
+import com.example.duocappmoviles003d.repository.ProjectRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ProjectViewModel : ViewModel() {
+
+    private val repository = ProjectRepository()
 
     // Estado para pantallamain
     private val _misProyectos = MutableStateFlow<List<Proyecto>>(emptyList())
@@ -34,100 +33,82 @@ class ProjectViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    // Carga mis proyectos
+    // Carga los proyectos del usuario
     fun cargarProyectosDelUsuario(email: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    RetrofitClient.apiService.getMyProjects("eq.$email")
+
+            val resultado = repository.getProyectosPorUsuario(email)
+
+            resultado.onSuccess { lista ->
+                _misProyectos.value = lista
+                if (lista.isNotEmpty()) {
+                    seleccionarProyecto(lista[0])
                 }
-                if (response.isSuccessful && response.body() != null) {
-                    val lista = response.body()!!.map { it.proyecto }
-                    _misProyectos.value = lista
-                    // Selecciona el primero por defecto y carga sus integrantes
-                    if (lista.isNotEmpty()) {
-                        seleccionarProyecto(lista[0])
-                    }
-                }
-            } catch (e: Exception) { e.printStackTrace() }
-            finally { _isLoading.value = false }
+            }.onFailure {
+                println("Error: ${it.message}")
+            }
+
+            _isLoading.value = false
         }
     }
 
-    // Selecciona un Proyecto y carga sus integrantes
+    // Seleccion de proyecto
     fun seleccionarProyecto(proyecto: Proyecto) {
         _proyectoSeleccionado.value = proyecto
         cargarMiembros(proyecto.id)
     }
 
+    // Cargar los integrantes del proyecto
     private fun cargarMiembros(projectId: Long) {
         viewModelScope.launch {
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    RetrofitClient.apiService.getProjectMembers("eq.$projectId")
-                }
-                if (response.isSuccessful && response.body() != null) {
-                    // Mapea la respuesta para sacar solo el objeto Usuario
-                    _integrantes.value = response.body()!!.map { it.usuario }
-                } else {
-                    _integrantes.value = emptyList()
-                }
-            } catch (e: Exception) { e.printStackTrace() }
+            val resultado = repository.getIntegrantesProyecto(projectId)
+
+            resultado.onSuccess { lista ->
+                _integrantes.value = lista
+            }.onFailure {
+                _integrantes.value = emptyList()
+            }
         }
     }
 
-    // Carga todos los proyectos agrupados por track
+    // Cargar todos los proyectos de todos los tracks
     fun cargarTodosLosProyectos() {
         viewModelScope.launch {
             _isLoading.value = true
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    RetrofitClient.apiService.getAllProjects()
-                }
-                if (response.isSuccessful && response.body() != null) {
-                    val listaCompleta = response.body()!!
 
-                    // Agrupa la lista por el nombre del track
-                    val agrupados = listaCompleta.groupBy {
-                        it.trackDetails?.nombre ?: "Sin Categoría"
-                    }
-                    _todosLosProyectos.value = agrupados
+            val resultado = repository.getAllProyectos()
+
+            resultado.onSuccess { lista ->
+                val agrupados = lista.groupBy {
+                    it.trackDetails?.nombre ?: "Sin Categoría"
                 }
-            } catch (e: Exception) { e.printStackTrace() }
-            finally { _isLoading.value = false }
+                _todosLosProyectos.value = agrupados
+            }
+
+            _isLoading.value = false
         }
     }
-    //Envia un correo con la info del proyecto que se quiere crear
+
+    // Enviar solicitud al correo del coordinador
     fun enviarSolicitudCorreo(
-        nombre: String,
-        track: String,
-        solicitante: String,
-        descripcion: String,
-        integrantes: String,
-        onResult: (Boolean) -> Unit // Callback para avisar a la UI
+        nombre: String, track: String, solicitante: String,
+        descripcion: String, integrantes: String,
+        onResult: (Boolean) -> Unit
     ) {
         viewModelScope.launch {
             _isLoading.value = true
-            try {
-                val request = EmailRequest(nombre, track, solicitante, descripcion, integrantes)
+            val request = EmailRequest(nombre, track, solicitante, descripcion, integrantes)
 
-                val response = withContext(Dispatchers.IO) {
-                    FuncionesRetrofitClient.apiService.sendEmail(request)
-                }
+            val resultado = repository.enviarCorreo(request)
 
-                if (response.isSuccessful) {
-                    onResult(true)
-                } else {
-                    println("Error envío: ${response.errorBody()?.string()}")
-                    onResult(false)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            if (resultado.isSuccess) {
+                onResult(true)
+            } else {
                 onResult(false)
-            } finally {
-                _isLoading.value = false
             }
+
+            _isLoading.value = false
         }
     }
 }
