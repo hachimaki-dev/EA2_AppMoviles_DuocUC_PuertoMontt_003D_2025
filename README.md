@@ -53,7 +53,7 @@ El backend está implementado en **Supabase**, proveyendo:
 
 ## Requisitos Previos
 
-- Android Studio (versión recomendada: Narwhal | 2025.1.4 o superior).
+- Android Studio (versión recomendada: Otter | 2025.2.1 o superior).
 - JDK 17 o superior.
 
 ## Instalación
