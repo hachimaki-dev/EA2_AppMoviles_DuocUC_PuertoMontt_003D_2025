@@ -1,23 +1,24 @@
 package com.example.duocappmoviles003d.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.duocappmoviles003d.data.repository.UsuarioRepository
+import com.example.duocappmoviles003d.model.Producto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
-class CarritoViewModel(
-    private val repo: UsuarioRepository = UsuarioRepository()
-) : ViewModel() {
+class CarritoViewModel : ViewModel() {
 
-    private val _carritoAgregado = MutableStateFlow(false)
-    val carritoAgregado: StateFlow<Boolean> = _carritoAgregado
+    private val _carrito = MutableStateFlow<List<Producto>>(emptyList())
+    val carrito: StateFlow<List<Producto>> = _carrito
 
-    fun agregarProducto(usuarioId: Long, productoId: Long, cantidad: Int = 1) {
-        viewModelScope.launch {
-            val ok = repo.agregarAlCarrito(usuarioId, productoId, cantidad)
-            _carritoAgregado.value = ok
-        }
+    fun agregarAlCarrito(producto: Producto) {
+        _carrito.value = _carrito.value + producto
+    }
+
+    fun eliminarDelCarrito(producto: Producto) {
+        _carrito.value = _carrito.value.filter { it.id != producto.id }
+    }
+
+    fun limpiarCarrito() {
+        _carrito.value = emptyList()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d.view
+package com.example.duocappmoviles003d.ui.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -8,20 +8,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.duocappmoviles003d.viewModel.CatalogoViewModel
+import com.example.duocappmoviles003d.viewmodel.CatalogoViewModel
+import com.example.duocappmoviles003d.viewmodel.CarritoViewModel
+import com.example.duocappmoviles003d.model.Producto
 
 @Composable
 fun CatalogoScreen(
     onNavigateToProfile: () -> Unit,
     onNavigateHaciaCarrito: () -> Unit,
     onCerrarSesion: () -> Unit,
-    viewModel: CatalogoViewModel = viewModel()
+    catalogoViewModel: CatalogoViewModel = viewModel(),
+    carritoViewModel: CarritoViewModel = viewModel()
 ) {
-    val productos = viewModel.productos.collectAsState()
-    val carrito = viewModel.carrito.collectAsState()
+    val productos by catalogoViewModel.productos.collectAsState(initial = emptyList())
+    val carrito by carritoViewModel.carrito.collectAsState(initial = emptyList())
+
+    // Cargar productos al entrar
+    LaunchedEffect(Unit) {
+        catalogoViewModel.cargarProductos()
+    }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Text(
             text = "Catálogo",
@@ -31,7 +41,7 @@ fun CatalogoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        productos.value.forEach { producto ->
+        productos.forEach { producto: Producto ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -47,8 +57,8 @@ fun CatalogoScreen(
                 ) {
                     Text(producto.nombre, color = Color.Black)
                     Button(
-                        onClick = { viewModel.agregarAlCarrito(producto) },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(2,178,191))
+                        onClick = { carritoViewModel.agregarAlCarrito(producto) },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191))
                     ) {
                         Text("Agregar", color = Color.Black)
                     }
@@ -63,7 +73,7 @@ fun CatalogoScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
-            Text("Ver Carrito (${carrito.value.size})", color = Color.White)
+            Text("Ver Carrito (${carrito.size})", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -71,7 +81,7 @@ fun CatalogoScreen(
         Button(
             onClick = onNavigateToProfile,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(2,178,191))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191))
         ) {
             Text("Perfil", color = Color.Black)
         }

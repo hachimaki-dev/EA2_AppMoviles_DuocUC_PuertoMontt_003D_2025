@@ -1,20 +1,24 @@
 package com.example.duocappmoviles003d.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.duocappmoviles003d.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+data class User(
+    val username: String = "",
+    val email: String = ""
+)
+
 class ProfileViewModel : ViewModel() {
 
-    private val _usuario = MutableStateFlow<Usuario?>(null)
-    val usuario: StateFlow<Usuario?> = _usuario
+    private val _user = MutableStateFlow(User())
+    val user: StateFlow<User> = _user
 
-    fun setUsuario(user: Usuario?) {
-        _usuario.value = user
-    }
-
-    fun logout() {
-        _usuario.value = null
+    init {
+        // Simulación de usuario cargado
+        _user.value = User(
+            username = "Juan Perez",
+            email = "juan@example.com"
+        )
     }
 }

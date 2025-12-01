@@ -1,112 +1,55 @@
-package com.example.duocappmoviles003d.view
+package com.example.duocappmoviles003d.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.duocappmoviles003d.viewModel.ProfileViewModel
+import androidx.navigation.NavHostController
+import com.example.duocappmoviles003d.navigation.NavigationRoute
+import com.example.duocappmoviles003d.viewmodel.ProfileViewModel
+
+private val Teal = Color(0xFF02B2BF)
 
 @Composable
 fun ProfileScreen(
-    onNavigateBack: () -> Unit,
-    viewModel: ProfileViewModel = viewModel()
+    navController: NavHostController,
+    viewModel: ProfileViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val user = viewModel.user.collectAsState()
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+        modifier = Modifier.fillMaxSize().background(Color.White),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            horizontalAlignment = Alignment.Start
         ) {
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Text("Perfil del usuario", color = Color.Black, fontSize = 26.sp)
 
-            Text(
-                text = "Perfil de Usuario",
-                fontSize = 24.sp,
-                color = Color.Black
-            )
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Text("Nombre: ${user.value.username}", fontSize = 18.sp, color = Color.Black)
+            Text("Correo: ${user.value.email}", fontSize = 18.sp, color = Color.Black)
 
-            OutlinedTextField(
-                value = uiState.value.username,
-                onValueChange = { viewModel.onUsernameChanged(it) },
-                label = { Text("Username") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(2, 178, 191),
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color(2, 178, 191),
-                    unfocusedLabelColor = Color(2, 178, 191),
-                    disabledBorderColor = Color(2, 178, 191),
-                    focusedLabelColor = Color(2, 178, 191),
-                    focusedTextColor = Color.Black
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = uiState.value.email,
-                onValueChange = { viewModel.onEmailChanged(it) },
-                label = { Text("Email") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(2, 178, 191),
-                    unfocusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color(2, 178, 191),
-                    unfocusedLabelColor = Color(2, 178, 191),
-                    disabledBorderColor = Color(2, 178, 191),
-                    focusedLabelColor = Color(2, 178, 191),
-                    focusedTextColor = Color.Black
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (uiState.value.mensaje.isNotEmpty()) {
-                Text(text = uiState.value.mensaje, color = Color.Black, fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { viewModel.guardarCambios() },
+                onClick = {
+                    navController.navigate(NavigationRoute.Login.route) {
+                        popUpTo(NavigationRoute.Home.route) { inclusive = true }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(2,178,191)),
-                shape = RoundedCornerShape(26.dp)
+                colors = ButtonDefaults.buttonColors(Color.Red)
             ) {
-                Text("Guardar cambios", color = Color.Black)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onNavigateBack,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                shape = RoundedCornerShape(26.dp)
-            ) {
-                Text("Volver", color = Color.White)
+                Text("Cerrar sesión", color = Color.White)
             }
         }
     }

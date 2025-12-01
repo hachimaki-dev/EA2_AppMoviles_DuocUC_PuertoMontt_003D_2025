@@ -1,21 +1,20 @@
 package com.example.duocappmoviles003d.Repository
 
-import com.example.duocappmoviles003d.model.Producto
+import com.example.duocappmoviles003d.model.Usuario
 import com.example.duocappmoviles003d.network.RetrofitClient
 
-class ProductoRepository {
+class ProfileRepository {
 
     private val api = RetrofitClient.apiService
 
-    suspend fun obtenerProductos(): List<Producto>? {
+    suspend fun obtenerPerfil(id: Long): Usuario? {
         return try {
-            val response = api.obtenerProductos()
+            val response = api.obtenerUsuarioPorId(id)
 
             if (response.isSuccessful) {
-                response.body()
-            } else {
-                null
-            }
+                val lista = response.body()
+                if (!lista.isNullOrEmpty()) lista.first() else null
+            } else null
 
         } catch (e: Exception) {
             e.printStackTrace()

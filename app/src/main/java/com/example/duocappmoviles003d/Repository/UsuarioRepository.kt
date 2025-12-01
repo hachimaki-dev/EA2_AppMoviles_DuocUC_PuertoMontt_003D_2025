@@ -1,6 +1,5 @@
 package com.example.duocappmoviles003d.Repository
 
-
 import com.example.duocappmoviles003d.model.Usuario
 import com.example.duocappmoviles003d.network.RetrofitClient
 
@@ -26,6 +25,7 @@ class UsuarioRepository {
         }
     }
 
+
     // ------------------------------------------
     // REGISTRO
     // ------------------------------------------
@@ -33,6 +33,44 @@ class UsuarioRepository {
         return try {
             val response = api.registrarUsuario(usuario)
             response.isSuccessful
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+
+    // ------------------------------------------
+    // OBTENER PERFIL POR ID
+    // ------------------------------------------
+    suspend fun obtenerUsuarioPorId(id: Long): Usuario? {
+        return try {
+            val response = api.obtenerUsuarioPorId(id)
+
+            if (response.isSuccessful) {
+                val lista = response.body()
+                if (!lista.isNullOrEmpty()) lista.first() else null
+            } else null
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+
+    // ------------------------------------------
+    // VERIFICAR SI EXISTE UN EMAIL
+    // ------------------------------------------
+    suspend fun existeEmail(email: String): Boolean {
+        return try {
+            val response = api.existeEmail(email)
+
+            if (response.isSuccessful) {
+                val lista = response.body()
+                !lista.isNullOrEmpty()
+            } else false
 
         } catch (e: Exception) {
             e.printStackTrace()

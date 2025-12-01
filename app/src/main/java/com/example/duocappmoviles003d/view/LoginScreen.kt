@@ -16,14 +16,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.duocappmoviles003d.R
+import com.example.duocappmoviles003d.navigation.NavigationRoute
 import com.example.duocappmoviles003d.viewmodel.AuthViewModel
+
+private val Teal = Color(0xFF02B2BF)
 
 @Composable
 fun LoginScreen(
-    onNavigateToHome: (String) -> Unit,
-    onNavigateToRegister: () -> Unit,
-    onNavigateToForgot: () -> Unit,
+    navController: NavHostController,
     viewModel: AuthViewModel = viewModel()
 ) {
     val username by viewModel.username.collectAsState()
@@ -31,10 +33,11 @@ fun LoginScreen(
     val loginState by viewModel.loginState.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    // Si login es exitoso, navegar automáticamente
     LaunchedEffect(loginState) {
         loginState?.let {
-            onNavigateToHome(it.username)
+            navController.navigate(NavigationRoute.Home.route) {
+                popUpTo(NavigationRoute.Login.route) { inclusive = true }
+            }
         }
     }
 
@@ -45,9 +48,7 @@ fun LoginScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -55,99 +56,78 @@ fun LoginScreen(
             Image(
                 painter = painterResource(id = R.drawable.game),
                 contentDescription = "Logo app",
-                modifier = Modifier
-                    .height(250.dp)
-                    .padding(bottom = 24.dp),
+                modifier = Modifier.height(250.dp).padding(bottom = 24.dp),
                 contentScale = ContentScale.Fit
             )
 
             Text(
                 text = "Iniciar Sesión",
-                style = MaterialTheme.typography.headlineMedium,
                 color = Color.Black,
-                fontWeight = FontWeight.Black,
+                fontWeight = FontWeight.Bold,
                 fontSize = 30.sp
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // USERNAME
             OutlinedTextField(
                 value = username,
                 onValueChange = { viewModel.username.value = it },
                 label = { Text("Usuario") },
-                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(26.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(2, 178, 191),
-                    unfocusedBorderColor = Color(2, 178, 191)
+                    focusedBorderColor = Teal,
+                    unfocusedBorderColor = Teal
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // PASSWORD
             OutlinedTextField(
                 value = password,
                 onValueChange = { viewModel.password.value = it },
                 label = { Text("Contraseña") },
-                singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(26.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(2, 178, 191),
-                    unfocusedBorderColor = Color(2, 178, 191)
+                    focusedBorderColor = Teal,
+                    unfocusedBorderColor = Teal
                 )
             )
 
-            // ERROR MESSAGE
             if (!error.isNullOrEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = error ?: "",
-                    color = Color.Red,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = error!!, color = Color.Red, fontSize = 14.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // LOGIN BUTTON
             Button(
                 onClick = { viewModel.login() },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191)),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = ButtonDefaults.buttonColors(Teal)
             ) {
-                Text("Iniciar Sesión", color = Color.Black, fontWeight = FontWeight.Black)
+                Text("Iniciar Sesión", color = Color.Black)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // REGISTER BUTTON
             Button(
-                onClick = { onNavigateToRegister() },
+                onClick = { navController.navigate(NavigationRoute.Registrar.route) },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                shape = RoundedCornerShape(26.dp)
+                shape = RoundedCornerShape(26.dp),
+                colors = ButtonDefaults.buttonColors(Color.Black)
             ) {
-                Text("Registrarse", color = Color.White, fontWeight = FontWeight.Black)
+                Text("Registrarse", color = Color.White)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             TextButton(
-                onClick = { onNavigateToForgot() },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { navController.navigate(NavigationRoute.ForgotPassword.route) }
             ) {
-                Text(
-                    "Olvidé mi contraseña",
-                    color = Color(2, 178, 191),
-                    fontWeight = FontWeight.Black
-                )
+                Text("Olvidé mi contraseña", color = Teal)
             }
         }
     }
