@@ -7,22 +7,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.duocappmoviles003d.navigation.NavigationRoute
 import com.example.duocappmoviles003d.viewmodel.CarritoViewModel
 import com.example.duocappmoviles003d.model.Producto
 
 @Composable
 fun VistaCarrito(
-    navegarHaciaCatalogo: () -> Unit,
-    onPagar: () -> Unit,
+    navController: NavHostController,
     viewModel: CarritoViewModel = viewModel()
 ) {
     // collectAsState necesita un valor inicial
     val carrito by viewModel.carrito.collectAsState(initial = emptyList())
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
+
         Text(
             "Carrito de Compras",
             color = Color.Black,
@@ -32,9 +35,13 @@ fun VistaCarrito(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (carrito.isEmpty()) {
+
             Text("Tu carrito está vacío", color = Color.Gray)
+
         } else {
+
             carrito.forEach { producto: Producto ->
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -55,9 +62,12 @@ fun VistaCarrito(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = onPagar,
+                onClick = {
+                    // Aquí iría la pantalla de pago si la tienes
+                    // navController.navigate(NavigationRoute.Pago.route)
+                },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(2, 178, 191))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF02B2BF))
             ) {
                 Text("Pagar", color = Color.Black)
             }
@@ -66,7 +76,9 @@ fun VistaCarrito(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = navegarHaciaCatalogo,
+            onClick = {
+                navController.navigate(NavigationRoute.Catalogo.route)
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {

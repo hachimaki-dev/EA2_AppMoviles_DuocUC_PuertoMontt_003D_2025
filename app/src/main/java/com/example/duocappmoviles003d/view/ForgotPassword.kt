@@ -11,15 +11,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.duocappmoviles003d.viewmodel.ForgotPasswordViewModel
 
 @Composable
 fun ForgotPassword(
-    onNavigateBack: () -> Unit,
+    navController: NavHostController,
     viewModel: ForgotPasswordViewModel = viewModel()
 ) {
     var email by remember { mutableStateOf("") }
-    val mensaje by viewModel.mensaje.collectAsState()
+    val mensaje by viewModel.mensaje.collectAsState(initial = "")
 
     Box(
         modifier = Modifier
@@ -33,7 +34,12 @@ fun ForgotPassword(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Recuperar Contraseña", fontSize = 24.sp, color = Color.Black)
+            Text(
+                text = "Recuperar Contraseña",
+                fontSize = 24.sp,
+                color = Color.Black
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
@@ -50,7 +56,10 @@ fun ForgotPassword(
 
             if (mensaje.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(mensaje, color = Color.Black)
+                Text(
+                    text = mensaje,
+                    color = Color.Black
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -66,7 +75,7 @@ fun ForgotPassword(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = onNavigateBack,
+                onClick = { navController.popBackStack() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
