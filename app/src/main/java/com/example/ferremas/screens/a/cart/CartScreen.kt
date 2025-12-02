@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home.cart
+package com.example.ferremas.screens.a.cart
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.ferremas.R
 import com.example.ferremas.model.Product
 import androidx.compose.foundation.layout.Row
 import androidx.navigation.NavController
@@ -26,7 +25,7 @@ import androidx.navigation.NavController
 @Composable
 fun CartScreen(navController: NavController){
     var cartItems = listOf(
-        Product("3", "Sierra", 999.9, imageUrl = R.drawable.traladro),
+        Product("3", "Sierra", 999.9),
     )
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp) ) {

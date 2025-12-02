@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home.categories
+package com.example.ferremas.screens.a.categories
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

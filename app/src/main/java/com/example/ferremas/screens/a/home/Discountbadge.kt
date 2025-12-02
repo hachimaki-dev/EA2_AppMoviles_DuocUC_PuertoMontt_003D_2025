@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home
+package com.example.ferremas.screens.a.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import java.util.logging.Level.OFF
 
 @Composable
 fun DiscountBadge(discountPercentage: Int, modifier: Modifier) {

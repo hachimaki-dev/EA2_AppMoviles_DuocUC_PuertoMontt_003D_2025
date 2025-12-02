@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home
+package com.example.ferremas.screens.a.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

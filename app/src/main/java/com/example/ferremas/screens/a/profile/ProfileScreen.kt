@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home.profile
+package com.example.ferremas.screens.a.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,9 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.ferremas.model.UserProfile
 import androidx.navigation.NavController
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.example.ferremas.viewmodels.UserViewModel

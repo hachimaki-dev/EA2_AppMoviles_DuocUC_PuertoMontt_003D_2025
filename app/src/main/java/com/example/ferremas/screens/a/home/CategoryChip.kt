@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home
+package com.example.ferremas.screens.a.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.ferremas.ui.theme.CategoryChipColor
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 
 @Composable

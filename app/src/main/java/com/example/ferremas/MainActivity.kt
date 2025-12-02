@@ -7,13 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ferremas.screens.home.HomeScreen
-import com.example.ferremas.screens.home.cart.CartScreen
-import com.example.ferremas.screens.home.categories.CategoryScreen
-import com.example.ferremas.screens.home.navigation.Screens
-import com.example.ferremas.screens.home.profile.LoginScreen
-import com.example.ferremas.screens.home.profile.ProfileScreen
-import com.example.ferremas.screens.home.profile.SignUpScreen
+import com.example.ferremas.screens.a.home.HomeScreen
+import com.example.ferremas.screens.a.cart.CartScreen
+import com.example.ferremas.screens.a.categories.CategoryScreen
+import com.example.ferremas.screens.a.navigation.Screens
+import com.example.ferremas.screens.a.profile.LoginScreen
+import com.example.ferremas.screens.a.profile.ProfileScreen
+import com.example.ferremas.screens.a.profile.SignUpScreen
 import androidx.activity.viewModels
 import com.example.ferremas.viewmodels.UserViewModel
 

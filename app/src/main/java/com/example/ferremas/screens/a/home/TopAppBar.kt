@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home
+package com.example.ferremas.screens.a.home
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle

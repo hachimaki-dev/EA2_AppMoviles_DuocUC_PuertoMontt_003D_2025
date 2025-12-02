@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home.profile
+package com.example.ferremas.screens.a.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home.navigation
+package com.example.ferremas.screens.a.navigation
 
 sealed class Screens(val route: String) {
     object Login : Screens("login")  // ← minúscula para consistencia

@@ -1,4 +1,4 @@
-package com.example.ferremas.screens.home.cart
+package com.example.ferremas.screens.a.cart
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
