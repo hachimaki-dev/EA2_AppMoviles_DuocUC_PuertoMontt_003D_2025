@@ -7,7 +7,7 @@ import com.example.duocappmoviles003d.UserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
+import android.util.Log
 class CartViewModel : ViewModel() {
     private val repository = SupabaseRepository()
     private val _items = MutableStateFlow<List<CartItemUi>>(emptyList())
@@ -28,12 +28,29 @@ class CartViewModel : ViewModel() {
     }
 
     fun addToCart(product: Product) {
-        val userId = UserSession.currentUser?.id ?: return
+        Log.d("CartViewModel", "Botón presionado para producto: ${product.name}")
+
+        val user = UserSession.currentUser
+        if (user == null) {
+            Log.e("CartViewModel", "ERROR CRÍTICO: El usuario es NULL. No se puede agregar al carrito.")
+            return
+        }
+
+        val userId = user.id
+        if (userId == null) {
+            Log.e("CartViewModel", "ERROR: El usuario tiene ID nulo.")
+            return
+        }
+
+        Log.d("CartViewModel", "Usuario detectado (ID: $userId). Iniciando proceso...")
+
         viewModelScope.launch {
             val cart = repository.getOrCreateActiveCart(userId)
             if (cart?.id != null) {
                 repository.addProductToCart(cart.id, product)
-                loadCart() // Refrescar lista
+                loadCart()
+            } else {
+                Log.e("CartViewModel", "Error: No se pudo obtener/crear el carrito.")
             }
         }
     }

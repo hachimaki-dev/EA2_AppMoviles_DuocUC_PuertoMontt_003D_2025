@@ -1,4 +1,4 @@
-package com.example.duocappmoviles003d
+    package com.example.duocappmoviles003d
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.storage.Storage

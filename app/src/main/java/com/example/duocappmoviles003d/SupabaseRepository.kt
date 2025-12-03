@@ -4,7 +4,7 @@ import com.example.duocappmoviles003d.Cart.CartProduct
 import com.example.duocappmoviles003d.Login.User
 import com.example.duocappmoviles003d.ProductCatalogue.Product
 import io.github.jan.supabase.postgrest.from
-
+import android.util.Log
 class SupabaseRepository {
 
     // --- LOGIN ---
@@ -30,26 +30,45 @@ class SupabaseRepository {
 
     // --- CART: Obtener/Crear Carrito ---
     suspend fun getOrCreateActiveCart(userId: Long): Cart? {
+        Log.d("SupabaseRepo", "Buscando carrito activo para usuario: $userId")
         return try {
             val activeCarts = supabase.from("cart").select {
                 filter {
                     eq("id_user", userId)
-                    eq("status", "pending")
+                    eq("status", "pending") // <-- Aquí es donde falla si no existe la columna
                 }
             }.decodeList<Cart>()
 
-            if (activeCarts.isNotEmpty()) return activeCarts.first()
+            if (activeCarts.isNotEmpty()) {
+                Log.d("SupabaseRepo", "Carrito existente encontrado: ${activeCarts[0].id}")
+                return activeCarts.first()
+            }
+
+            Log.d("SupabaseRepo", "No hay carrito activo. Creando uno nuevo...")
 
             val newCart = Cart(userId = userId, status = "pending")
-            supabase.from("cart").insert(newCart) { select() }.decodeSingle<Cart>()
+            val createdCart = supabase.from("cart").insert(newCart) { select() }.decodeSingle<Cart>()
+
+            Log.d("SupabaseRepo", "Carrito nuevo creado con ID: ${createdCart.id}")
+            createdCart
+
         } catch (e: Exception) {
+            Log.e("SupabaseRepo", "ERROR CRÍTICO AL OBTENER/CREAR CARRITO: ${e.message}", e)
             null
         }
     }
 
     // --- CART: Agregar Producto ---
+// En app/src/main/java/com/example/duocappmoviles003d/SupabaseRepository.kt
+
+// En app/src/main/java/com/example/duocappmoviles003d/SupabaseRepository.kt
+
+// Asegúrate de que este import esté arriba en el archivo
+// ... dentro de la clase SupabaseRepository ...
+
     suspend fun addProductToCart(cartId: Long, product: Product) {
         try {
+            // 1. Verificar si ya existe el producto en el carrito
             val existing = supabase.from("cart_product").select {
                 filter {
                     eq("id_cart", cartId)
@@ -57,21 +76,32 @@ class SupabaseRepository {
                 }
             }.decodeList<CartProduct>()
 
-            val quantity = if (existing.isNotEmpty()) existing[0].quantity + 1 else 1
-            val grossPrice = product.price * quantity
+            // 2. Calcular las variables ANTES de usarlas (para que no salgan en rojo)
+            val newQuantity = if (existing.isNotEmpty()) existing[0].quantity + 1 else 1
+            val newGrossPrice = product.price * newQuantity
 
+            // 3. Crear el objeto a enviar
             val item = CartProduct(
                 cartId = cartId,
                 productId = product.id,
-                quantity = quantity,
-                grossPrice = grossPrice
+                quantity = newQuantity,     // Usamos la variable calculada arriba
+                grossPrice = newGrossPrice  // Usamos la variable calculada arriba
             )
-            supabase.from("cart_product").upsert(item)
+
+            // 4. Ejecutar upsert
+            // IMPORTANTE: onConflict debe coincidir con la Primary Key que creamos en el Paso 1
+            supabase.from("cart_product").upsert(
+                value = item,
+                onConflict = "id_cart,id_product"
+            )
+
+            Log.d("SupabaseRepo", "Producto agregado: ${product.name} (Cant: $newQuantity)")
+
         } catch (e: Exception) {
+            Log.e("SupabaseRepo", "Error al agregar al carrito: ${e.message}")
             e.printStackTrace()
         }
     }
-
     // --- CART: Obtener Items (Join manual) ---
     suspend fun getCartItems(cartId: Long): List<Pair<Product, Int>> {
         try {
