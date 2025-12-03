@@ -28,16 +28,24 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: AuthViewModel = viewModel()
 ) {
-    val username by viewModel.username.collectAsState()
-    val password by viewModel.password.collectAsState()
+    // Estados del ViewModel
     val loginState by viewModel.loginState.collectAsState()
     val error by viewModel.error.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
+    // Variables locales para los campos de texto
+    var user by remember { mutableStateOf("") }
+    var pass by remember { mutableStateOf("") }
+
+    // --- CORRECCIÓN CLAVE: SEGURIDAD ---
     LaunchedEffect(loginState) {
-        loginState?.let {
+        // Solo navegamos si es explícitamente TRUE.
+        // Si es false (error) o null (esperando), no entra aquí.
+        if (loginState == true) {
             navController.navigate(NavigationRoute.Catalogo.route) {
                 popUpTo(NavigationRoute.Login.route) { inclusive = true }
             }
+            viewModel.resetLoginState()
         }
     }
 
@@ -47,87 +55,95 @@ fun LoginScreen(
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+        if (isLoading) {
+            CircularProgressIndicator(color = Teal)
+        } else {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.game),
-                contentDescription = "Logo app",
-                modifier = Modifier.height(250.dp).padding(bottom = 24.dp),
-                contentScale = ContentScale.Fit
-            )
-
-            Text(
-                text = "Iniciar Sesión",
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            OutlinedTextField(
-                value = username,
-                onValueChange = { viewModel.username.value = it },
-                label = { Text("Usuario") },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Teal,
-                    unfocusedBorderColor = Teal
+                Image(
+                    painter = painterResource(id = R.drawable.game),
+                    contentDescription = "Logo app",
+                    modifier = Modifier.height(250.dp).padding(bottom = 24.dp),
+                    contentScale = ContentScale.Fit
                 )
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { viewModel.password.value = it },
-                label = { Text("Contraseña") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Teal,
-                    unfocusedBorderColor = Teal
+                Text(
+                    text = "Iniciar Sesión",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp
                 )
-            )
 
-            if (!error.isNullOrEmpty()) {
-                Text(text = error!!, color = Color.Red, fontSize = 14.sp)
-            }
+                Spacer(modifier = Modifier.height(32.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = user,
+                    onValueChange = { user = it },
+                    label = { Text("Usuario") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Teal,
+                        unfocusedBorderColor = Teal,
+                        focusedLabelColor = Teal
+                    )
+                )
 
-            Button(
-                onClick = { viewModel.login() },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp),
-                colors = ButtonDefaults.buttonColors(Teal)
-            ) {
-                Text("Iniciar Sesión", color = Color.Black)
-            }
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = pass,
+                    onValueChange = { pass = it },
+                    label = { Text("Contraseña") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Teal,
+                        unfocusedBorderColor = Teal,
+                        focusedLabelColor = Teal
+                    )
+                )
 
-            Button(
-                onClick = { navController.navigate(NavigationRoute.Registrar.route) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(26.dp),
-                colors = ButtonDefaults.buttonColors(Color.Black)
-            ) {
-                Text("Registrarse", color = Color.White)
-            }
+                // Mostrar mensaje de error si existe
+                if (!error.isNullOrEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = error!!, color = Color.Red, fontSize = 14.sp)
+                }
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            TextButton(
-                onClick = { navController.navigate(NavigationRoute.ForgotPassword.route) }
-            ) {
-                Text("Olvidé mi contraseña", color = Teal)
+                Button(
+                    onClick = { viewModel.login(user, pass) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = ButtonDefaults.buttonColors(Teal)
+                ) {
+                    Text("Iniciar Sesión", color = Color.Black)
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = { navController.navigate(NavigationRoute.Registrar.route) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Black)
+                ) {
+                    Text("Registrarse", color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                TextButton(
+                    onClick = { navController.navigate(NavigationRoute.ForgotPassword.route) }
+                ) {
+                    Text("Olvidé mi contraseña", color = Teal)
+                }
             }
         }
     }

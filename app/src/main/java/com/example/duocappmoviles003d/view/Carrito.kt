@@ -13,7 +13,7 @@ import com.example.duocappmoviles003d.viewmodel.CarritoViewModel
 import com.example.duocappmoviles003d.model.Producto
 
 @Composable
-fun VistaCarrito(
+fun Carrito(
     navController: NavHostController,
     viewModel: CarritoViewModel = viewModel()
 ) {

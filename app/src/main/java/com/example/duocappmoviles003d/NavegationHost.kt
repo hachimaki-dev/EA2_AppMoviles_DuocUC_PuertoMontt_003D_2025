@@ -1,6 +1,7 @@
 package com.example.duocappmoviles003d
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,10 +11,13 @@ import com.example.duocappmoviles003d.ui.view.ForgotPassword
 import com.example.duocappmoviles003d.ui.view.LoginScreen
 import com.example.duocappmoviles003d.ui.view.ProfileScreen
 import com.example.duocappmoviles003d.ui.view.RegistrarScreen
-import com.example.duocappmoviles003d.ui.view.VistaCarrito
+import com.example.duocappmoviles003d.ui.view.Carrito
+import com.example.duocappmoviles003d.viewmodel.CarritoViewModel
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
+
+    val carritoViewModel: CarritoViewModel = viewModel()
 
     NavHost(
         navController = navController,
@@ -29,11 +33,17 @@ fun NavigationHost(navController: NavHostController) {
         }
 
         composable(NavigationRoute.Catalogo.route) {
-            CatalogoScreen(navController)
+            CatalogoScreen(
+                navController = navController,
+                carritoViewModel = carritoViewModel
+            )
         }
 
         composable(NavigationRoute.Carrito.route) {
-            VistaCarrito(navController)
+            Carrito(
+                navController = navController,
+                viewModel = carritoViewModel
+            )
         }
 
         composable(NavigationRoute.Perfil.route) {
