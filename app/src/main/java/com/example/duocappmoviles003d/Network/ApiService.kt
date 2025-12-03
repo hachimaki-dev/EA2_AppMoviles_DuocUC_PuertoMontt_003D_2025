@@ -25,8 +25,8 @@ interface ApiService {
     // REGISTRO
     // ---------------------------
     @Headers(
-        "apikey: TU_API_KEY",
-        "Authorization: Bearer TU_API_KEY",
+        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
         "Content-Type: application/json"
     )
     @POST("usuario")
