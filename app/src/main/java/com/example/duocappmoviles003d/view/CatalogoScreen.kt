@@ -1,14 +1,18 @@
 package com.example.duocappmoviles003d.ui.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.duocappmoviles003d.navigation.NavigationRoute
 import com.example.duocappmoviles003d.viewmodel.CatalogoViewModel
 import com.example.duocappmoviles003d.viewmodel.CarritoViewModel
@@ -58,6 +62,14 @@ fun CatalogoScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    AsyncImage(
+                        model = producto.imagen, // Asegúrate que en tu modelo se llame así
+                        contentDescription = producto.nombre,
+                        modifier = Modifier
+                            .size(80.dp) // Tamaño fijo para que no rompa el diseño
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
 
                     Text(producto.nombre, color = Color.Black)
 

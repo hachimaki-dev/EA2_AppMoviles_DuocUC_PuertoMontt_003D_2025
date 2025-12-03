@@ -4,37 +4,50 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private const val BASE_URL =
-        "https://yqsjpbuxfbbpjcmqmpec.supabase.co/rest/v1/"
+    // 1. URL DEL PROYECTO (Verificada con tu log)
+    private const val BASE_URL = "https://yqsjpbuxfbbpjcmqmpec.supabase.co/rest/v1/"
 
-    // 👉 Pega aquí tu REAL anon public API key de Supabase
-    private const val API_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2dXBqcW16aXN0ZmVjbnZldGx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MTg2MTIsImV4cCI6MjA4MDE5NDYxMn0.Y_nC6L_Rcrq-PUBmVJp8DfECgQhvjfbJC2c4LhPsst8"
+    // 2. CLAVE PARTIDA (Técnica anti-errores de copiado)
+    // Al dividirla, eliminamos cualquier caracter basura oculto en la línea larga.
+    private const val KEY_PART_1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0"
+    private const val KEY_PART_2 = ".AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
 
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    // Unimos las partes y limpiamos
+    private val SUPABASE_KEY = (KEY_PART_1 + KEY_PART_2).trim()
 
-    private val httpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
+    // 3. Cliente HTTP con Interceptor
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
         .addInterceptor { chain ->
-            val newRequest = chain.request().newBuilder()
-                .addHeader("apikey", API_KEY)
-                .addHeader("Authorization", "Bearer $API_KEY")
-                .addHeader("Content-Type", "application/json")
-                .build()
-            chain.proceed(newRequest)
+            val original = chain.request()
+            val requestBuilder = original.newBuilder()
+                // Borra cualquier header anterior para evitar duplicados
+                .header("apikey", SUPABASE_KEY)
+                .header("Authorization", "Bearer $SUPABASE_KEY")
+                .header("Prefer", "return=minimal") // ¡ESTE ES VITAL!
+                .header("User-Agent", "DuocApp/1.0") // Ayuda a que Cloudflare no nos bloquee
+                .method(original.method, original.body)
+
+            val request = requestBuilder.build()
+            chain.proceed(request)
         }
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
         .build()
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(httpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    val apiService: ApiService = retrofit.create(ApiService::class.java)
+    // 4. Instancia Retrofit
+    val apiService: ApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+    }
 }

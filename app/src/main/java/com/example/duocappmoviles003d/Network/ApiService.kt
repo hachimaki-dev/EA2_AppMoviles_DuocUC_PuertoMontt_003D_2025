@@ -10,10 +10,7 @@ interface ApiService {
     // ---------------------------
     // LOGIN
     // ---------------------------
-    @Headers(
-        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
-        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
-    )
+
     @GET("usuario")
     suspend fun validarLogin(
         @Query("username") username: String,
@@ -24,12 +21,7 @@ interface ApiService {
     // ---------------------------
     // REGISTRO
     // ---------------------------
-    @Headers(
-        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
-        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
-        "Content-Type: application/json",
-        "Prefer: return=minimal"
-    )
+
     @POST("usuario")
     suspend fun registrarUsuario(
         @Body usuario: Usuario
@@ -38,10 +30,7 @@ interface ApiService {
     // ---------------------------
     // OBTENER PRODUCTOS
     // ---------------------------
-    @Headers(
-        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
-        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
-    )
+
     @GET("producto")
     suspend fun obtenerProductos(
         @Query("select") select: String = "*"
@@ -50,10 +39,7 @@ interface ApiService {
     // ---------------------------
     // OBTENER PERFIL POR ID
     // ---------------------------
-    @Headers(
-        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
-        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
-    )
+
     @GET("usuario")
     suspend fun obtenerUsuarioPorId(
         @Query("id") id: Long,
@@ -62,10 +48,7 @@ interface ApiService {
     // -------------------------------------------
 // VERIFICAR EMAIL
 // -------------------------------------------
-    @Headers(
-        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
-        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
-    )
+
     @GET("usuario")
     suspend fun existeEmail(
         @Query("email") email: String,

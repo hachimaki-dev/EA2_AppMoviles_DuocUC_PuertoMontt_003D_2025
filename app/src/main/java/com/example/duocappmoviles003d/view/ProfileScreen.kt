@@ -43,7 +43,7 @@ fun ProfileScreen(
             Button(
                 onClick = {
                     navController.navigate(NavigationRoute.Login.route) {
-                        popUpTo(NavigationRoute.Home.route) { inclusive = true }
+                        popUpTo(NavigationRoute.Catalogo.route) { inclusive = true }
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
