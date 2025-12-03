@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.duocappmoviles003d"
+    namespace = "com.example.gamezone"
     compileSdk = 36   // <--- CORREGIDO
 
     defaultConfig {
-        applicationId = "com.example.duocappmoviles003d"
+        applicationId = "com.example.gamezone"
         minSdk = 27
         targetSdk = 36   // <--- CORREGIDO
         versionCode = 1
