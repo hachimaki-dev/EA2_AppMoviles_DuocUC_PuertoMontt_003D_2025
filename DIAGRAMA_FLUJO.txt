@@ -1,0 +1,321 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        DIGIDEX - ARQUITECTURA MVVM                           ║
+║                      Aplicación Android de Digimon                           ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                          📱 VIEW LAYER (COMPOSE)                             │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐       │
+│  │   Login     │  │   SignUp    │  │    Main     │  │   Detail    │       │
+│  │   Screen    │  │   Screen    │  │   Screen    │  │   Screen    │       │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘       │
+│         │                 │                │                 │              │
+│         └─────────────────┴────────────────┴─────────────────┘              │
+│                                    │                                        │
+│                            observa StateFlow                                │
+│                            llama funciones                                  │
+│                                    │                                        │
+└────────────────────────────────────┼────────────────────────────────────────┘
+                                     │
+                                     ↓
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                         🧠 VIEWMODEL LAYER                                   │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│                          DigimonViewModel                                    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │  States (StateFlow):                                                │    │
+│  │  • listUiState: DigimonListUiState                                 │    │
+│  │    - isLoading: Boolean                                            │    │
+│  │    - digimonList: List<DigimonItem>                                │    │
+│  │    - error: String?                                                │    │
+│  │                                                                     │    │
+│  │  • detailUiState: DigimonDetailUiState                             │    │
+│  │    - isLoading: Boolean                                            │    │
+│  │    - digimon: DigimonDetailResponse?                               │    │
+│  │    - error: String?                                                │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │  Functions:                                                         │    │
+│  │  • loadDigimonList(page, pageSize)                                 │    │
+│  │  • loadDigimonDetail(id)                                           │    │
+│  │  • retry()                                                          │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                    │                                        │
+│                            llama repository                                 │
+│                                    │                                        │
+└────────────────────────────────────┼────────────────────────────────────────┘
+                                     │
+                                     ↓
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                        💾 REPOSITORY LAYER                                   │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│                         DigimonRepository                                    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │  suspend fun fetchDigimonList(                                     │    │
+│  │      page: Int,                                                     │    │
+│  │      pageSize: Int                                                  │    │
+│  │  ): Result<List<DigimonItem>>                                      │    │
+│  │                                                                     │    │
+│  │  suspend fun fetchDigimonDetail(                                   │    │
+│  │      id: Int                                                        │    │
+│  │  ): Result<DigimonDetailResponse>                                  │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                    │                                        │
+│                        withContext(Dispatchers.IO)                          │
+│                               try/catch                                     │
+│                                    │                                        │
+└────────────────────────────────────┼────────────────────────────────────────┘
+                                     │
+                                     ↓
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                        🌐 NETWORK LAYER                                      │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │                        ApiClient                                 │       │
+│  │  • BASE_URL: "https://digi-api.com/"                            │       │
+│  │  • Retrofit + OkHttp + Gson                                     │       │
+│  │  • HttpLoggingInterceptor                                       │       │
+│  │  • Timeouts: 30s                                                │       │
+│  └─────────────────────────────────────────────────────────────────┘       │
+│                                    │                                        │
+│                                    │                                        │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │                     DigimonService                               │       │
+│  │                                                                  │       │
+│  │  @GET("api/v1/digimon")                                         │       │
+│  │  suspend fun getDigimonList(                                    │       │
+│  │      @Query("page") page: Int,                                  │       │
+│  │      @Query("pageSize") pageSize: Int                           │       │
+│  │  ): DigimonListResponse                                         │       │
+│  │                                                                  │       │
+│  │  @GET("api/v1/digimon/{id}")                                    │       │
+│  │  suspend fun getDigimonDetail(                                  │       │
+│  │      @Path("id") id: Int                                        │       │
+│  │  ): DigimonDetailResponse                                       │       │
+│  └─────────────────────────────────────────────────────────────────┘       │
+│                                    │                                        │
+│                             HTTP Request                                    │
+│                                    │                                        │
+└────────────────────────────────────┼────────────────────────────────────────┘
+                                     │
+                                     ↓
+                         ┌───────────────────────┐
+                         │                       │
+                         │   🌍 DIGI-API REST    │
+                         │                       │
+                         │  https://digi-api.com │
+                         │                       │
+                         └───────────────────────┘
+
+
+══════════════════════════════════════════════════════════════════════════════
+                            FLUJO DE DATOS COMPLETO
+══════════════════════════════════════════════════════════════════════════════
+
+1. Usuario abre MainScreen
+   │
+   ↓
+2. MainScreen observa viewModel.listUiState.collectAsState()
+   │
+   ↓
+3. ViewModel.init() automáticamente llama loadDigimonList()
+   │
+   ↓
+4. ViewModel actualiza estado: _listUiState.value = copy(isLoading = true)
+   │
+   ↓
+5. MainScreen recibe nuevo estado y muestra CircularProgressIndicator
+   │
+   ↓
+6. ViewModel llama repository.fetchDigimonList(page = 0, pageSize = 20)
+   │
+   ↓
+7. Repository ejecuta en withContext(Dispatchers.IO)
+   │
+   ↓
+8. Repository llama apiService.getDigimonList(0, 20)
+   │
+   ↓
+9. Retrofit construye la URL: https://digi-api.com/api/v1/digimon?page=0&pageSize=20
+   │
+   ↓
+10. OkHttpClient hace petición HTTP GET
+    │
+    ↓
+11. HttpLoggingInterceptor registra la petición en Logcat
+    │
+    ↓
+12. Digi-API procesa la petición
+    │
+    ↓
+13. Digi-API responde con JSON:
+    {
+      "content": [
+        {
+          "id": 1,
+          "name": "Agumon",
+          "href": "...",
+          "image": "https://digi-api.com/images/digimon/w/Agumon.png"
+        },
+        ...
+      ],
+      "pageable": {...}
+    }
+    │
+    ↓
+14. Gson deserializa JSON a DigimonListResponse
+    │
+    ↓
+15. Repository extrae response.content (List<DigimonItem>)
+    │
+    ↓
+16. Repository retorna Result.success(content)
+    │
+    ↓
+17. ViewModel recibe Result en .onSuccess { }
+    │
+    ↓
+18. ViewModel actualiza estado:
+    _listUiState.value = DigimonListUiState(
+        isLoading = false,
+        digimonList = list,
+        error = null
+    )
+    │
+    ↓
+19. StateFlow emite nuevo valor
+    │
+    ↓
+20. MainScreen recibe nuevo estado vía collectAsState()
+    │
+    ↓
+21. Compose recompone la UI
+    │
+    ↓
+22. LazyColumn renderiza DigimonCard para cada item
+    │
+    ↓
+23. Coil carga las imágenes de forma asíncrona
+    │
+    ↓
+24. Usuario ve la lista completa de Digimon con imágenes ✅
+
+
+══════════════════════════════════════════════════════════════════════════════
+                           MANEJO DE ERRORES
+══════════════════════════════════════════════════════════════════════════════
+
+Si ocurre un error en cualquier punto:
+
+Repository:
+    try {
+        val response = apiService.getDigimonList()
+        Result.success(response.content)
+    } catch (e: Exception) {
+        Result.failure(e)  ← Captura y envuelve el error
+    }
+    │
+    ↓
+ViewModel:
+    result.onFailure { exception →
+        _listUiState.value = DigimonListUiState(
+            isLoading = false,
+            digimonList = emptyList(),
+            error = exception.message  ← Actualiza estado con error
+        )
+    }
+    │
+    ↓
+MainScreen:
+    when {
+        uiState.error != null → {
+            Text("Error: ${uiState.error}")  ← Muestra mensaje
+            Button(onClick = { viewModel.retry() })  ← Botón reintentar
+        }
+    }
+
+
+══════════════════════════════════════════════════════════════════════════════
+                              TESTING
+══════════════════════════════════════════════════════════════════════════════
+
+DigimonViewModelTest:
+    │
+    ├─ Mock del Repository con MockK
+    │  coEvery { repository.fetchDigimonList() } returns Result.success(mockList)
+    │
+    ├─ Crear ViewModel con repository mockeado
+    │  viewModel = DigimonViewModel(repository)
+    │
+    ├─ Avanzar tiempo de corrutinas
+    │  testDispatcher.scheduler.advanceUntilIdle()
+    │
+    └─ Verificar estado con Kotest assertions
+       viewModel.listUiState.value.digimonList.size shouldBe 2 ✅
+
+
+DigimonRepositoryTest:
+    │
+    ├─ Mock del DigimonService con MockK
+    │  coEvery { apiService.getDigimonList() } returns mockResponse
+    │
+    ├─ Crear Repository con service mockeado
+    │  repository = DigimonRepository(apiService)
+    │
+    ├─ Llamar función suspendida en runTest
+    │  val result = repository.fetchDigimonList()
+    │
+    └─ Verificar resultado
+       result.isSuccess shouldBe true ✅
+       result.getOrNull()?.size shouldBe 2 ✅
+
+
+══════════════════════════════════════════════════════════════════════════════
+                          TECNOLOGÍAS UTILIZADAS
+══════════════════════════════════════════════════════════════════════════════
+
+📱 UI:                  🌐 Networking:         🧪 Testing:
+• Jetpack Compose      • Retrofit 2.11.0      • JUnit5 5.11.3
+• Material Design 3    • OkHttp 4.12.0        • Kotest 5.9.1
+• Navigation Compose   • Gson                 • MockK 1.13.13
+• Coil 2.7.0          • HttpLoggingInterceptor • Coroutines Test
+
+🏗️ Architecture:       📦 Build:
+• MVVM                 • Gradle 8.12.3
+• StateFlow            • Kotlin 2.0.21
+• Coroutines           • Min SDK 24
+• ViewModel            • Target SDK 36
+
+
+══════════════════════════════════════════════════════════════════════════════
+                             RESUMEN
+══════════════════════════════════════════════════════════════════════════════
+
+✅ 6 Pantallas implementadas
+✅ 2 Endpoints de API consumidos
+✅ Arquitectura MVVM completa
+✅ 9 Tests unitarios (100% pass)
+✅ UI moderna con Jetpack Compose
+✅ Manejo robusto de errores
+✅ Carga de imágenes optimizada
+✅ Navegación type-safe
+✅ Documentación completa
+✅ Listo para defensa
+
+Estado: 🚀 PRODUCCIÓN

@@ -1,0 +1,1 @@
+Este es un archivo placeholder para la música de fondo. Reemplaza este archivo con un archivo de audio real (ej: background_music.mp3)
