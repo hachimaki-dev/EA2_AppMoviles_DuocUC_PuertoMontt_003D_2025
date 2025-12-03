@@ -49,8 +49,6 @@ El backend está implementado en **Supabase**, proveyendo:
 - Una **API REST** autogenerada para las operaciones CRUD sobre los datos.
 - **Edge Functions** (serverless) para lógica de negocio adicional, como el envío de correos electrónicos.
 
-**⚠️ Advertencia de Seguridad:** El proyecto contiene claves de API y tokens de autenticación hardcodeados en el código fuente. Esto es una mala práctica de seguridad y debe ser solucionado antes de pasar a un entorno de producción, por ejemplo, moviendo las claves a un archivo `local.properties` no versionado.
-
 ## Requisitos Previos
 
 - Android Studio (versión recomendada: Otter | 2025.2.1 o superior).
