@@ -4,7 +4,7 @@
 
 **Nombre del Proyecto:** DigiDex - Enciclopedia Digital de Digimon
 
-**Institución:** [Tu institución]
+**Institución:** DuocUC
 
 **Curso:** Desarrollo de Aplicaciones Móviles
 
@@ -14,9 +14,8 @@
 
 ## Integrantes del Equipo
 
-- [Nombre Completo 1] - [Matrícula/ID]
-- [Nombre Completo 2] - [Matrícula/ID]
-- [Nombre Completo 3] - [Matrícula/ID]
+- Felipe Angel
+- Ismael Oyarzun
 
 ---
 
