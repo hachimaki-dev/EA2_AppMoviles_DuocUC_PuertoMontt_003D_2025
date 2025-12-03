@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
 
     private const val BASE_URL =
-        "https://lvupjqmzistfecnvetlz.supabase.co"
+        "https://lvupjqmzistfecnvetlz.supabase.co/api/v1"
 
     // 👉 Pega aquí tu REAL anon public API key de Supabase
     private const val API_KEY =

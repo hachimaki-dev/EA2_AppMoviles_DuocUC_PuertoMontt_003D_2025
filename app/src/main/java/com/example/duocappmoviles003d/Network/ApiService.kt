@@ -11,8 +11,8 @@ interface ApiService {
     // LOGIN
     // ---------------------------
     @Headers(
-        "apikey: TU_API_KEY",
-        "Authorization: Bearer TU_API_KEY"
+        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
     )
     @GET("usuario")
     suspend fun validarLogin(
@@ -38,8 +38,8 @@ interface ApiService {
     // OBTENER PRODUCTOS
     // ---------------------------
     @Headers(
-        "apikey: TU_API_KEY",
-        "Authorization: Bearer TU_API_KEY"
+        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
     )
     @GET("producto")
     suspend fun obtenerProductos(
@@ -50,8 +50,8 @@ interface ApiService {
     // OBTENER PERFIL POR ID
     // ---------------------------
     @Headers(
-        "apikey: TU_API_KEY",
-        "Authorization: Bearer TU_API_KEY"
+        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
     )
     @GET("usuario")
     suspend fun obtenerUsuarioPorId(
@@ -62,8 +62,8 @@ interface ApiService {
 // VERIFICAR EMAIL
 // -------------------------------------------
     @Headers(
-        "apikey: TU_API_KEY",
-        "Authorization: Bearer TU_API_KEY"
+        "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY",
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlxc2pwYnV4ZmJicGpjbXFtcGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MTgzMjUsImV4cCI6MjA3OTA5NDMyNX0.AoqRzYoDC249TvMU_EnVimqOCFY4NY9HG7G9wtbs7qY"
     )
     @GET("usuario")
     suspend fun existeEmail(
