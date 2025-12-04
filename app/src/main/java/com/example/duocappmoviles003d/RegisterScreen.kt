@@ -15,8 +15,7 @@ import androidx.core.content.edit
 
 @Composable
 fun RegisterScreen(
-    onRegisterSuccess: () -> Unit
-) {
+    onRegisterSuccess: () -> Unit) {
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.duocappmoviles003d.ui.theme.AppTheme
+import com.example.duocappmoviles003d.AppNavigationHost
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +18,7 @@ class MainActivity : ComponentActivity() {
             AppTheme {
                 val navController = rememberNavController()
                 Surface(modifier = Modifier) {
-                    NavigationHost(navController = navController)
+                    AppNavigationHost(navController = navController)
                 }
             }
         }

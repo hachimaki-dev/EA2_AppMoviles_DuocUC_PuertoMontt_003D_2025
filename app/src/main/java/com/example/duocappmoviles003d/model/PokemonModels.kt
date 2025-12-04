@@ -54,6 +54,8 @@ data class StatDto(
 
 // Modelo que usará la UI
 data class Pokemon(
-    val name: String,
-    val imageUrl: String
+    val id: Int, // ID del Pokémon
+    val name: String, // Nombre del Pokémon
+    val imageUrl: String,
+    val types: List<String> = emptyList() // Lista de tipos del Pokémon
 )
