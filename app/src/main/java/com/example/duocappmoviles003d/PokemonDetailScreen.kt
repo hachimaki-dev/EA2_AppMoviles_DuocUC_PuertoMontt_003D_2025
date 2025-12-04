@@ -1,5 +1,6 @@
 package com.example.duocappmoviles003d
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -61,106 +63,123 @@ fun PokemonDetailScreen(pokemon: PokemonDetail) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        primaryColor.copy(alpha = 0.55f),
-                        Color(0xFF0A0A0A)
-                    )
-                )
-            )
-            .padding(16.dp)
     ) {
-        Column(
+        // 🔹 Imagen de fondo personalizada
+        Image(
+            painter = painterResource(R.drawable.forest),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // 🔹 Overlay con degradado
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            primaryColor.copy(alpha = 0.45f),
+                            Color(0xCC000000)
+                        )
+                    )
+                )
+                .padding(16.dp)
         ) {
-            // Tarjeta principal
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E2F)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                // Tarjeta principal
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E2F)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
-                    // Imagen del Pokémon
-                    AsyncImage(
-                        model = pokemon.imageUrl,
-                        contentDescription = pokemon.name,
-                        modifier = Modifier
-                            .size(180.dp)
-                            .padding(8.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // Nombre
-                    Text(
-                        text = pokemon.name,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // Tipos como chips
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    ) {
-                        pokemon.types.forEach { type ->
-                            val typeColor =
-                                detailTypeColors[type.lowercase()] ?: Color(0xFF6C63FF)
-
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        brush = Brush.horizontalGradient(
-                                            colors = listOf(typeColor, typeColor.copy(alpha = 0.6f))
-                                        ),
-                                        shape = RoundedCornerShape(12.dp)
-                                    )
-                                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                            ) {
-                                Text(
-                                    text = type.replaceFirstChar { it.uppercase() },
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Título de sección de stats
-                    Text(
-                        text = "Estadísticas base",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White,
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    )
-
-                    // Lista de stats con barras
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        pokemon.stats.forEach { stat ->
-                            StatRow(stat = stat, color = primaryColor)
+                        // Imagen del Pokémon
+                        AsyncImage(
+                            model = pokemon.imageUrl,
+                            contentDescription = pokemon.name,
+                            modifier = Modifier
+                                .size(180.dp)
+                                .padding(8.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Nombre
+                        Text(
+                            text = pokemon.name,
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = primaryColor,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Tipos como chips
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        ) {
+                            pokemon.types.forEach { type ->
+                                val typeColor =
+                                    detailTypeColors[type.lowercase()] ?: Color(0xFF6C63FF)
+
+                                Box(
+                                    modifier = Modifier
+                                        .background(
+                                            brush = Brush.horizontalGradient(
+                                                colors = listOf(
+                                                    typeColor,
+                                                    typeColor.copy(alpha = 0.6f)
+                                                )
+                                            ),
+                                            shape = RoundedCornerShape(12.dp)
+                                        )
+                                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    Text(
+                                        text = type.replaceFirstChar { it.uppercase() },
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Título de sección de stats
+                        Text(
+                            text = "Estadísticas base",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        )
+
+                        // Lista de stats con barras
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            pokemon.stats.forEach { stat ->
+                                StatRow(stat = stat, color = primaryColor)
+                            }
                         }
                     }
                 }
